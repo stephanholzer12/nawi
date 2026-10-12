@@ -1,6 +1,7 @@
-# NAWI – Aufgaben am Handy
+# Unterricht am Handy
 
-Arbeitsblätter und Quiz für den NAWI-Unterricht (BHAK für Führung und Sicherheit).
-Webseite: https://stephanholzer12.github.io/nawi/
+Lernseiten, Arbeitsblätter und Quiz für den Unterricht an der BHAK für Führung und Sicherheit (NAWI, PBGW, TÖW, IWK).
+Webseite: https://stephanholzer12.github.io/unterricht/
 
 Die Antworten der Kadetten werden nur lokal im Browser gespeichert und als PDF abgegeben – es werden keine Daten an diese Seite gesendet.
+Bauvorlagen: Ordner `werkzeug/`.
