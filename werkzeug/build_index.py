@@ -3,7 +3,7 @@ import json, html, os, base64
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 E = json.load(open(os.path.join(ROOT, "werkzeug", "einheiten.json"), encoding="utf-8"))
 LOGO = base64.b64encode(open(os.path.join(ROOT, "werkzeug", "logo.png"), "rb").read()).decode()
-NAMEN = {"theorie.html": ("Theorie", "alt"), "aufgaben.html": ("Aufgaben", ""), "quiz.html": ("Quiz", "")}
+NAMEN = {"theorie.html": ("Theorie", "alt"), "aufgaben.html": ("Aufgaben", ""), "quiz.html": ("Quiz", ""), "projekt.html": ("Projekt", "")}
 esc = html.escape
 gruppen = {}
 for e in E: gruppen.setdefault(f'{e["klasse"]} · {e["fach"]}', []).append(e)

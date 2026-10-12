@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Nachhaltigkeit – Aufgaben</title>
+<title>Nachhaltigkeit – Nachhaltigkeits-Aufgaben</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -777,7 +777,7 @@ function update() {
 function answerLines(t) {
   const a = S.a[t.id] || {}, L = [], none = "— keine Antwort —";
   if (t.type === "text") L.push(filled(a.t) ? a.t.trim() : none);
-  if (t.type === "fields") t.fields.forEach((f, i) => L.push(f + ": " + (filled(a["f" + i]) ? a["f" + i].trim() : none)));
+  if (t.type === "fields") t.fields.forEach((f, i) => L.push(f + (/[?:]$/.test(f) ? " " : ": ") + (filled(a["f" + i]) ? a["f" + i].trim() : none)));
   if (t.type === "table") t.rows.forEach(([f, n], i) => L.push(f + " (" + n + "): " + (a["b" + i] || "?") + " → " + (a["k" + i] || "?")));
   if (t.type === "sketch") { L.push("Skizze: " + (a.foto ? "Foto siehe unten" : "kein Foto")); L.push("Verbindung: " + (filled(a.verb) ? a.verb.trim() : none)); L.push("Alltag: " + (filled(a.alltag) ? a.alltag.trim() : none)); }
   if (t.type === "strike") t.sents.forEach((parts, si) => { let g = 0; L.push(parts.map(p => { if (typeof p === "string") return p; const s = a[si + "_" + (g++)]; return s == null ? "[" + p.join(" / ") + "]" : p[1 - s]; }).join("")); });
@@ -786,7 +786,7 @@ function answerLines(t) {
   return L;
 }
 function asText() {
-  const out = ["K1.3 Prinzipien der Nachhaltigkeit – Aufgaben", "Name: " + (S.name || "") + " · Klasse: " + (S.klasse || "") + " · " + new Date().toLocaleDateString("de-AT"), ""];
+  const out = ["K1.3 Prinzipien der Nachhaltigkeit – Nachhaltigkeits-Aufgaben", "Name: " + (S.name || "") + " · Klasse: " + (S.klasse || "") + " · " + new Date().toLocaleDateString("de-AT"), ""];
   T.forEach(t => { out.push("Aufgabe " + t.nr + ": " + t.title); answerLines(t).forEach(l => out.push("  " + l)); out.push(""); });
   return out.join("\n");
 }

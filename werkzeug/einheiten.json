@@ -1,4 +1,4 @@
 [
   {"klasse": "2AB", "fach": "NAWI", "ordner": "2ab-nawi/k1-2-bindungen", "kapitel": "K1.2", "titel": "Die Bindungsarten", "seiten": ["theorie.html", "aufgaben.html", "quiz.html"]},
-  {"klasse": "5AB", "fach": "TÖW", "ordner": "5ab-toew/k1-3-nachhaltig", "kapitel": "K1.3", "titel": "Prinzipien der Nachhaltigkeit", "seiten": ["theorie.html", "aufgaben.html", "quiz.html"]}
+  {"klasse": "5AB", "fach": "TÖW", "ordner": "5ab-toew/k1-3-nachhaltig", "kapitel": "K1.3", "titel": "Prinzipien der Nachhaltigkeit", "seiten": ["theorie.html", "aufgaben.html", "projekt.html", "quiz.html"]}
 ]
