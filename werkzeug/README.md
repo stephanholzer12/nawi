@@ -6,7 +6,8 @@ Bauvorlagen für Lernseite (Theorie), Arbeitsblatt (Aufgaben) und Quiz – Stil 
 - Pro Einheit ein Ordner: `<klasse>-<fach>/k<kapitel>-<thema>/` (z. B. `2ab-nawi/k1-2-bindungen/`, `3bk-pbgw/k2-1-wahlen/`)
 - Darin: `theorie.html`, `aufgaben.html`, `quiz.html`, Bilder in `img/`
 - Link: `https://stephanholzer12.github.io/unterricht/<ordner>/<seite>.html`
-- Neue Einheit in `einheiten.json` eintragen, dann `python3 werkzeug/build_index.py` → Übersichtsseite
+- Neue Einheit in `einheiten.json` eintragen, dann `python3 werkzeug/build_index.py` → Übersicht pro Klasse (`<klasse>-<fach>/index.html`); die Startseite listet bewusst keine Klassen
+- QR-Code für die Klasse: `https://stephanholzer12.github.io/unterricht/<klasse>-<fach>/`
 
 ## Bausteine
 - `vorlagen/extract.py` + `vorlagen/build_theorie.py`: Theorie aus der TH-Kadetten-PPP (Texte, Bilder, GIFs) → `theorie.html`

@@ -1,6 +1,6 @@
 import base64, re, subprocess, qrcode, os, io
 BASE="https://stephanholzer12.github.io/unterricht/"
-SITE="/home/claude/nawi/"
+SITE="/home/claude/unterricht/"
 def qr_b64(url):
     q=qrcode.QRCode(border=2,box_size=12,error_correction=qrcode.constants.ERROR_CORRECT_M); q.add_data(url); q.make()
     b=io.BytesIO(); q.make_image(fill_color="#2C3424",back_color="white").save(b,format="PNG"); return base64.b64encode(b.getvalue()).decode(), b.getvalue()

@@ -3,7 +3,7 @@ import json, html, os, shutil
 from PIL import Image
 
 S = json.load(open("/home/claude/handy/slides.json"))
-DST = "/home/claude/nawi/2ab-nawi/k1-2-bindungen/"
+DST = "/home/claude/unterricht/2ab-nawi/k1-2-bindungen/"
 os.makedirs(DST + "img", exist_ok=True)
 rd = lambda p: open(p).read().strip()
 CAMO, LOGO, SMILEY = rd("/home/claude/w2/camo.b64"), rd("/home/claude/w2/logo.b64"), rd("/home/claude/w2/smiley.b64")
