@@ -1,0 +1,521 @@
+<title>Bindungs-Aufgaben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">
+<style>
+/* Layout: eine Spalte, Handy zuerst – Kopf wie die Inhaltsfolien des BHAK-Folienmasters (Tarnmuster-Ecke, Wappen, Smiley).
+   Bewusst nur helles Design wie Folienmaster und Bindungs-Check. Gelb = hier wird geschrieben. */
+:root {
+  --bg: #EEF3E4;          /* lt2 des Folienmasters */
+  --card: #FFFFFF;
+  --ink: #1F2A1C;
+  --olive: #3B4A2F;
+  --green: #7FA83A;
+  --green-soft: #E6F0D3;
+  --teal: #2E7D8C;        /* Buch-Aufgabe */
+  --theory: #6E7F4E;      /* eigene Aufgabe / Theorie */
+  --rust: #8C3B2E;
+  --rust-soft: #F6E3DF;
+  --write: #FFF7D6;       /* Antwortfelder */
+  --write-line: #C9A227;
+  --muted: #5E6652;
+  --line: #D3DCC2;
+  --font-head: Cambria, "Source Serif 4", Georgia, serif;
+  --font-body: Calibri, "Source Sans 3", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+html, body { background: var(--bg); color: var(--ink); }
+body { margin: 0; font-family: var(--font-body); font-size: 18px; line-height: 1.45; }
+.top { background: var(--card); position: relative; border-bottom: 1px solid var(--line); }
+.top .camo { position: absolute; left: 0; top: 0; width: 190px; height: auto; pointer-events: none; }
+.top .logo { position: absolute; left: 8px; top: 6px; width: 52px; height: auto; }
+.top-inner { max-width: 680px; margin: 0 auto; padding: 18px 16px 16px 16px; min-height: 104px; display: flex; align-items: center; gap: 12px; }
+.top-text { margin-left: 150px; flex: 1; min-width: 0; }
+.eyebrow { font-weight: 700; font-size: 14px; color: var(--teal); letter-spacing: .04em; }
+h1 { font-family: var(--font-head); color: var(--olive); font-size: 34px; line-height: 1.05; margin: 2px 0 0; }
+.top .smiley { width: 64px; height: 64px; flex: 0 0 64px; }
+@media (max-width: 520px) {
+  .top .camo { width: 112px; }
+  .top .logo { width: 32px; left: 6px; top: 4px; }
+  .top-inner { padding-top: 54px; min-height: 0; }
+  .top-text { margin-left: 0; }
+  h1 { font-size: 30px; }
+  .top .smiley { width: 52px; height: 52px; flex-basis: 52px; }
+}
+main { max-width: 680px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 48px; display: grid; gap: 14px; }
+.progress { display: flex; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; font-size: 16px; }
+.bar { flex: 1; height: 10px; background: var(--card); border-radius: 5px; overflow: hidden; border: 1px solid var(--line); }
+.bar span { display: block; height: 100%; background: var(--green); width: 0; transition: width .3s ease; }
+.card { background: var(--card); border-radius: 14px; padding: 18px 16px; display: grid; gap: 12px; box-shadow: 0 2px 6px rgba(31, 42, 28, .12); min-width: 0; }
+.card.done { box-shadow: 0 2px 6px rgba(31, 42, 28, .12), inset 4px 0 0 var(--green); }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
+.nr { font-weight: 700; color: var(--olive); font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: inline-grid; place-items: center; font-size: 13px; color: transparent; }
+.card.done .check { background: var(--green); border-color: var(--green); color: #fff; }
+.pill { color: #fff; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 3px 12px; white-space: nowrap; background: var(--teal); }
+.pill.theory { background: var(--theory); }
+.tag { font-size: 13px; font-weight: 700; color: var(--muted); border: 1.5px solid var(--muted); border-radius: 999px; padding: 1px 9px; }
+h2 { font-family: var(--font-head); color: var(--olive); font-size: 23px; line-height: 1.2; margin: 0; text-wrap: balance; }
+.q { margin: 0; }
+.q b { color: var(--theory); }
+.hint { font-size: 15px; color: var(--muted); margin: 0; }
+label.lbl { font-weight: 700; color: var(--olive); font-size: 16px; display: block; margin-bottom: 4px; }
+input[type=text], textarea, select {
+  font: inherit; font-size: 18px; color: var(--ink); width: 100%; background: var(--write);
+  border: 2px dashed var(--write-line); border-radius: 10px; padding: 10px 12px;
+}
+textarea { resize: vertical; min-height: 120px; line-height: 1.4; }
+select { appearance: none; -webkit-appearance: none; padding-right: 36px; min-height: 50px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--olive) 50%), linear-gradient(135deg, var(--olive) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-style: solid; }
+.filled { border-style: solid !important; border-color: var(--line) !important; background-color: var(--card) !important; }
+.rows { display: grid; gap: 10px; }
+.row { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+.row .stoff { font-weight: 700; font-size: 19px; color: var(--olive); }
+.row .stoff span { font-weight: 400; color: var(--muted); font-size: 16px; }
+.two { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 460px) { .two { grid-template-columns: 1fr; } }
+.sent { border: 1px solid var(--line); border-radius: 12px; padding: 12px; line-height: 2.1; }
+.opt { font: inherit; font-size: 18px; font-weight: 600; color: var(--olive); background: var(--write); border: 2px solid var(--write-line); border-radius: 8px; padding: 2px 10px; cursor: pointer; line-height: 1.3; }
+.opt.struck { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--rust); color: var(--muted); background: var(--rust-soft); border-color: var(--rust); }
+.opt.kept { background: var(--green-soft); border-color: var(--green); }
+.abb { display: inline-block; font-weight: 700; background: var(--bg); border-radius: 8px; padding: 4px 10px; color: var(--olive); }
+.grp { font-weight: 700; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.puz { display: grid; gap: 6px; }
+.boxes { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 32px)); gap: 3px; }
+.boxes span { height: 34px; border: 2px solid var(--olive); border-radius: 4px; display: grid; place-items: center; font-weight: 700; font-size: 18px; color: var(--ink); background: var(--card); }
+.boxes span.given { background: var(--rust-soft); color: var(--rust); }
+.boxes span.bad { border-color: var(--rust); }
+.photo { display: grid; gap: 8px; justify-items: start; }
+.photo img { max-width: 100%; border-radius: 10px; border: 1px solid var(--line); }
+.btn { font: inherit; font-weight: 700; font-size: 19px; background: var(--olive); color: #fff; border: 0; border-radius: 12px; padding: 14px 18px; cursor: pointer; width: 100%; }
+.btn.secondary { background: var(--card); color: var(--olive); border: 2px solid var(--olive); }
+.btn.small { width: auto; font-size: 16px; padding: 8px 14px; }
+.btn.danger { background: var(--rust); }
+.btn:disabled { opacity: .55; cursor: default; }
+.filebtn { position: relative; overflow: hidden; display: inline-block; }
+.filebtn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
+.status { margin: 0; font-weight: 600; }
+.status.ok { color: var(--green); }
+.status.err { color: var(--rust); }
+.status.info { color: var(--muted); }
+.who { display: grid; gap: 10px; grid-template-columns: 1fr 120px; }
+@media (max-width: 400px) { .who { grid-template-columns: 1fr; } }
+.steps { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.confirm { background: var(--rust-soft); border-radius: 10px; padding: 12px; display: grid; gap: 10px; }
+.confirm .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+#copyArea { font-size: 14px; min-height: 160px; background: var(--card); border: 1px solid var(--line); border-style: solid; }
+.qrbtn { font: inherit; font-weight: 700; font-size: 15px; background: var(--teal); color: #fff; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; white-space: nowrap; }
+.qr-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10; display: grid; place-items: center; padding: 24px 16px; }
+.qr-box { background: var(--card); border-radius: 18px; box-shadow: 0 4px 14px rgba(31, 42, 28, .18); padding: 3vh 4vw; display: grid; justify-items: center; gap: 1.6vh; text-align: center; max-width: 100%; }
+.qr-box img { width: min(50vh, 80vw); height: auto; image-rendering: pixelated; }
+.qr-box h2 { font-size: clamp(28px, 4vw, 48px); }
+.qr-box p { margin: 0; font-size: clamp(18px, 2vw, 26px); color: var(--muted); }
+@media (max-width: 760px) { .qrbtn { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+
+<header class="top">
+  <img class="camo" alt="" src="data:image/png;base64,__CAMO__">
+  <img class="logo" alt="BHAK Wappen" src="data:image/png;base64,__LOGO__">
+  <div class="top-inner">
+    <div class="top-text">
+      <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+      <h1>Bindungs-Aufgaben</h1>
+    </div>
+    <button class="qrbtn" type="button" id="qrbtn" __QRHIDE__>QR-Code für die Klasse</button>
+    <img class="smiley" alt="" src="data:image/png;base64,__SMILEY__">
+  </div>
+</header>
+<div class="qr-overlay" id="qr" hidden>
+  <div class="qr-box">
+    <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+    <h2>Bindungs-Aufgaben am Handy</h2>
+    <img alt="QR-Code zum Arbeitsblatt" src="data:image/png;base64,__QR__">
+    <p>Kamera öffnen, QR-Code scannen, loslegen.</p>
+    <button class="btn small" type="button" id="qrclose">Schließen</button>
+  </div>
+</div>
+
+<main>
+  <section class="card">
+    <div class="who">
+      <div><label class="lbl" for="name">Dein Name</label><input type="text" id="name" autocomplete="name" placeholder="Vorname Nachname"></div>
+      <div><label class="lbl" for="klasse">Klasse</label><select id="klasse"><option value="">–</option><option>2A</option><option>2B</option></select></div>
+    </div>
+    <ol class="steps hint">
+      <li>Aufgaben in die <b>gelben Felder</b> eintragen – alles wird am Handy automatisch gespeichert.</li>
+      <li>Skizzen ins Heft zeichnen und bei Aufgabe 2 als Foto einfügen.</li>
+      <li>Ganz unten <b>PDF erstellen</b> und die PDF in LMS hochladen.</li>
+    </ol>
+  </section>
+  <div class="progress"><span id="count">0 von 10 bearbeitet</span><div class="bar"><span id="barfill"></span></div></div>
+  <div id="tasks" style="display:grid;gap:14px"></div>
+
+  <section class="card" id="abgabe">
+    <div class="head"><span class="nr">Abgabe</span></div>
+    <h2>Fertig? Dann PDF erstellen</h2>
+    <p class="hint" id="missing"></p>
+    <button class="btn" type="button" id="pdfbtn">PDF erstellen</button>
+    <p class="status" id="pdfstatus" hidden></p>
+    <p class="hint">Danach in LMS die Aufgabe öffnen → <b>Datei hochladen</b> → die PDF aus <i>Downloads</i> (Android) bzw. <i>Dateien</i> (iPhone) wählen.</p>
+    <details>
+      <summary class="hint" style="cursor:pointer">Klappt das PDF nicht? Antworten als Text kopieren</summary>
+      <div style="display:grid;gap:8px;margin-top:8px">
+        <button class="btn secondary small" type="button" id="copybtn">Antworten kopieren</button>
+        <p class="status" id="copystatus" hidden></p>
+        <textarea id="copyArea" readonly aria-label="Alle Antworten als Text"></textarea>
+        <p class="hint">Den Text in LMS in das Antwortfeld einfügen oder einen Screenshot hochladen.</p>
+      </div>
+    </details>
+    <div id="resetwrap">
+      <button class="btn secondary small" type="button" id="resetbtn">Alles löschen und neu beginnen</button>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const FONT_R = "__FONTR__", FONT_B = "__FONTB__", LOGO = "data:image/png;base64,__LOGO__";
+const RANGES = __RANGES__;
+const KEY = "26-27-2AB-K1.2-Bindungen-TH-Handy-v1";
+
+const BAUSTEINE = ["Metall + Nichtmetall", "Nichtmetall + Nichtmetall", "Metall + Metall"];
+const BINDUNG = ["Ionenbindung", "Atombindung (polar)", "Atombindung (unpolar)", "Metallbindung"];
+const ART5 = ["Metallbindung", "Atombindung", "Ionenbindung", "Van-der-Waals-Kräfte", "Wasserstoffbrücken"];
+const T = [
+  { id: "a1", nr: 1, title: "Welche Bindung liegt vor?", src: "Buch-Aufgabe S. 20", type: "table",
+    q: "Schauen Sie im PSE nach, ob die Bestandteile Metalle oder Nichtmetalle sind, und geben Sie die Bindungsart an.",
+    hint: "Buch: CO₂, CaO, Cu₄Sn – Zusatz: NaCl, Cl₂, NH₃",
+    rows: [["CO₂", "Kohlenstoffdioxid"], ["CaO", "Calciumoxid"], ["Cu₄Sn", "Kupfer-Zinn (Bronze)"], ["NaCl", "Kochsalz"], ["Cl₂", "Chlorgas"], ["NH₃", "Ammoniak"]] },
+  { id: "a2", nr: 2, title: "Ionenbindung skizzieren", src: "Buch-Aufgabe S. 22", type: "sketch",
+    q: "Skizzieren Sie die Ionenbindung von Natrium und Chlor im Schalenmodell nach Bohr. Welche Verbindung entsteht? Woher kennen Sie sie aus dem Alltag?" },
+  { id: "a3", nr: 3, title: "Warum reagieren Atome?", src: "Buch-Aufgabe S. 28", type: "text", lead: "Ziele erreicht? Nr. 1:",
+    q: "Erläutern Sie, warum Atome miteinander reagieren." },
+  { id: "a4", nr: 4, title: "Falschen Begriff streichen", src: "Buch-Aufgabe S. 28", type: "strike", lead: "Ziele erreicht? Nr. 2:",
+    q: "Streichen Sie jeweils den falschen Begriff durch.", hint: "Tippe auf den falschen Begriff – er wird durchgestrichen. Nochmal tippen macht es rückgängig.",
+    sents: [["Metalle haben ", ["wenige", "viele"], " Außenelektronen. Sie sind ", ["elektropositiv", "elektronegativ"], "."],
+            ["Nichtmetalle haben ", ["wenige", "viele"], " Außenelektronen. Sie sind ", ["elektropositiv", "elektronegativ"], "."],
+            ["", ["Metalle", "Nichtmetalle"], " geben bei der Bildung einer Bindung eher Elektronen ab."],
+            ["Die ", ["Ionenbindung", "Atombindung"], " ist eine Bindung zwischen Nichtmetallen."],
+            ["Die ", ["Metallbindung", "Ionenbindung"], " ist eine Bindung zwischen Metallen und Nichtmetallen."]] },
+  { id: "a5", nr: 5, title: "Bindungsarten zuordnen", src: "Buch-Aufgabe S. 28", type: "assign", lead: "Ziele erreicht? Nr. 3:",
+    q: "Ordnen Sie den Abbildungen die richtige Bindungsart zu.",
+    items: [["Echte Bindungen", "⊕ ⊕ ⊕ mit freien e⁻"], ["Echte Bindungen", "gemeinsames Elektronenpaar"], ["Echte Bindungen", "⊕ ⊖ Ionen"],
+            ["Zwischenmolekulare Kräfte", "δ+δ– ··· δ+δ–"], ["Zwischenmolekulare Kräfte", "δ+ H ··· δ– O"]] },
+  { id: "a6", nr: 6, title: "Salze", src: "Buch-Aufgabe S. 28", type: "text", lead: "Ziele erreicht? Nr. 4:",
+    q: "Nennen Sie die Bindungsart, bei der Salze entstehen. Zählen Sie drei Eigenschaften von Salzen auf." },
+  { id: "a7", nr: 7, title: "Metalle", src: "Buch-Aufgabe S. 28", type: "text", lead: "Ziele erreicht? Nr. 5:",
+    q: "Notieren Sie mindestens drei Eigenschaften von Metallen, die aufgrund der Metallbindung zustande kommen." },
+  { id: "a8", nr: 8, title: "σ- und π-Bindungen", src: "Buch-Aufgabe S. 28", type: "text", lead: "Ziele erreicht? Nr. 6:", tag: "Exkurs",
+    q: "Erläutern Sie den Unterschied zwischen σ- und π-Bindungen.", hint: "Nur bearbeiten, wenn der Exkurs im Unterricht dran war." },
+  { id: "a9", nr: 9, title: "Fachbegriffe-Rätsel", src: "Buch-Aufgabe S. 28", type: "puzzle", lead: "Ziele erreicht? Nr. 7:",
+    q: "Tragen Sie die passenden Fachbegriffe in die Felder ein.", hint: "Der rote Buchstabe ist vorgegeben.",
+    words: [["Schwer wasserlösliche Stoffe nennt man …", 9, 3, "R"], ["Bei polarisierten Atombindungen entsteht ein elektrischer …", 5, 2, "P"],
+            ["Bei Abgabe von Elektronen entstehen positiv geladene Ionen – die …", 8, 1, "A"], ["Bei Aufnahme von Elektronen entstehen negativ geladene Ionen – die …", 7, 5, "E"],
+            ["Eine Atombindung zwischen Atomen desselben Elements ist …", 7, 2, "P"]] },
+  { id: "a10", nr: 10, title: "Baumwolle oder Funktionsshirt?", src: "Theorie S. 26–27", type: "text", own: true,
+    q: "Für einen 25-km-Marsch im Herbst darfst du ein Shirt wählen: Baumwolle oder Polyester. Welches nimmst du? Begründe mit polar/unpolar und Wasserstoffbrücken." },
+];
+
+// ---------- Zustand (nur in diesem Browser gespeichert) ----------
+let S = { name: "", klasse: "", a: {} };
+let storageOk = true;
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+try { const f = localStorage.getItem(KEY + "-foto"); if (f) { S.a.a2 = S.a.a2 || {}; S.a.a2.foto = f; } } catch (e) {}
+// sofort speichern (klein); das Foto liegt getrennt, damit nicht bei jedem Tastendruck das Bild geschrieben wird
+function save() {
+  try {
+    const foto = S.a.a2 && S.a.a2.foto;
+    const copy = JSON.parse(JSON.stringify(S)); if (copy.a.a2) delete copy.a.a2.foto;
+    localStorage.setItem(KEY, JSON.stringify(copy)); storageOk = true;
+  } catch (e) { storageOk = false; }
+}
+function saveFoto() {
+  try { const f = S.a.a2 && S.a.a2.foto; if (f) localStorage.setItem(KEY + "-foto", f); else localStorage.removeItem(KEY + "-foto"); }
+  catch (e) { storageOk = false; }
+}
+const A = (id) => (S.a[id] = S.a[id] || {});
+
+const $ = (s) => document.querySelector(s);
+function el(tag, props = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);
+  return n;
+}
+const mark = (inp) => inp.classList.toggle("filled", !!String(inp.value).trim());
+
+function textField(id, key, label, multi, rows) {
+  const fid = id + "_" + key;
+  const inp = multi ? el("textarea", { id: fid, rows: rows || 5, placeholder: "Hier tippen …" }) : el("input", { type: "text", id: fid, placeholder: "Hier tippen …" });
+  inp.value = A(id)[key] || "";
+  inp.addEventListener("input", () => { A(id)[key] = inp.value; mark(inp); update(); save(); });
+  mark(inp);
+  return el("div", {}, label ? el("label", { class: "lbl", for: fid, text: label }) : null, inp);
+}
+function selectField(id, key, opts, label) {
+  const fid = id + "_" + key;
+  const s = el("select", { id: fid, "aria-label": label || key }, el("option", { value: "", text: "auswählen …" }), ...opts.map(o => el("option", { value: o, text: o })));
+  s.value = A(id)[key] || "";
+  s.addEventListener("change", () => { A(id)[key] = s.value; mark(s); update(); save(); });
+  mark(s);
+  return el("div", {}, label ? el("label", { class: "lbl", for: fid, text: label }) : null, s);
+}
+
+function renderTask(t) {
+  const card = el("section", { class: "card", id: "card_" + t.id });
+  card.append(el("div", { class: "head" },
+    el("span", { class: "nr" }, el("span", { class: "check", "aria-hidden": "true", text: "✓" }), "Aufgabe " + t.nr, t.tag ? el("span", { class: "tag", text: t.tag }) : null),
+    el("span", { class: "pill" + (t.own ? " theory" : ""), text: t.src })));
+  card.append(el("h2", { text: t.title }));
+  const q = el("p", { class: "q" }); if (t.lead) q.append(el("b", { text: t.lead + " " })); q.append(t.q); card.append(q);
+  if (t.hint) card.append(el("p", { class: "hint", text: t.hint }));
+
+  if (t.type === "text") card.append(textField(t.id, "t", "Deine Antwort", true, 5));
+  if (t.type === "table") {
+    const box = el("div", { class: "rows" });
+    t.rows.forEach(([f, n], i) => box.append(el("div", { class: "row" }, el("div", { class: "stoff" }, f + " ", el("span", { text: n })),
+      el("div", { class: "two" }, selectField(t.id, "b" + i, BAUSTEINE, "Bausteine"), selectField(t.id, "k" + i, BINDUNG, "Bindungsart")))));
+    card.append(box);
+  }
+  if (t.type === "sketch") {
+    const ph = el("div", { class: "photo" });
+    const img = el("img", { alt: "Foto deiner Skizze" });
+    const status = el("p", { class: "status info", hidden: "" });
+    const file = el("input", { type: "file", accept: "image/*", id: "a2_foto", "aria-label": "Foto der Skizze auswählen" });
+    const pick = el("span", { class: "btn secondary small filebtn" }, el("span", { id: "a2_fotolbl", text: "Foto der Heftskizze aufnehmen" }), file);
+    const del = el("button", { class: "btn secondary small", type: "button", text: "Foto entfernen" });
+    function show() {
+      const f = A(t.id).foto; img.hidden = !f; del.hidden = !f; if (f) img.src = f;
+      $("#a2_fotolbl") && ($("#a2_fotolbl").textContent = f ? "Anderes Foto wählen" : "Foto der Heftskizze aufnehmen");
+    }
+    file.addEventListener("change", async () => {
+      const f = file.files && file.files[0]; if (!f) return;
+      status.hidden = false; status.className = "status info"; status.textContent = "Foto wird verkleinert …";
+      try { A(t.id).foto = await shrink(f); status.hidden = true; show(); update(); saveFoto(); if (!storageOk) { status.hidden = false; status.className = "status err"; status.textContent = "Das Foto ist zu groß zum Speichern am Handy – es kommt trotzdem in die PDF, wenn du jetzt abgibst."; } }
+      catch (e) { status.className = "status err"; status.textContent = "Das Foto ließ sich nicht öffnen. Bitte ein JPG- oder PNG-Foto wählen."; }
+      file.value = "";
+    });
+    del.addEventListener("click", () => { delete A(t.id).foto; show(); update(); saveFoto(); });
+    ph.append(el("label", { class: "lbl", text: "Deine Skizze (Foto)" }), pick, status, img, del);
+    card.append(ph, textField(t.id, "verb", "Welche Verbindung entsteht?", false), textField(t.id, "alltag", "Woher kennst du sie aus dem Alltag?", false));
+    setTimeout(show);
+  }
+  if (t.type === "strike") {
+    const box = el("div", { class: "rows" });
+    t.sents.forEach((parts, si) => {
+      const p = el("div", { class: "sent" }); let gi = 0;
+      parts.forEach(part => {
+        if (typeof part === "string") { p.append(part); return; }
+        const g = gi++, key = si + "_" + g;
+        const btns = part.map((w, wi) => {
+          const b = el("button", { class: "opt", type: "button", text: w, "aria-pressed": "false" });
+          b.addEventListener("click", () => { const cur = A(t.id)[key]; A(t.id)[key] = cur === wi ? undefined : wi; paint(); update(); save(); });
+          return b;
+        });
+        function paint() { const s = A(t.id)[key]; btns.forEach((b, wi) => { b.classList.toggle("struck", s === wi); b.classList.toggle("kept", s != null && s !== wi); b.setAttribute("aria-pressed", String(s === wi)); }); }
+        paint(); p.append(btns[0], " / ", btns[1]);
+      });
+      box.append(p);
+    });
+    card.append(box);
+  }
+  if (t.type === "assign") {
+    const box = el("div", { class: "rows" }); let last = "";
+    t.items.forEach(([grp, abb], i) => {
+      if (grp !== last) { box.append(el("div", { class: "grp", text: grp })); last = grp; }
+      box.append(el("div", { class: "row" }, el("div", {}, el("span", { class: "hint", text: "Abbildung " + (i + 1) + "  " }), el("span", { class: "abb", text: abb })), selectField(t.id, "s" + i, ART5, "Bindungsart zu Abbildung " + (i + 1))));
+    });
+    card.append(box);
+  }
+  if (t.type === "puzzle") {
+    const box = el("div", { class: "rows" });
+    t.words.forEach(([q, len, hint, ch], i) => {
+      const fid = t.id + "_w" + i;
+      const inp = el("input", { type: "text", id: fid, maxlength: String(len), autocapitalize: "characters", autocomplete: "off", spellcheck: "false", placeholder: len + " Buchstaben" });
+      const boxes = el("div", { class: "boxes", "aria-hidden": "true", style: "--n:" + len });
+      function paint() {
+        const v = (inp.value || "").toUpperCase(); boxes.textContent = "";
+        for (let c = 0; c < len; c++) { const sp = el("span", { text: c === hint && !v[c] ? ch : (v[c] || "") }); if (c === hint) { sp.className = "given"; if (v[c] && v[c] !== ch) sp.classList.add("bad"); } boxes.append(sp); }
+      }
+      inp.value = A(t.id)["w" + i] || "";
+      inp.addEventListener("input", () => { A(t.id)["w" + i] = inp.value; mark(inp); paint(); update(); save(); });
+      mark(inp); paint();
+      box.append(el("div", { class: "row puz" }, el("label", { for: fid, text: (i + 1) + ". " + q }), boxes, inp));
+    });
+    card.append(box);
+  }
+  return card;
+}
+
+// Foto verkleinern (max. 1400 px, JPEG), damit Speicher und PDF klein bleiben
+function shrink(file) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onerror = rej;
+    fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => {
+      const m = 1400, k = Math.min(1, m / Math.max(im.width, im.height));
+      const c = document.createElement("canvas"); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      res(c.toDataURL("image/jpeg", 0.78)); }; im.src = fr.result; };
+    fr.readAsDataURL(file);
+  });
+}
+
+// ---------- Fortschritt ----------
+const filled = (v) => v != null && String(v).trim() !== "";
+function isDone(t) {
+  const a = S.a[t.id] || {};
+  if (t.type === "text") return filled(a.t);
+  if (t.type === "table") return t.rows.every((_, i) => filled(a["b" + i]) && filled(a["k" + i]));
+  if (t.type === "sketch") return !!a.foto && filled(a.verb) && filled(a.alltag);
+  if (t.type === "strike") return t.sents.every((p, si) => p.filter(x => typeof x !== "string").every((_, g) => a[si + "_" + g] != null));
+  if (t.type === "assign") return t.items.every((_, i) => filled(a["s" + i]));
+  if (t.type === "puzzle") return t.words.every((w, i) => (a["w" + i] || "").trim().length === w[1]);
+}
+function update() {
+  let n = 0; const open = [];
+  T.forEach(t => { const d = isDone(t); if (d) n++; else open.push(t.nr); $("#card_" + t.id).classList.toggle("done", d); });
+  $("#count").textContent = n + " von " + T.length + " bearbeitet";
+  $("#barfill").style.width = (n / T.length * 100) + "%";
+  const who = [];
+  if (!S.name.trim()) who.push("Name"); if (!S.klasse) who.push("Klasse");
+  $("#missing").textContent = (who.length ? "Noch eintragen: " + who.join(" und ") + ". " : "") + (open.length ? "Noch offen: Aufgabe " + open.join(", ") + " (du kannst trotzdem abgeben)." : "Alle Aufgaben bearbeitet.");
+  $("#copyArea").value = asText();
+}
+
+// ---------- Text-Fassung (für Kopieren und PDF) ----------
+function answerLines(t) {
+  const a = S.a[t.id] || {}, L = [], none = "— keine Antwort —";
+  if (t.type === "text") L.push(filled(a.t) ? a.t.trim() : none);
+  if (t.type === "table") t.rows.forEach(([f, n], i) => L.push(f + " (" + n + "): " + (a["b" + i] || "?") + " → " + (a["k" + i] || "?")));
+  if (t.type === "sketch") { L.push("Skizze: " + (a.foto ? "Foto siehe unten" : "kein Foto")); L.push("Verbindung: " + (filled(a.verb) ? a.verb.trim() : none)); L.push("Alltag: " + (filled(a.alltag) ? a.alltag.trim() : none)); }
+  if (t.type === "strike") t.sents.forEach((parts, si) => { let g = 0; L.push(parts.map(p => { if (typeof p === "string") return p; const s = a[si + "_" + (g++)]; return s == null ? "[" + p.join(" / ") + "]" : p[1 - s]; }).join("")); });
+  if (t.type === "assign") t.items.forEach(([, abb], i) => L.push("Abbildung " + (i + 1) + " (" + abb + "): " + (a["s" + i] || "?")));
+  if (t.type === "puzzle") t.words.forEach(([q], i) => L.push((i + 1) + ". " + q + " " + (filled(a["w" + i]) ? a["w" + i].trim().toUpperCase() : "?")));
+  return L;
+}
+function asText() {
+  const out = ["K1.2 Die Bindungsarten – Aufgaben", "Name: " + (S.name || "") + " · Klasse: " + (S.klasse || "") + " · " + new Date().toLocaleDateString("de-AT"), ""];
+  T.forEach(t => { out.push("Aufgabe " + t.nr + ": " + t.title); answerLines(t).forEach(l => out.push("  " + l)); out.push(""); });
+  return out.join("\n");
+}
+
+// ---------- PDF ----------
+function clean(s) {
+  s = String(s).replace(/⊕/g, "(+)").replace(/⊖/g, "(−)").replace(/[‘’]/g, "'");
+  let o = "";
+  for (const ch of s) { const c = ch.codePointAt(0); if (c === 10 || RANGES.some(([a, b]) => c >= a && c <= b)) o += ch; }
+  return o;
+}
+function slug(s) {
+  return (s || "ohne-Namen").trim().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/Ä/g, "Ae").replace(/Ö/g, "Oe").replace(/Ü/g, "Ue").replace(/ß/g, "ss")
+    .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || "ohne-Namen";
+}
+function imgSize(src) { return new Promise((res) => { const i = new Image(); i.onload = () => res([i.width, i.height]); i.onerror = () => res([1, 1]); i.src = src; }); }
+
+async function buildPdf() {
+  const { jsPDF } = window.jspdf;
+  const d = new jsPDF({ unit: "mm", format: "a4" });
+  d.addFileToVFS("C-R.ttf", FONT_R); d.addFont("C-R.ttf", "C", "normal");
+  d.addFileToVFS("C-B.ttf", FONT_B); d.addFont("C-B.ttf", "C", "bold");
+  const W = 210, M = 18, CW = W - 2 * M, BOT = 282; let y = 14;
+  const olive = [59, 74, 47], teal = [46, 125, 140], muted = [94, 102, 82], ink = [31, 42, 28], rust = [140, 59, 46];
+  const txt = (s, size, style, color, x = M, w = CW, lh = 1.32) => {
+    d.setFont("C", style); d.setFontSize(size); d.setTextColor(...color);
+    const lines = d.splitTextToSize(clean(s), w), h = size * 0.3528 * lh;
+    lines.forEach(l => { if (y + h > BOT) { d.addPage(); y = 18; } d.text(l, x, y + h * 0.78); y += h; });
+  };
+  // Kopf
+  d.addImage(LOGO, "PNG", M, y, 11, 12.6);
+  d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...teal); d.text(clean("NAWI · 2AB · K1.2 Die Bindungsarten · Schulbuch S. 19–28"), M + 15, y + 4);
+  d.setFontSize(18); d.setTextColor(...olive); d.text("Bindungs-Aufgaben", M + 15, y + 11.5);
+  y += 17;
+  d.setFont("C", "normal"); d.setFontSize(11); d.setTextColor(...ink);
+  d.text(clean("Name: " + (S.name || "—")), M, y); d.text(clean("Klasse: " + (S.klasse || "—")), M + 105, y); d.text("Datum: " + new Date().toLocaleDateString("de-AT"), M + 140, y);
+  y += 3; d.setDrawColor(...olive); d.setLineWidth(0.6); d.line(M, y, W - M, y); y += 5;
+  for (const t of T) {
+    if (y > BOT - 25) { d.addPage(); y = 18; }
+    y += 2;
+    d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...(t.own ? [110, 127, 78] : teal)); d.text(clean(t.src + (t.tag ? " · " + t.tag : "")), W - M, y + 4, { align: "right" });
+    txt("Aufgabe " + t.nr + ": " + t.title, 13, "bold", olive, M, CW - 40);
+    txt((t.lead ? t.lead + " " : "") + t.q, 10, "normal", muted);
+    y += 1.2;
+    for (const l of answerLines(t)) txt(l, 11.5, l.includes("keine Antwort") ? "bold" : "normal", l.includes("keine Antwort") ? rust : ink, M + 4, CW - 4, 1.3);
+    if (t.type === "sketch" && (S.a.a2 || {}).foto) {
+      const src = S.a.a2.foto; const [iw, ih] = await imgSize(src);
+      let w = 110, h = w * ih / iw; if (h > 120) { h = 120; w = h * iw / ih; }
+      if (y + h + 3 > BOT) { d.addPage(); y = 18; }
+      y += 2; d.addImage(src, "JPEG", M + 4, y, w, h); y += h + 2;
+    }
+    y += 3; d.setDrawColor(211, 220, 194); d.setLineWidth(0.3); d.line(M, y, W - M, y); y += 2;
+  }
+  const n = d.getNumberOfPages();
+  for (let p = 1; p <= n; p++) { d.setPage(p); d.setFont("C", "normal"); d.setFontSize(8); d.setTextColor(...muted); d.text(clean("K1.2 Bindungen · " + (S.name || "") + " · Seite " + p + " von " + n), W - M, 292, { align: "right" }); }
+  return d.output("blob");
+}
+
+// Speichern: im Claude-Artefakt über die Download-Freigabe, sonst als normaler Download
+const inViewer = !!(window.claude && typeof window.claude.use === "function");
+const dlReady = inViewer ? window.claude.use("downloads") : Promise.resolve(null);
+async function savePdf() {
+  const st = $("#pdfstatus"), btn = $("#pdfbtn");
+  const say = (cls, m) => { st.hidden = false; st.className = "status " + cls; st.textContent = m; };
+  if (!S.name.trim()) { say("err", "Bitte zuerst oben deinen Namen eintragen."); $("#name").focus(); return; }
+  if (!window.jspdf) { say("err", "Das PDF-Programm wurde nicht geladen. Prüfe die Internetverbindung und lade die Seite neu – oder kopiere die Antworten als Text (unten)."); return; }
+  btn.disabled = true; say("info", "PDF wird erstellt …");
+  const filename = "K1.2-Bindungen-" + slug(S.name) + ".pdf";
+  try {
+    const blob = await buildPdf();
+    if (inViewer) {
+      const dl = await dlReady;
+      if (!dl) { say("err", "Speichern ist in dieser Ansicht nicht möglich. Kopiere die Antworten als Text (unten) oder öffne den Link im Browser."); return; }
+      try { await dl.save({ filename, data: blob }); say("ok", "Gespeichert: " + filename + " – jetzt in LMS hochladen."); }
+      catch (e) {
+        if (e && e.code === "declined") say("info", "Speichern abgebrochen. Tippe nochmal auf »PDF erstellen«, wenn du es doch speichern willst.");
+        else if (e && e.code === "rate_limited") say("info", "Bitte kurz warten und nochmal tippen.");
+        else say("err", "Speichern hat nicht geklappt. Kopiere die Antworten als Text (unten).");
+      }
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = el("a", { href: url, download: filename }); document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      say("ok", "Gespeichert: " + filename + " – jetzt in LMS hochladen.");
+    }
+  } catch (e) { say("err", "Beim Erstellen der PDF ist ein Fehler passiert. Kopiere die Antworten als Text (unten)."); }
+  finally { btn.disabled = false; }
+}
+
+// ---------- Start ----------
+T.forEach(t => $("#tasks").append(renderTask(t)));
+const nameI = $("#name"), klI = $("#klasse");
+nameI.value = S.name; klI.value = S.klasse; mark(nameI); mark(klI);
+nameI.addEventListener("input", () => { S.name = nameI.value; mark(nameI); update(); save(); });
+klI.addEventListener("change", () => { S.klasse = klI.value; mark(klI); update(); save(); });
+$("#pdfbtn").addEventListener("click", savePdf);
+$("#copybtn").addEventListener("click", () => {
+  const ta = $("#copyArea"), st = $("#copystatus"); ta.value = asText(); st.hidden = false;
+  const fallback = () => { ta.focus(); ta.select(); st.className = "status info"; st.textContent = "Text ist markiert – jetzt mit »Kopieren« übernehmen."; };
+  try { navigator.clipboard.writeText(ta.value).then(() => { st.className = "status ok"; st.textContent = "Kopiert."; }, fallback); } catch (e) { fallback(); }
+});
+function askReset() {
+  const w = $("#resetwrap"); w.textContent = "";
+  const back = () => { w.textContent = ""; w.append(el("button", { class: "btn secondary small", type: "button", id: "resetbtn", text: "Alles löschen und neu beginnen", onclick: askReset })); };
+  w.append(el("div", { class: "confirm" }, el("strong", { text: "Wirklich alle Antworten und das Foto löschen?" }),
+    el("div", { class: "btns" },
+      el("button", { class: "btn danger small", type: "button", text: "Ja, alles löschen", onclick: () => { try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "-foto"); } catch (e) {} location.reload(); } }),
+      el("button", { class: "btn secondary small", type: "button", text: "Abbrechen", onclick: back }))));
+}
+$("#resetbtn").addEventListener("click", askReset);
+const qr = $("#qr");
+$("#qrbtn").addEventListener("click", () => { qr.hidden = false; });
+$("#qrclose").addEventListener("click", () => { qr.hidden = true; });
+update();
+</script>

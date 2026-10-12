@@ -1,0 +1,213 @@
+<title>Bindungs-Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">
+<style>
+/* Layout: eine Spalte, Handy zuerst – Kopf wie die Inhaltsfolien des BHAK-Folienmasters (Tarnmuster-Ecke, Wappen, Smiley).
+   Bewusst nur helles Design, damit Wappen und Tarnmuster wie in der Präsentation wirken. */
+:root {
+  --bg: #EEF3E4;          /* lt2 des Folienmasters */
+  --card: #FFFFFF;
+  --ink: #1F2A1C;         /* dk1 */
+  --olive: #3B4A2F;       /* dk2 – Überschriften, Buttons */
+  --green: #7FA83A;       /* accent1 – richtig, Fortschritt */
+  --green-soft: #E6F0D3;
+  --orange: #D9772B;      /* accent3 – Lösung */
+  --teal: #2E7D8C;        /* accent4 – Buchseiten-Pill, Buchstaben */
+  --rust: #8C3B2E;        /* accent6 – falsch */
+  --rust-soft: #F6E3DF;
+  --muted: #5E6652;
+  --line: #D3DCC2;
+  --font-head: Cambria, "Source Serif 4", Georgia, serif;
+  --font-body: Calibri, "Source Sans 3", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); }
+body { margin: 0; font-family: var(--font-body); font-size: 18px; line-height: 1.45; }
+.top { background: var(--card); position: relative; border-bottom: 1px solid var(--line); }
+.top .camo { position: absolute; left: 0; top: 0; width: 190px; height: auto; pointer-events: none; }
+.top .logo { position: absolute; left: 8px; top: 6px; width: 52px; height: auto; }
+.top-inner { max-width: 680px; margin: 0 auto; padding: 18px 16px 16px 16px; min-height: 104px; display: flex; align-items: center; gap: 12px; }
+.top-text { margin-left: 150px; flex: 1; min-width: 0; }
+.eyebrow { font-weight: 700; font-size: 14px; color: var(--teal); letter-spacing: .04em; }
+h1 { font-family: var(--font-head); color: var(--olive); font-size: 34px; line-height: 1.05; margin: 2px 0 0; white-space: nowrap; }
+.top .smiley { width: 64px; height: 64px; flex: 0 0 64px; }
+@media (max-width: 520px) {
+  .top .camo { width: 112px; }
+  .top .logo { width: 32px; left: 6px; top: 4px; }
+  .top-inner { padding-top: 54px; min-height: 0; }
+  .top-text { margin-left: 0; }
+  h1 { font-size: 30px; }
+  .top .smiley { width: 52px; height: 52px; flex-basis: 52px; }
+}
+main { max-width: 680px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 40px; display: grid; gap: 14px; }
+.progress { display: flex; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; font-size: 16px; }
+.bar { flex: 1; height: 10px; background: var(--card); border-radius: 5px; overflow: hidden; border: 1px solid var(--line); }
+.bar span { display: block; height: 100%; background: var(--green); width: 0; transition: width .3s ease; }
+.card { background: var(--card); border-radius: 14px; padding: 20px 18px; display: grid; gap: 14px; box-shadow: 0 2px 6px rgba(31, 42, 28, .12); }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.topic { font-weight: 700; color: var(--olive); font-size: 15px; }
+.pill { background: var(--teal); color: #fff; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 3px 12px; white-space: nowrap; }
+.q { font-family: var(--font-head); color: var(--olive); font-size: 23px; line-height: 1.25; margin: 0; text-wrap: balance; }
+.answers { display: grid; gap: 10px; }
+.answer { font: inherit; font-size: 18px; text-align: left; color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 58px; cursor: pointer; display: flex; gap: 12px; align-items: center; }
+.answer:hover:not(:disabled) { border-color: var(--teal); }
+.answer:focus-visible, .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.key { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 700; display: grid; place-items: center; }
+.answer.right { border-color: var(--green); background: var(--green-soft); }
+.answer.right .key { background: var(--green); }
+.answer.wrong { border-color: var(--rust); background: var(--rust-soft); }
+.answer.wrong .key { background: var(--rust); }
+.answer:disabled { cursor: default; }
+.feedback { border: 2px solid var(--orange); border-radius: 12px; padding: 12px 14px; background: var(--card); }
+.feedback strong { display: block; font-size: 19px; margin-bottom: 2px; }
+.feedback.ok strong { color: var(--green); }
+.feedback.no strong { color: var(--rust); }
+.btn { font: inherit; font-weight: 700; font-size: 19px; background: var(--olive); color: #fff; border: 0; border-radius: 12px; padding: 14px 18px; cursor: pointer; width: 100%; }
+.btn.secondary { background: var(--card); color: var(--olive); border: 2px solid var(--olive); }
+.result { display: grid; justify-items: center; text-align: center; gap: 6px; }
+.result img { width: 120px; height: 120px; }
+.score { font-family: var(--font-head); font-size: 64px; line-height: 1; color: var(--olive); font-variant-numeric: tabular-nums; }
+.msg { font-size: 20px; font-weight: 700; color: var(--teal); }
+.review { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.review li { background: var(--bg); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; }
+.review b { color: var(--olive); }
+.review span { color: var(--muted); font-size: 16px; }
+.review span.pill { color: #fff; font-size: 14px; }
+.review .pill { justify-self: start; }
+.qrbtn { font: inherit; font-weight: 700; font-size: 15px; background: var(--teal); color: #fff; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; white-space: nowrap; }
+.qrbtn:focus-visible, .qrclose:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.qr-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10; display: grid; place-items: center; padding: 24px 16px; }
+.qr-box { background: var(--card); border-radius: 18px; box-shadow: 0 4px 14px rgba(31, 42, 28, .18); padding: 28px; display: grid; justify-items: center; gap: 14px; text-align: center; max-width: 100%; }
+.qr-box img { width: min(50vh, 80vw); height: auto; image-rendering: pixelated; }
+.qr-box { padding: 3vh 4vw; gap: 1.6vh; }
+.qr-box h2 { font-family: var(--font-head); color: var(--olive); font-size: clamp(28px, 4vw, 48px); margin: 0; }
+.qr-box p { margin: 0; font-size: clamp(18px, 2vw, 26px); color: var(--muted); }
+.qrclose { font: inherit; font-weight: 700; font-size: 18px; background: var(--olive); color: #fff; border: 0; border-radius: 12px; padding: 12px 22px; cursor: pointer; }
+.qr-overlay[hidden] { display: none; }
+@media (max-width: 760px) { .qrbtn { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+
+<header class="top">
+  <img class="camo" alt="" src="data:image/png;base64,__CAMO__">
+  <img class="logo" alt="BHAK Wappen" src="data:image/png;base64,__LOGO__">
+  <div class="top-inner">
+    <div class="top-text">
+      <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+      <h1>Bindungs-Check</h1>
+    </div>
+    <button class="qrbtn" type="button" id="qrbtn">QR-Code für die Klasse</button>
+    <img class="smiley" alt="" src="data:image/png;base64,__SMILEY__">
+  </div>
+</header>
+<div class="qr-overlay" id="qr" hidden>
+  <img class="camo" alt="" src="data:image/png;base64,__CAMO__" style="position:fixed;left:0;top:0;width:min(26vw,300px)">
+  <img alt="BHAK Wappen" src="data:image/png;base64,__LOGO__" style="position:fixed;left:12px;top:10px;width:min(7vw,80px)">
+  <div class="qr-box">
+    <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+    <h2>Bindungs-Check am Handy</h2>
+    <img alt="QR-Code zum Bindungs-Check" src="data:image/png;base64,__QR__">
+    <p>Kamera öffnen, QR-Code scannen, loslegen.</p>
+    <button class="qrclose" type="button" id="qrclose">Quiz starten</button>
+  </div>
+</div>
+
+<main>
+  <div class="progress"><span id="count">Frage 1 von 16</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
+  <section class="card" id="stage" aria-live="polite"></section>
+</main>
+
+<script>
+const SMILEY = "data:image/png;base64,__SMILEY__";
+const Q = [
+  { t: "Grundlagen", q: "Warum gehen Atome überhaupt Bindungen ein?", a: ["Sie wollen eine voll besetzte Außenschale erreichen (Edelgaszustand).", "Sie wollen schwerer werden.", "Ihre Atomkerne ziehen sich gegenseitig an.", "Sie wollen mehr Protonen bekommen."], e: "Eine voll besetzte Außenschale (meist 8 Elektronen, Oktettregel) ist energiearm und besonders stabil.", p: "Buch S. 20" },
+  { t: "Ionenbindung", q: "Natrium (Metall) reagiert mit Chlor (Nichtmetall). Welche Bindung entsteht?", a: ["Ionenbindung", "Atombindung", "Metallbindung", "Wasserstoffbrücke"], e: "Metall + Nichtmetall ergibt eine Ionenbindung: Natrium gibt ein Elektron ab (Na⁺), Chlor nimmt es auf (Cl⁻). Es entsteht ein Salz.", p: "Buch S. 21" },
+  { t: "Ionenbindung", q: "Festes Kochsalz leitet keinen Strom, Salzwasser schon. Warum?", a: ["Im Wasser werden die Ionen beweglich.", "Wasser selbst leitet den Strom sehr gut.", "Im Wasser verwandelt sich Salz in ein Metall.", "Im festen Salz gibt es keine Ionen."], e: "Im Kristall sitzen die Ionen fest im Ionengitter. Gelöst sind sie beweglich und tragen den Strom – Salzwasser ist ein Elektrolyt.", p: "Buch S. 21" },
+  { t: "Ionenbindung", q: "Ein Salzkristall zerspringt unter dem Hammer. Warum?", a: ["Gleiche Ladungen geraten übereinander und stoßen sich ab.", "Das Elektronengas entweicht.", "Die Wasserstoffbrücken reißen.", "Salz ist innen hohl."], e: "Der Schlag verschiebt die Ionenschichten. Plötzlich liegt + über + und – über –, die Schichten stoßen sich ab, der Kristall bricht.", p: "Buch S. 21" },
+  { t: "Sport", q: "Bei einem langen Lauf in der Hitze schwitzt du stark. Was verlierst du neben Wasser?", a: ["Ionen (Elektrolyte) wie Na⁺ und Cl⁻", "Elektronengas", "Wasserstoffbrücken", "Nichts – Schweiß ist reines Wasser."], e: "Schweiß enthält gelöste Ionen. Wer stundenlang schwitzt und nur reines Wasser trinkt, riskiert einen Natriummangel.", p: "Buch S. 21" },
+  { t: "Atombindung", q: "Welche Bindung hält das Chlor-Molekül Cl₂ zusammen?", a: ["unpolare Atombindung", "polare Atombindung", "Ionenbindung", "Metallbindung"], e: "Zwei gleiche Atome haben die gleiche Elektronegativität. Das gemeinsame Elektronenpaar liegt genau in der Mitte: unpolar.", p: "Buch S. 22" },
+  { t: "Atombindung", q: "Im HCl-Molekül trägt das Chlor-Atom die Teilladung δ–. Warum?", a: ["Chlor hat die höhere Elektronegativität.", "Chlor hat mehr Neutronen.", "Wasserstoff gibt sein Elektron vollständig ab.", "Chlor ist ein Metall."], e: "Chlor (EN 3,0) zieht das gemeinsame Elektronenpaar stärker an als Wasserstoff (EN 2,1). So entsteht δ– am Cl und δ+ am H.", p: "Buch S. 22" },
+  { t: "Atombindung", q: "Kohlenstoffdioxid (CO₂) hat polare Bindungen, ist aber kein Dipol. Warum?", a: ["Es ist linear gebaut – die Teilladungen heben sich auf.", "Kohlenstoff hat keine Elektronen.", "CO₂ ist ein Salz.", "Sauerstoff ist unpolar."], e: "Beide O-Atome ziehen gleich stark, aber in entgegengesetzte Richtungen. Wasser ist dagegen gewinkelt und deshalb ein Dipol.", p: "Buch S. 23" },
+  { t: "Metallbindung", q: "Warum leitet ein Kupferkabel den Strom so gut?", a: ["Die Elektronen sind frei beweglich (Elektronengas).", "Kupfer besteht aus Ionen, die sich lösen.", "Zwischen den Kupferatomen gibt es Wasserstoffbrücken.", "Kupfer ist ein Nichtmetall."], e: "In Metallen bewegen sich die Außenelektronen frei zwischen den Kationen – wie ein Gas. Sie tragen den Strom.", p: "Buch S. 25" },
+  { t: "Metallbindung", q: "Stahl ist eine Legierung aus …", a: ["Eisen und Kohlenstoff", "Kupfer und Zinn", "Kupfer und Zink", "Eisen und Chlor"], e: "Stahl = Eisen + Kohlenstoff. Kupfer + Zinn ist Bronze, Kupfer + Zink ist Messing.", p: "Buch S. 25" },
+  { t: "Wasserstoffbrücken", q: "Wasserstoffbrücken entstehen, wenn Wasserstoff gebunden ist an …", a: ["Sauerstoff, Stickstoff oder Fluor", "Kohlenstoff", "ein Metall", "jedes beliebige Atom"], e: "Nur bei O, N und F ist der Unterschied in der Elektronegativität groß genug. Das δ+ H zieht dann das δ– Atom des Nachbarmoleküls an.", p: "Buch S. 26" },
+  { t: "Wasserstoffbrücken", q: "Warum schwimmt Eis auf Wasser?", a: ["Wasserstoffbrücken halten die Moleküle im Eis auf Abstand – Eis ist weniger dicht.", "Im Eis sind Luftblasen eingeschlossen.", "Kalte Stoffe sind immer leichter.", "Eis besteht aus anderen Molekülen als Wasser."], e: "Im Eis bilden Wasserstoffbrücken ein weitmaschiges Gitter. Eis (0,92 g/cm³) ist leichter als Wasser (1,00 g/cm³). Deshalb friert ein Teich von oben zu.", p: "Buch S. 26" },
+  { t: "Wasserstoffbrücken", q: "Warum solltest du bei Kälte keinen Schnee essen?", a: ["Das Schmelzen kostet Körperwärme – Wasserstoffbrücken müssen aufgebrochen werden.", "Schnee ist giftig.", "Schnee enthält zu viel Salz.", "Schnee enthält keine Wassermoleküle."], e: "Ein Kilogramm Schnee zu schmelzen und zu erwärmen kostet den Körper fast 500 kJ Wärme. Schnee darum immer zuerst schmelzen.", p: "Buch S. 26" },
+  { t: "Van-der-Waals-Kräfte", q: "Butan (Campingkocher) siedet bei –1 °C, Octan (Benzin) erst bei 126 °C. Warum?", a: ["Längere Moleküle haben stärkere Van-der-Waals-Kräfte.", "Octan enthält Ionenbindungen.", "Octan bildet Wasserstoffbrücken.", "Butan ist ein Metall."], e: "Je größer und länger das Molekül, desto stärker die Van-der-Waals-Kräfte – und desto mehr Energie braucht es zum Sieden.", p: "Buch S. 27" },
+  { t: "Löslichkeit", q: "Warum mischen sich Öl und Wasser nicht?", a: ["Öl ist unpolar, Wasser ist polar.", "Öl ist schwerer als Wasser.", "Wasser ist ein Metall.", "Öl besteht aus Ionen."], e: "»Ähnliches löst sich in Ähnlichem«: Polare Stoffe lösen sich in polaren, unpolare in unpolaren. Öl schwimmt oben, weil es leichter ist.", p: "Buch S. 26–27" },
+  { t: "Van-der-Waals-Kräfte", q: "Ein Gecko läuft eine Glasscheibe hinauf. Was hält ihn fest?", a: ["Van-der-Waals-Kräfte zwischen Millionen feiner Härchen und dem Glas", "Saugnäpfe an den Füßen", "Klebriger Schleim", "Magnetische Kräfte"], e: "Jedes Härchen haftet nur ganz schwach. Weil es Millionen sind, reicht die Summe der Van-der-Waals-Kräfte für das ganze Tier.", p: "Buch S. 27" },
+];
+const KEYS = ["A", "B", "C", "D"];
+let i = 0, pts = 0, missed = [], order = [];
+const $ = (id) => document.getElementById(id);
+function shuffle(n) { const a = [...Array(n).keys()]; for (let k = n - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; }
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function head() {
+  $("count").textContent = `Frage ${Math.min(i + 1, Q.length)} von ${Q.length}`;
+  $("pts").textContent = `${pts} ${pts === 1 ? "Punkt" : "Punkte"}`;
+  $("barfill").style.width = `${(i / Q.length) * 100}%`;
+}
+function show() {
+  head();
+  const q = Q[i], st = $("stage");
+  st.replaceChildren();
+  const h = el("div", "head"); h.append(el("div", "topic", q.t), el("div", "pill", q.p));
+  st.append(h, el("h2", "q", q.q));
+  const box = el("div", "answers");
+  order = shuffle(q.a.length);
+  order.forEach((orig, pos) => {
+    const b = el("button", "answer"); b.type = "button"; b.id = `a${pos}`;
+    b.append(el("span", "key", KEYS[pos]), el("span", "", q.a[orig]));
+    b.addEventListener("click", () => pick(orig, b));
+    box.append(b);
+  });
+  st.append(box);
+}
+function pick(orig, btn) {
+  const q = Q[i], st = $("stage"), ok = orig === 0;
+  st.querySelectorAll(".answer").forEach((b, pos) => { b.disabled = true; if (order[pos] === 0) b.classList.add("right"); });
+  if (!ok) { btn.classList.add("wrong"); missed.push(i); } else pts++;
+  const fb = el("div", "feedback " + (ok ? "ok" : "no"));
+  fb.append(el("strong", "", ok ? "Richtig!" : "Leider falsch."), el("div", "", q.e));
+  const next = el("button", "btn", i < Q.length - 1 ? "Nächste Frage" : "Ergebnis anzeigen"); next.type = "button"; next.id = "next";
+  next.addEventListener("click", () => { i++; i < Q.length ? show() : result(); window.scrollTo({ top: 0, behavior: "auto" }); });
+  st.append(fb, next);
+  head();
+  next.focus({ preventScroll: true });
+  fb.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
+}
+function message(p) {
+  if (p === Q.length) return "Alles richtig – ausgezeichnet!";
+  if (p >= 13) return "Sehr gut – fast alles sitzt.";
+  if (p >= 9) return "Gut – schau dir die markierten Fragen noch einmal an.";
+  return "Noch üben – lies die Buchseiten unten nach und probier es noch einmal.";
+}
+function result() {
+  $("count").textContent = "Geschafft";
+  $("pts").textContent = `${pts} ${pts === 1 ? "Punkt" : "Punkte"}`;
+  $("barfill").style.width = "100%";
+  const st = $("stage");
+  st.replaceChildren();
+  const r = el("div", "result");
+  const img = el("img"); img.src = SMILEY; img.alt = "";
+  r.append(img, el("div", "score", `${pts} / ${Q.length}`), el("div", "msg", message(pts)));
+  st.append(r);
+  if (missed.length) {
+    st.append(el("div", "topic", "Zum Nachlesen"));
+    const ul = el("ul", "review");
+    missed.forEach(k => { const li = el("li"); li.append(el("b", "", Q[k].q), el("span", "", `Richtig: ${Q[k].a[0]}`), el("span", "pill", Q[k].p)); ul.append(li); });
+    st.append(ul);
+  }
+  const again = el("button", "btn secondary", "Noch einmal"); again.type = "button"; again.id = "again";
+  again.addEventListener("click", () => { i = 0; pts = 0; missed = []; show(); });
+  st.append(again);
+}
+$("qrbtn").addEventListener("click", () => { $("qr").hidden = false; $("qrclose").focus(); });
+$("qrclose").addEventListener("click", () => { $("qr").hidden = true; $("qrbtn").focus(); });
+// Am Laptop/Beamer startet die Seite mit dem QR-Code, am Handy direkt mit dem Quiz
+if (matchMedia("(min-width: 761px)").matches) { $("qr").hidden = false; }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("qr").hidden) $("qr").hidden = true; });
+show();
+</script>
