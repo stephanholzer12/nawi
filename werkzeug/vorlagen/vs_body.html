@@ -1,0 +1,281 @@
+<header class="top">
+  <img class="camo" alt="" src="data:image/png;base64,__CAMO__">
+  <img class="logo" alt="BHAK Wappen" src="data:image/png;base64,__LOGO__">
+  <div class="top-inner">
+    <div class="top-text">
+      <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+      <h1>Bindungs-Versuche</h1>
+    </div>
+    <button class="qrbtn" type="button" id="qrbtn">QR-Code für die Klasse</button>
+    <img class="smiley" alt="" src="data:image/png;base64,__SMILEY__">
+  </div>
+</header>
+<div class="qr-overlay" id="qr" hidden>
+  <div class="qr-box">
+    <div class="eyebrow">NAWI · 2AB · K1.2 Die Bindungsarten</div>
+    <h2>Versuchsprotokoll am Handy</h2>
+    <img alt="QR-Code zur Versuchsseite" src="data:image/png;base64,__QR__">
+    <p>Ein Handy pro Gruppe: QR-Code scannen, Versuch wählen, los.</p>
+    <button class="btn small" type="button" id="qrclose">Schließen</button>
+  </div>
+</div>
+
+<main>
+  <section class="card safety">
+    <h2>Handy im NAWI-Saal</h2>
+    <ul class="steps">
+      <li><b>Ein Protokoll-Handy pro Gruppe.</b> Es liegt abseits vom Arbeitsplatz oder steckt im Zipp-Beutel.</li>
+      <li><b>Erst arbeiten, dann tippen.</b> Bei Brenner, Säuren und Laugen das Handy nicht in der Hand.</li>
+      <li><b>Fotos nur aus sicherem Abstand</b> – nie über die Flamme oder das offene Gefäß beugen.</li>
+      <li>Schutzbrille bleibt auf, auch beim Fotografieren.</li>
+    </ul>
+  </section>
+  <section class="card">
+    <div class="who">
+      <div><label class="lbl" for="name">Namen der Gruppe</label><input type="text" id="name" autocomplete="off" placeholder="z. B. Huber, Maier, Novak"></div>
+      <div><label class="lbl" for="klasse">Klasse</label><select id="klasse"><option value="">–</option><option>2A</option><option>2B</option></select></div>
+    </div>
+    <p class="hint"><b>So wertest du jeden Versuch aus:</b> <b>Erkenntnis</b> – Was habt ihr herausgefunden? · <b>Interpretation</b> – Warum ist das so? Erklärt mit den Teilchen. · <b>Schlussfolgerung</b> – Was bedeutet das für Alltag, Sport oder Bundesheer?</p>
+    <p class="hint">Antippen öffnet einen Versuch. Alles wird am Handy gespeichert. Ganz unten: <b>PDF erstellen</b> und in LMS hochladen – in die PDF kommen nur die Versuche, die ihr bearbeitet habt.</p>
+  </section>
+  <div class="progress"><span id="count">0 Versuche bearbeitet</span></div>
+  <div id="vs" style="display:grid;gap:14px"></div>
+
+  <section class="card" id="abgabe">
+    <div class="head"><span class="nr">Abgabe</span></div>
+    <h2>Fertig? Dann PDF erstellen</h2>
+    <p class="hint" id="missing"></p>
+    <button class="btn" type="button" id="pdfbtn">PDF erstellen</button>
+    <p class="status" id="pdfstatus" hidden></p>
+    <p class="hint">Danach in LMS die Aufgabe öffnen → <b>Datei hochladen</b> → die PDF aus <i>Downloads</i> (Android) bzw. <i>Dateien</i> (iPhone) wählen.</p>
+    <details>
+      <summary class="hint" style="cursor:pointer">Klappt das PDF nicht? Protokoll als Text kopieren</summary>
+      <div style="display:grid;gap:8px;margin-top:8px">
+        <button class="btn secondary small" type="button" id="copybtn">Protokoll kopieren</button>
+        <p class="status" id="copystatus" hidden></p>
+        <textarea id="copyArea" readonly aria-label="Protokoll als Text"></textarea>
+      </div>
+    </details>
+    <div id="resetwrap"><button class="btn secondary small" type="button" id="resetbtn">Alles löschen und neu beginnen</button></div>
+  </section>
+</main>
+
+<script>__JSPDF__</script>
+<script>
+const FONT_R = "__FONTR__", FONT_B = "__FONTB__", LOGO = "data:image/png;base64,__LOGO__";
+const RANGES = __RANGES__;
+const V = __DATA__;
+const KEY = "26-27-2AB-K1.2-Bindungen-VS-Handy-v1";
+
+let S = { name: "", klasse: "", a: {} }, storageOk = true;
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+V.forEach(v => { try { const f = localStorage.getItem(KEY + "-foto-" + v.id); if (f) { S.a[v.id] = S.a[v.id] || {}; S.a[v.id].foto = f; } } catch (e) {} });
+function save() {
+  try { const c = JSON.parse(JSON.stringify(S)); Object.values(c.a).forEach(x => delete x.foto); localStorage.setItem(KEY, JSON.stringify(c)); storageOk = true; } catch (e) { storageOk = false; }
+}
+function saveFoto(id) {
+  try { const f = S.a[id] && S.a[id].foto; if (f) localStorage.setItem(KEY + "-foto-" + id, f); else localStorage.removeItem(KEY + "-foto-" + id); } catch (e) { storageOk = false; }
+}
+const A = (id) => (S.a[id] = S.a[id] || {});
+const $ = (s) => document.querySelector(s);
+function el(tag, props = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);
+  return n;
+}
+const mark = (inp) => inp.classList.toggle("filled", !!String(inp.value).trim());
+const filled = (v) => v != null && String(v).trim() !== "";
+
+function field(id, key, label, multi, hint) {
+  const fid = id + "_" + key;
+  const inp = multi ? el("textarea", { id: fid, rows: 4, placeholder: "Hier tippen …" }) : el("input", { type: "text", id: fid, placeholder: "Hier tippen …" });
+  inp.value = A(id)[key] || "";
+  inp.addEventListener("input", () => { A(id)[key] = inp.value; mark(inp); update(); save(); });
+  mark(inp);
+  return el("div", { class: "fieldwrap" }, label ? el("label", { class: "lbl", for: fid, text: label }) : null, hint ? el("p", { class: "q", text: hint }) : null, inp);
+}
+
+function shrink(file) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader(); fr.onerror = rej;
+    fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => {
+      const m = 1200, k = Math.min(1, m / Math.max(im.width, im.height));
+      const c = document.createElement("canvas"); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      res(c.toDataURL("image/jpeg", 0.72)); }; im.src = fr.result; };
+    fr.readAsDataURL(file);
+  });
+}
+
+function versuch(v) {
+  const d = el("details", { class: "card vcard", id: "card_" + v.id });
+  const sum = el("summary", {},
+    el("div", { class: "head" },
+      el("span", { class: "nr" }, el("span", { class: "check", "aria-hidden": "true", text: "✓" }), v.nr, el("span", { class: "tag " + (v.kern ? "kern" : "zusatz"), text: v.kern ? "KERN" : "ZUSATZ" })),
+      el("span", { class: "pill" + (v.buch.versuch ? " book" : " theory"), text: (v.buch.versuch ? "Versuch im Buch " : "Theorie ") + v.buch.s })),
+    el("h2", { text: v.titel }), el("p", { class: "hint", text: v.bindung }));
+  d.append(sum);
+  const body = el("div", { class: "vbody" });
+  body.append(el("p", { class: "q", text: v.intro }));
+  if (v.sicher) body.append(el("div", { class: "warn" }, el("b", { text: "Sicherheit: " }), v.sicher));
+  body.append(el("h3", { text: "Geräte & Chemikalien" }));
+  const mat = el("div", { class: "mat" });
+  v.mat.forEach(([t, ic]) => mat.append(el("div", { class: "matitem" }, el("img", { src: "vs-img/i_" + ic + ".png", alt: "", loading: "lazy" }), el("span", { text: t }))));
+  body.append(mat);
+  body.append(el("h3", { text: "Durchführung" }));
+  const ol = el("ol", { class: "steps" }); v.schritte.forEach(s => ol.append(el("li", { text: s }))); body.append(ol);
+  body.append(el("figure", { class: "fig" }, el("img", { src: "vs-img/d_" + v.skizze + ".png", alt: "Skizze zum Versuchsaufbau", loading: "lazy" })));
+  body.append(el("p", { class: "hint" }, el("b", { text: "Entsorgung und Reinigung: " }), v.entsorgung));
+  // Beobachtung / Messwerte
+  body.append(el("h3", { text: v.beob.titel }));
+  const nGiven = Math.max(...v.beob.zeilen.map(z => z.length));
+  v.beob.zeilen.forEach((z, ri) => {
+    const row = el("div", { class: "row" }, el("div", { class: "stoff", text: z.join(" · ") }));
+    for (let c = nGiven; c < v.beob.kopf.length; c++) row.append(field(v.id, "b" + ri + "_" + c, v.beob.kopf[c], false));
+    body.append(row);
+  });
+  // Foto
+  const ph = el("div", { class: "photo" });
+  const img = el("img", { alt: "Foto vom Versuch" });
+  const st = el("p", { class: "status info", hidden: "" });
+  const file = el("input", { type: "file", accept: "image/*", id: v.id + "_foto", "aria-label": "Foto vom Versuch" });
+  const lbl = el("span", { text: "Foto vom Versuch aufnehmen" });
+  const del = el("button", { class: "btn secondary small", type: "button", text: "Foto entfernen" });
+  const show = () => { const f = A(v.id).foto; img.hidden = !f; del.hidden = !f; if (f) img.src = f; lbl.textContent = f ? "Anderes Foto wählen" : "Foto vom Versuch aufnehmen"; };
+  file.addEventListener("change", async () => {
+    const f = file.files && file.files[0]; if (!f) return;
+    st.hidden = false; st.className = "status info"; st.textContent = "Foto wird verkleinert …";
+    try { A(v.id).foto = await shrink(f); st.hidden = true; show(); saveFoto(v.id); update();
+      if (!storageOk) { st.hidden = false; st.className = "status err"; st.textContent = "Handy-Speicher voll – das Foto kommt trotzdem in die PDF, wenn ihr jetzt abgebt."; } }
+    catch (e) { st.className = "status err"; st.textContent = "Das Foto ließ sich nicht öffnen. Bitte ein JPG- oder PNG-Foto wählen."; }
+    file.value = "";
+  });
+  del.addEventListener("click", () => { delete A(v.id).foto; show(); saveFoto(v.id); update(); });
+  ph.append(el("label", { class: "lbl", text: "Foto (freiwillig): Aufbau oder Ergebnis" }), el("span", { class: "btn secondary small filebtn" }, lbl, file), st, img, del);
+  body.append(ph); show();
+  body.append(field(v.id, "erk", "Erkenntnis", true, v.erk), field(v.id, "interp", "Interpretation", true, v.interp), field(v.id, "schluss", "Schlussfolgerung", true, v.schluss));
+  d.append(body);
+  return d;
+}
+
+function touched(v) { const a = S.a[v.id] || {}; return Object.entries(a).some(([k, x]) => filled(x)); }
+function isDone(v) { const a = S.a[v.id] || {}; return filled(a.erk) && filled(a.interp) && filled(a.schluss); }
+function update() {
+  let n = 0;
+  V.forEach(v => { const d = isDone(v); if (touched(v)) n++; $("#card_" + v.id).classList.toggle("done", d); });
+  $("#count").textContent = n + (n === 1 ? " Versuch" : " Versuche") + " bearbeitet";
+  const who = []; if (!S.name.trim()) who.push("Namen der Gruppe"); if (!S.klasse) who.push("Klasse");
+  $("#missing").textContent = (who.length ? "Noch eintragen: " + who.join(" und ") + ". " : "") + (n ? "In die PDF kommen " + n + (n === 1 ? " Versuch." : " Versuche.") : "Noch kein Versuch bearbeitet.");
+  $("#copyArea").value = asText();
+}
+
+function lines(v) {
+  const a = S.a[v.id] || {}, L = [];
+  const nGiven = Math.max(...v.beob.zeilen.map(z => z.length));
+  L.push([v.beob.titel + ":", "h"]);
+  v.beob.zeilen.forEach((z, ri) => {
+    const vals = []; for (let c = nGiven; c < v.beob.kopf.length; c++) vals.push(v.beob.kopf[c] + ": " + (filled(a["b" + ri + "_" + c]) ? a["b" + ri + "_" + c].trim() : "–"));
+    L.push(["  " + z.join(" · ") + " – " + vals.join(" · "), "n"]);
+  });
+  [["Erkenntnis", "erk"], ["Interpretation", "interp"], ["Schlussfolgerung", "schluss"]].forEach(([t, k]) => { L.push([t + ":", "h"]); L.push(["  " + (filled(a[k]) ? a[k].trim() : "— keine Antwort —"), filled(a[k]) ? "n" : "x"]); });
+  return L;
+}
+function asText() {
+  const out = ["K1.2 Die Bindungsarten – Versuchsprotokoll", "Gruppe: " + (S.name || "") + " · Klasse: " + (S.klasse || "") + " · " + new Date().toLocaleDateString("de-AT"), ""];
+  V.filter(touched).forEach(v => { out.push(v.nr + " " + v.titel); lines(v).forEach(([l]) => out.push(l)); out.push(""); });
+  return out.join("\n");
+}
+function clean(s) {
+  s = String(s).replace(/⊕/g, "(+)").replace(/⊖/g, "(−)").replace(/[‘’]/g, "'");
+  let o = ""; for (const ch of s) { const c = ch.codePointAt(0); if (c === 10 || RANGES.some(([a, b]) => c >= a && c <= b)) o += ch; } return o;
+}
+function slug(s) {
+  return (s || "Gruppe").trim().split(/[,;/]+/)[0].trim().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/Ä/g, "Ae").replace(/Ö/g, "Oe").replace(/Ü/g, "Ue").replace(/ß/g, "ss")
+    .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || "Gruppe";
+}
+function imgSize(src) { return new Promise((res) => { const i = new Image(); i.onload = () => res([i.width, i.height]); i.onerror = () => res([1, 1]); i.src = src; }); }
+
+async function buildPdf() {
+  const { jsPDF } = window.jspdf;
+  const d = new jsPDF({ unit: "mm", format: "a4" });
+  d.addFileToVFS("C-R.ttf", FONT_R); d.addFont("C-R.ttf", "C", "normal");
+  d.addFileToVFS("C-B.ttf", FONT_B); d.addFont("C-B.ttf", "C", "bold");
+  const W = 210, M = 18, CW = W - 2 * M, BOT = 282; let y = 14;
+  const olive = [59, 74, 47], teal = [46, 125, 140], muted = [94, 102, 82], ink = [31, 42, 28], rust = [140, 59, 46];
+  const txt = (s, size, style, color, x = M, w = CW, lh = 1.32) => {
+    d.setFont("C", style); d.setFontSize(size); d.setTextColor(...color);
+    const ls = d.splitTextToSize(clean(s), w), h = size * 0.3528 * lh;
+    ls.forEach(l => { if (y + h > BOT) { d.addPage(); y = 18; } d.text(l, x, y + h * 0.78); y += h; });
+  };
+  d.addImage(LOGO, "PNG", M, y, 11, 12.6);
+  d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...teal); d.text(clean("NAWI · 2AB · K1.2 Die Bindungsarten · Versuchsprotokoll"), M + 15, y + 4);
+  d.setFontSize(18); d.setTextColor(...olive); d.text("Bindungs-Versuche", M + 15, y + 11.5);
+  y += 17;
+  txt("Gruppe: " + (S.name || "—"), 11, "normal", ink, M, 120);
+  y -= 11 * 0.3528 * 1.32;
+  d.setFont("C", "normal"); d.setFontSize(11); d.text(clean("Klasse: " + (S.klasse || "—")), M + 108, y + 4); d.text("Datum: " + new Date().toLocaleDateString("de-AT"), W - M, y + 4, { align: "right" });
+  y += 6; d.setDrawColor(...olive); d.setLineWidth(0.6); d.line(M, y, W - M, y); y += 5;
+  for (const v of V.filter(touched)) {
+    if (y > BOT - 30) { d.addPage(); y = 18; }
+    y += 2;
+    d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...teal); d.text(clean((v.kern ? "KERN · " : "ZUSATZ · ") + (v.buch.versuch ? "Versuch im Buch " : "Theorie ") + v.buch.s), W - M, y + 4, { align: "right" });
+    txt(v.nr + "  " + v.titel, 13, "bold", olive, M, CW - 55);
+    txt(v.bindung, 10, "normal", muted);
+    y += 1;
+    for (const [l, t] of lines(v)) txt(l, t === "h" ? 11 : 11.5, t === "h" ? "bold" : (t === "x" ? "bold" : "normal"), t === "h" ? olive : (t === "x" ? rust : ink), M + 2, CW - 2, 1.3);
+    const f = (S.a[v.id] || {}).foto;
+    if (f) { const [iw, ih] = await imgSize(f); let w = 100, h = w * ih / iw; if (h > 110) { h = 110; w = h * iw / ih; } if (y + h + 3 > BOT) { d.addPage(); y = 18; } y += 2; d.addImage(f, "JPEG", M + 2, y, w, h); y += h + 2; }
+    y += 3; d.setDrawColor(211, 220, 194); d.setLineWidth(0.3); d.line(M, y, W - M, y); y += 2;
+  }
+  const n = d.getNumberOfPages();
+  for (let p = 1; p <= n; p++) { d.setPage(p); d.setFont("C", "normal"); d.setFontSize(8); d.setTextColor(...muted); d.text(clean("K1.2 Versuche · " + (S.name || "") + " · Seite " + p + " von " + n), W - M, 292, { align: "right" }); }
+  return d.output("blob");
+}
+async function savePdf() {
+  const st = $("#pdfstatus"), btn = $("#pdfbtn");
+  const say = (cls, m) => { st.hidden = false; st.className = "status " + cls; st.textContent = m; };
+  if (!S.name.trim()) { say("err", "Bitte zuerst oben die Namen der Gruppe eintragen."); $("#name").focus(); return; }
+  if (!V.some(touched)) { say("err", "Ihr habt noch keinen Versuch bearbeitet."); return; }
+  btn.disabled = true; say("info", "PDF wird erstellt …");
+  const filename = "K1.2-Versuche-" + slug(S.name) + ".pdf";
+  try {
+    const blob = await buildPdf();
+    const url = URL.createObjectURL(blob);
+    const a = el("a", { href: url, download: filename }); document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    say("ok", "Gespeichert: " + filename + " – jetzt in LMS hochladen.");
+  } catch (e) { say("err", "Beim Erstellen der PDF ist ein Fehler passiert. Kopiert das Protokoll als Text (unten)."); }
+  finally { btn.disabled = false; }
+}
+
+const kern = V.filter(v => v.kern), zus = V.filter(v => !v.kern);
+$("#vs").append(el("div", { class: "grp", text: "Kern-Versuche" }));
+kern.forEach(v => $("#vs").append(versuch(v)));
+$("#vs").append(el("div", { class: "grp", text: "Zusatz-Versuche" }));
+zus.forEach(v => $("#vs").append(versuch(v)));
+const nameI = $("#name"), klI = $("#klasse");
+nameI.value = S.name; klI.value = S.klasse; mark(nameI); mark(klI);
+nameI.addEventListener("input", () => { S.name = nameI.value; mark(nameI); update(); save(); });
+klI.addEventListener("change", () => { S.klasse = klI.value; mark(klI); update(); save(); });
+$("#pdfbtn").addEventListener("click", savePdf);
+$("#copybtn").addEventListener("click", () => {
+  const ta = $("#copyArea"), st = $("#copystatus"); ta.value = asText(); st.hidden = false;
+  const fb = () => { ta.focus(); ta.select(); st.className = "status info"; st.textContent = "Text ist markiert – jetzt mit »Kopieren« übernehmen."; };
+  try { navigator.clipboard.writeText(ta.value).then(() => { st.className = "status ok"; st.textContent = "Kopiert."; }, fb); } catch (e) { fb(); }
+});
+function askReset() {
+  const w = $("#resetwrap"); w.textContent = "";
+  const back = () => { w.textContent = ""; w.append(el("button", { class: "btn secondary small", type: "button", text: "Alles löschen und neu beginnen", onclick: askReset })); };
+  w.append(el("div", { class: "confirm" }, el("strong", { text: "Wirklich das ganze Protokoll und alle Fotos löschen?" }),
+    el("div", { class: "btns" },
+      el("button", { class: "btn danger small", type: "button", text: "Ja, alles löschen", onclick: () => { try { localStorage.removeItem(KEY); V.forEach(v => localStorage.removeItem(KEY + "-foto-" + v.id)); } catch (e) {} location.reload(); } }),
+      el("button", { class: "btn secondary small", type: "button", text: "Abbrechen", onclick: back }))));
+}
+$("#resetbtn").addEventListener("click", askReset);
+$("#qrbtn").addEventListener("click", () => { $("#qr").hidden = false; });
+$("#qrclose").addEventListener("click", () => { $("#qr").hidden = true; });
+update();
+</script>
