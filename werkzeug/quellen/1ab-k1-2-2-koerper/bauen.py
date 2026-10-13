@@ -142,6 +142,10 @@ parts = [
               "<li>Messwerte als <strong>Säulendiagramm</strong> darstellen und deine <strong>Reaktionszeit</strong> bestimmen</li></ol>"),
     ]),
     part("teil1", "Teil 1 · Stunde 1 · Buch S. 19", "Die Länge messen", [
+        slide("Die Geschichte des Meters", table([["Jahr", "Was geschah?"], ["1791", "Frankreich: 1 m soll der 10-millionste Teil der Strecke vom Nordpol zum Äquator sein."],
+                                                 ["1792–1798", "Zwei Forscher vermessen 7 Jahre lang die Strecke Dünkirchen – Barcelona."],
+                                                 ["1799", "Ein Platin-Stab in Paris wird zum Ur-Meter."], ["1983", "Der Meter wird über das Licht festgelegt – überall gleich genau."]])
+              + P("<strong>Auch Profis messen falsch:</strong> Der Ur-Meter war rund 0,2 mm zu kurz – ein systematischer Fehler bei der Vermessung der Erde."), "Buch S. 17–19"),
         slide("Die Länge", '<div class="merke"><strong>Merke:</strong> Die <strong>Länge l</strong> gibt den Abstand zwischen zwei Punkten bzw. die Ausdehnung eines Objekts in eine Richtung an. Einheit: <strong>Meter (m)</strong>.</div>'
               + tiles(("Grundgröße im SI", P("Die Länge ist eine der 7 Grundgrößen.") + P("<strong>1 m = 10 dm = 100 cm = 1000 mm</strong>")),
                       ("Wusstest du?", P("Seit 1983 ist der Meter über das Licht festgelegt: Licht legt 1 m in 1/299 792 458 s zurück."))), "Buch S. 19"),
@@ -269,7 +273,7 @@ page = f"""<!doctype html>
 <section class="next" id="weiter">
   <div class="eyebrow">Weiter geht's</div>
   <h2>Jetzt bist du dran</h2>
-  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt A1–A11</a><a class="btn alt" href="quiz.html">Mess-Check (Quiz)</a></div>
+  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt (TH + UE)</a><a class="btn alt" href="quiz.html">Mess-Check (Quiz)</a></div>
   <p class="hint">Theorie zum Nachlesen im Schulbuch (Trauner) S. 17–19.</p>
 </section>
 </main>
