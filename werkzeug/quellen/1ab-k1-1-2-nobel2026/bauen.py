@@ -191,10 +191,49 @@ rep = {"__BASECSS__": None, "__CAMO__": CAMO, "__LOGO__": LOGO, "__SMILEY__": SM
        "__JSPDF__": open(JSPDF, encoding="utf-8").read()}
 tpl = open(os.path.join(WZ, "vorlagen", "aufgaben_K1.2_vorlage.html"), encoding="utf-8").read()
 rep["__BASECSS__"] = tpl[tpl.index("<style>"):tpl.index("</style>") + 8]
+rep_css_base = rep["__BASECSS__"]
 for k, v_ in rep.items(): src = src.replace(k, v_)
 src = src.replace("</style>\n\n<header", ".row .choose { margin-top: 4px; }\n</style>\n\n<header", 1)
 assert not re.search(r"__[A-Z]+__", src)
 open(DST + "aufgaben.html", "w", encoding="utf-8").write(wrap(src))
+
+# ---------------------------------------------------------------- Versuchsseite (Protokoll am Handy)
+MAT_ICON = {"Molekülbaukasten": "atom", "2 schwarze C-Kugeln (4 Löcher)": "atom", "je 2 Kugeln in 4 Farben": "atom", "8 Bindungsstäbe": "pen", "deine Hände": "hand",
+            "Lichtmikroskop": "mic", "Dauerpräparat Euglena": "eye", "Zeichenblatt": "book", "Bleistift": "pen"}
+VDATA = []
+for v in I.VERSUCHE:
+    VDATA.append({"id": f"v{v['nr']}", "nr": f"V{v['nr']}", "titel": v["titel"], "bindung": f"{v['form']} · {v['dauer']}", "intro": v["einleitung"],
+                  "sicher": " · ".join(v["sicherheit"]), "mat": [[m, MAT_ICON.get(m, "pen")] for m in v["material"]], "entsorgung": v["entsorgung"],
+                  "schritte": [plain(x) for x in v["durchfuehrung"]], "skizze": v["skizze"].rsplit(".", 1)[0],
+                  "beob": {"titel": "Beobachtung", "kopf": v["tabelle"][0], "zeilen": [[r[0]] for r in v["tabelle"][1:]]},
+                  "erk": v["erkenntnis_frage"], "interp": v["interpretation_frage"], "schluss": v["schluss_frage"],
+                  "kern": v["einsatz"] == "KERN", "buch": {"versuch": False, "s": re.search(r"S\. [\d–, ]+", v["schulbuch"][1]).group(0).strip(" ,")}})
+os.makedirs(DST + "vs-img", exist_ok=True)
+for ic in {m[1] for v in VDATA for m in v["mat"]}:
+    im = Image.open(os.path.join(SRC, "icons", f"d_{ic}.png")).convert("RGBA"); im.thumbnail((96, 96)); im.save(DST + f"vs-img/i_{ic}.png", optimize=True)
+for v in VDATA:
+    im = Image.open(os.path.join(SRC, "img", v["skizze"] + ".png")).convert("RGB"); im.thumbnail((900, 700)); im.quantize(colors=128).save(DST + f"vs-img/d_{v['skizze']}.png", optimize=True)
+bv = open(os.path.join(WZ, "vorlagen", "build_versuche.py"), encoding="utf-8").read()
+vextra = bv[bv.index('extra = """') + 11:bv.index('"""', bv.index('extra = """') + 11)]
+vbody = open(os.path.join(WZ, "vorlagen", "vs_body.html"), encoding="utf-8").read()
+for x, y in [("NAWI · 2AB · K1.2 Die Bindungsarten · Versuchsprotokoll", f"{EYEBROW} · Versuchsprotokoll"), ("NAWI · 2AB · K1.2 Die Bindungsarten", EYEBROW),
+             ("Bindungs-Versuche", "Nobel-Versuche"), ("<option>2A</option><option>2B</option>", "<option>1AK</option><option>1BK</option>"),
+             ('const KEY = "26-27-2AB-K1.2-Bindungen-VS-Handy-v1";', f'const KEY = "{I.PRE}-VS-Handy-v1";'),
+             ("K1.2 Die Bindungsarten – Versuchsprotokoll", f"{I.KAP} {I.TITEL} – Versuchsprotokoll"),
+             ('clean("K1.2 Versuche · "', f'clean("{I.KAP} Versuche · "'), ('"K1.2-Versuche-"', f'"{I.KAP}-Versuche-"')]:
+    assert x in vbody, x; vbody = vbody.replace(x, y)
+assert "2AB" not in vbody and "Bindung" not in vbody.replace("v.bindung", "")
+for k, v_ in {"__CAMO__": CAMO, "__LOGO__": LOGO, "__SMILEY__": SMILEY, "__QR__": qr_b64(BASE + UNIT + "versuche.html"),
+              "__JSPDF__": "/* jsPDF 2.5.1 (MIT) */\n" + open(JSPDF, encoding="utf-8").read(),
+              "__FONTR__": b64(WZ + "/schriften/carlito-Regular.ttf"), "__FONTB__": b64(WZ + "/schriften/carlito-Bold.ttf"),
+              "__RANGES__": open(WZ + "/schriften/ranges.json").read().strip(), "__DATA__": json.dumps(VDATA, ensure_ascii=False)}.items():
+    vbody = vbody.replace(k, v_)
+assert not re.search(r"__[A-Z]+__", vbody)
+vhead = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">\n')
+open(DST + "versuche.html", "w", encoding="utf-8").write(
+    '<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<meta name="robots" content="noindex">\n'
+    f'<title>{I.TITEL} – Versuche</title>\n' + vhead + rep_css_base + "\n" + vextra + "\n</head>\n<body>\n" + vbody + "\n</body>\n</html>\n")
 
 # ---------------------------------------------------------------- Quiz
 qs = ",\n".join("  { t: %s, q: %s, a: %s, e: %s, p: %s }" % tuple(json.dumps(x, ensure_ascii=False) for x in (t, nb(q), [nb(z) for z in a], nb(e), p)) for t, q, a, e, p in I.QUIZ)
@@ -245,6 +284,10 @@ ALT = {"icecube.png": "Schnitt durch das Eis am Südpol: 86 Kabel mit Lichtsenso
 
 def th_html(f):
     a = f["art"]; P = f.get("pill")
+    if a == "film":
+        return slide(f["titel"], '<div class="tiles">' + "".join(f'<div class="tile"><h4>{esc(fl)} <span class="teil">→ {esc(tl)}</span></h4><p>{md(q)}</p></div>' for fl, q, tl in f["filme"]) + "</div>" + merke(f["merke"]))
+    if a == "stopp":
+        return slide("Stopp – kannst du das?", "".join(f'<div class="stopq"><p><strong>{md(q)}</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p>{md(an)}</p></details></div>' for q, an in f["fragen"]), f["teil"])
     if a == "einstieg_story":
         h, paras = f["story"]; h2, ms = f["mythen"]
         return slide(f["titel"], tiles([(h, paras)]) + f'<div class="tile myth"><h4>{esc(h2)}</h4>{ol(ms)}</div>'
@@ -282,7 +325,10 @@ for f in I.TH:
         cur = ["einstieg", "Einstieg", [], "Worum geht es?"]; parts.append(cur)
     cur[2].append(th_html(f))
 parts.append(["begriffe", "Zum Nachschlagen", [slide("Fachbegriffe · " + lab, table(rows)) for lab, rows in I.FACHBEGRIFFE], "Fachbegriffe"])
-TOCLAB = {"einstieg": "Einstieg", "begriffe": "Begriffe"}
+CHECK = "".join(f'<div class="ziel"><p>{md(z)}</p><div class="chips" role="group" aria-label="Selbstcheck">' + "".join(f'<button type="button" class="chip" data-z="{k}" data-v="{v}" aria-pressed="false">{v}</button>' for v in ("sicher", "fast", "noch nicht")) + "</div></div>" for k, z in enumerate(I.LERNZIELE))
+parts.append(["kurz", "Zum Schluss", [slide("Das Wichtigste in 5 Sätzen", ol(I.WICHTIGSTE)),
+                                      slide("Kann ich das?", '<p class="hint">Tippe ehrlich an – bei »noch nicht« den passenden Teil noch einmal lesen.</p>' + CHECK)], "Kurz & knapp"])
+TOCLAB = {"einstieg": "Einstieg", "begriffe": "Begriffe", "kurz": "Kurz & knapp"}
 toc = "".join(f'<a href="#{p[0]}">{esc(TOCLAB.get(p[0], p[1].split(" · ")[0] if p[0] != "teil5" else "Teil 5"))}</a>' for p in parts) + '<a href="#weiter">Aufgaben</a>'
 body = "".join(f'<section class="part" id="{p[0]}"><div class="band"><div class="eyebrow">{esc(p[1])}</div><h2>{esc(p[3])}</h2></div>{"".join(p[2])}</section>' for p in parts)
 bt = open(os.path.join(WZ, "vorlagen", "build_theorie.py"), encoding="utf-8").read()
@@ -297,6 +343,17 @@ details.reveal p { margin: 8px 0 0; }
 .stat { background: #2E7D8C; color: #fff; border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
 .stat b { font-family: Cambria, "Source Serif 4", Georgia, serif; font-size: 28px; }
 .stat strong { color: #fff; }
+.teil { font-size: 14px; color: #D9772B; white-space: nowrap; }
+.stopq { display: grid; gap: 6px; }
+.stopq + .stopq { margin-top: 10px; }
+.ziel { border: 1px solid #D3DCC2; border-radius: 12px; padding: 10px 12px; display: grid; gap: 6px; }
+.ziel p { margin: 0; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: 16px; font-weight: 700; color: #3B4A2F; background: #fff; border: 2px solid #D3DCC2; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.chip[aria-pressed="true"][data-v="sicher"] { background: #E6F0D3; border-color: #7FA83A; }
+.chip[aria-pressed="true"][data-v="fast"] { background: #FFF1D6; border-color: #D9772B; }
+.chip[aria-pressed="true"][data-v="noch nicht"] { background: #F6E3DF; border-color: #8C3B2E; }
+.chip:focus-visible { outline: 3px solid #2E7D8C; outline-offset: 2px; }
 </style>""")
 page = f"""<!doctype html>
 <html lang="de">
@@ -325,15 +382,28 @@ page = f"""<!doctype html>
 <section class="next" id="weiter">
   <div class="eyebrow">Weiter geht's</div>
   <h2>Jetzt bist du dran</h2>
-  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt A1–A{len(I.AUFGABEN)}</a><a class="btn alt" href="quiz.html">Nobel-Check (Quiz)</a></div>
+  <div class="btns"><a class="btn" href="aufgaben.html">2 · Arbeitsblatt A1–A{len(I.AUFGABEN)}</a><a class="btn alt" href="quiz.html">3 · Nobel-Check (Quiz)</a><a class="btn alt" href="versuche.html">Versuche</a></div>
   <p class="hint">Theorie zum Nachlesen im Schulbuch (Trauner) S. 11–14, 29, 115, 129, 140, 164. Grafiken und Animationen: selbst erstellt.</p>
 </section>
 </main>
+<script>
+(function () {{
+  var KEY = "{I.PRE}-Lernseite-Check-v1", S = {{}};
+  try {{ S = JSON.parse(localStorage.getItem(KEY) || "{{}}") || {{}}; }} catch (e) {{ S = {{}}; }}
+  var chips = document.querySelectorAll(".chip[data-z]");
+  function paint() {{ chips.forEach(function (c) {{ c.setAttribute("aria-pressed", String(S[c.dataset.z] === c.dataset.v)); }}); }}
+  chips.forEach(function (c) {{ c.addEventListener("click", function () {{
+    S[c.dataset.z] = S[c.dataset.z] === c.dataset.v ? null : c.dataset.v; paint();
+    try {{ localStorage.setItem(KEY, JSON.stringify(S)); }} catch (e) {{}}
+  }}); }});
+  paint();
+}})();
+</script>
 </body>
 </html>
 """
 open(DST + "theorie.html", "w", encoding="utf-8").write(page)
 # Quiz zusätzlich als einzelne Datei für das Unterrichtspaket
 if len(sys.argv) > 3: open(sys.argv[3], "w", encoding="utf-8").write(QUIZ_STANDALONE)
-for f in ["theorie.html", "aufgaben.html", "quiz.html"]:
+for f in ["theorie.html", "aufgaben.html", "versuche.html", "quiz.html"]:
     print(f, os.path.getsize(DST + f) // 1024, "KB")
