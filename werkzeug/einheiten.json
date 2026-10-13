@@ -2,18 +2,6 @@
  {
   "klasse": "1AB",
   "fach": "NAWI",
-  "ordner": "1ab-nawi/k1-2-2-koerper",
-  "kapitel": "K1.2.2",
-  "titel": "Wie groß bist du wirklich? Messen und Messfehler",
-  "seiten": [
-   "theorie.html",
-   "aufgaben.html",
-   "quiz.html"
-  ]
- },
- {
-  "klasse": "1AB",
-  "fach": "NAWI",
   "ordner": "1ab-nawi/k1-1-2-nobel2026",
   "kapitel": "K1.1.2",
   "titel": "Nobelpreise 2026",
@@ -21,6 +9,18 @@
    "theorie.html",
    "aufgaben.html",
    "versuche.html",
+   "quiz.html"
+  ]
+ },
+ {
+  "klasse": "1AB",
+  "fach": "NAWI",
+  "ordner": "1ab-nawi/k1-2-2-koerper",
+  "kapitel": "K1.2.2",
+  "titel": "Messen wie die Profis – Schätzen, Körpergröße, Reaktionszeit",
+  "seiten": [
+   "theorie.html",
+   "aufgaben.html",
    "quiz.html"
   ]
  },

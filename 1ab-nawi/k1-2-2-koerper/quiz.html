@@ -124,7 +124,7 @@ main { max-width: 680px; margin: 0 auto; padding-inline: 16px; padding-block: 18
 </div>
 
 <main>
-  <div class="progress"><span id="count">Frage 1 von 14</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
+  <div class="progress"><span id="count">Frage 1 von 17</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
   <section class="card" id="stage" aria-live="polite"></section>
 </main>
 
@@ -135,6 +135,7 @@ const Q = [
   { t: "Länge", q: "Wie ist der Meter seit 1983 festgelegt?", a: ["Über die Strecke, die Licht in 1/299 792 458 Sekunde zurücklegt", "Über einen Metallstab in Paris", "Über die Länge eines Fußes", "Über den Umfang der Erde"], e: "Früher galt ein Metallstab in Paris (Urmeter). Heute ist der Meter über die Lichtgeschwindigkeit festgelegt – das ist überall auf der Welt gleich genau.", p: "Buch S. 19" },
   { t: "Messgeräte", q: "Womit misst du den Durchmesser einer Patrone (5,56 mm) am besten?", a: ["Messschieber", "Maßband", "Laser-Entfernungsmesser", "Meterstab"], e: "Der Messschieber misst Längen zwischen 1 mm und 10 cm auf 0,1 mm genau. Ein Maßband ist dafür zu grob.", p: "Buch S. 19" },
   { t: "Messgeräte", q: "Wie misst man die Entfernung zum Mond?", a: ["Ein Laser misst die Laufzeit des Lichts zu einem Spiegel am Mond und zurück.", "Mit einem sehr langen Maßband", "Mit einem Messschieber", "Man kann sie nur schätzen."], e: "Das ist eine indirekte Messung: Aus der Laufzeit (ca. 2,5 s hin und zurück) berechnet man die Entfernung – rund 384 000 km.", p: "Buch S. 19" },
+  { t: "Schätzen", q: "Du solltest 10 cm zeichnen, gemessen sind 8,7 cm. Wie groß ist die Abweichung?", a: ["−1,3 cm", "+1,3 cm", "18,7 cm", "0,87 cm"], e: "Abweichung = gemessen − Ziel = 8,7 − 10 = −1,3 cm. Das Minus zeigt: Der Strich war zu kurz.", p: "Buch S. 17" },
   { t: "Genauigkeit", q: "Dein Maßband hat eine mm-Einteilung. Welches Ergebnis ist sinnvoll angegeben?", a: ["174,3 cm", "174,32 cm", "174,318 cm", "170 cm"], e: "Auf 1 mm genau heißt: eine Kommastelle bei cm. Mehr Kommastellen wären Scheingenauigkeit – so genau misst kein Maßband.", p: "Buch S. 17" },
   { t: "Mittelwert", q: "Annas Messwerte: 165,9 cm – 166,1 cm – 166,0 cm. Wie groß ist der Mittelwert?", a: ["166,0 cm", "166,1 cm", "498,0 cm", "165,9 cm"], e: "Alle Werte zusammenzählen und durch 3 teilen: 498,0 : 3 = 166,0 cm.", p: "Buch S. 17" },
   { t: "Messunsicherheit", q: "Lukas: 174,2 cm – 174,6 cm – 174,3 cm. Wie groß ist die Messunsicherheit?", a: ["± 0,2 cm", "± 0,4 cm", "± 0,1 cm", "± 174,4 cm"], e: "(größter − kleinster Wert) : 2 = (174,6 − 174,2) : 2 = 0,2 cm. Ergebnis: 174,4 cm ± 0,2 cm.", p: "Buch S. 17" },
@@ -143,6 +144,8 @@ const Q = [
   { t: "Schießstand", q: "Am Schießstand liegen alle Treffer eng beisammen, aber rechts oben. Was ist die Ursache?", a: ["ein systematischer Fehler – das Visier ist verstellt", "zufällige Fehler – mehr schießen hilft", "Der Schütze zittert.", "Die Scheibe ist zu klein."], e: "Eng beisammen heißt: kaum zufällige Fehler. Dass alle Treffer daneben liegen, ist systematisch. Das Visier muss eingestellt werden.", p: "Buch S. 17" },
   { t: "Mythos oder Fakt?", q: "Warum bist du am Morgen etwas größer als am Abend?", a: ["Tagsüber drückt das Körpergewicht die Bandscheiben zusammen.", "Du wächst jede Nacht 2 cm.", "Das Maßband dehnt sich am Abend.", "Am Morgen steht man auf Zehenspitzen."], e: "Die Bandscheiben zwischen den Wirbeln werden tagsüber zusammengedrückt und erholen sich im Liegen. Der Unterschied beträgt ca. 1–2 cm.", p: "Buch S. 17" },
   { t: "Faktencheck", q: "„+2 cm in 2 Wochen!“ – vorher abends, nachher morgens gemessen. Was folgt daraus?", a: ["Der Unterschied kann allein von der Uhrzeit kommen – das beweist nichts.", "Die Einlagen wirken sicher.", "Morgens misst man immer falsch.", "2 cm kann man nicht messen."], e: "Ein fairer Vergleich braucht gleiche Bedingungen: gleiche Uhrzeit, ohne Schuhe, mehrmals messen, viele Personen mit und ohne Einlagen.", p: "Buch S. 17" },
+  { t: "Reaktionszeit", q: "Deine Fallwege: 14 cm – 18 cm – 15 cm. Wie groß ist deine Reaktionszeit laut Tabelle (15 cm → 0,17 s, 17,5 cm → 0,19 s)?", a: ["ca. 0,18 s", "ca. 0,47 s", "ca. 0,10 s", "ca. 1,5 s"], e: "Mittelwert h = (14 + 18 + 15) : 3 = 15,7 cm. Der Wert liegt zwischen 15 und 17,5 cm, also t ≈ 0,18 s.", p: "Buch S. 18" },
+  { t: "Reaktionszeit", q: "Bei 50 km/h fährt ein Auto ca. 14 m pro Sekunde. Wie weit fährt es ungebremst, wenn du 2 s aufs Handy schaust?", a: ["ca. 28 m", "ca. 3 m", "ca. 14 cm", "ca. 100 m"], e: "2 s · 14 m pro Sekunde = 28 m – so lang wie ein Klassenzimmer-Trakt. Dazu kommt noch der Bremsweg.", p: "Buch S. 18" },
   { t: "Auswerten", q: "Größte Person 186,2 cm, kleinste 157,4 cm. Wie groß ist die Spannweite?", a: ["28,8 cm", "343,6 cm", "171,8 cm", "186,2 cm"], e: "Spannweite = größter − kleinster Wert = 186,2 − 157,4 = 28,8 cm. Sie zeigt, wie weit die Werte auseinanderliegen.", p: "Buch S. 17" },
   { t: "Auswerten", q: "Wohin gehört ein Mittelwert von 170,0 cm in der Strichliste?", a: ["in den Bereich 170–174,9 cm", "in den Bereich 165–169,9 cm", "in beide Bereiche", "in keinen Bereich"], e: "165–169,9 cm endet knapp vor 170. Ab 170,0 cm beginnt der nächste Bereich.", p: "Buch S. 17" }
 ];
@@ -187,8 +190,8 @@ function pick(orig, btn) {
 }
 function message(p) {
   if (p === Q.length) return "Alles richtig – ausgezeichnet!";
-  if (p >= 11) return "Sehr gut – fast alles sitzt.";
-  if (p >= 9) return "Gut – schau dir die markierten Fragen noch einmal an.";
+  if (p >= 14) return "Sehr gut – fast alles sitzt.";
+  if (p >= 10) return "Gut – schau dir die markierten Fragen noch einmal an.";
   return "Noch üben – lies die Buchseiten unten nach und probier es noch einmal.";
 }
 function result() {

@@ -1,4 +1,4 @@
-<title>Wie groß bist du wirklich? – Arbeitsblatt</title>
+<title>Messen wie die Profis – Arbeitsblatt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">
@@ -29,6 +29,11 @@ __BASECSS__
 .chartbox .col:focus-visible rect.hit { stroke: var(--teal); stroke-width: 3; }
 .gap { display: inline-block; width: 11em; max-width: 100%; margin: 2px 2px; padding: 4px 8px; font-size: 17px; }
 .sent2 { border: 1px solid var(--line); border-radius: 12px; padding: 12px; line-height: 2.1; }
+.tblwrap { overflow-x: auto; }
+table.readtbl { border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+table.readtbl th, table.readtbl td { border: 1px solid var(--line); padding: 4px 7px; text-align: center; }
+table.readtbl th { background: #DDE3D0; color: var(--olive); }
+table.readtbl tr > :first-child { white-space: nowrap; }
 </style>
 
 <header class="top">
@@ -37,7 +42,7 @@ __BASECSS__
   <div class="top-inner">
     <div class="top-text">
       <div class="eyebrow">NAWI · 1AB · K1.2.2 Messen und Messfehler</div>
-      <h1>Wie groß bist du wirklich?</h1>
+      <h1>Messen wie die Profis</h1>
     </div>
     <button class="qrbtn" type="button" id="qrbtn">QR-Code für die Klasse</button>
     <img class="smiley" alt="" src="data:image/png;base64,__SMILEY__">
@@ -61,12 +66,12 @@ __BASECSS__
     </div>
     <ol class="steps hint">
       <li>Aufgaben in die <b>gelben Felder</b> eintragen – alles wird am Handy automatisch gespeichert.</li>
-      <li>Stunde 1: Aufgaben 1–4 · Stunde 2: Aufgaben 5–10. Nach jeder Aufgabe kontrollieren wir gemeinsam.</li>
+      <li>Stunde 1: Aufgaben 1–4 · Stunde 2: Aufgaben 5–9 · 10 und 11 sind optional. Nach jeder Aufgabe kontrollieren wir gemeinsam.</li>
       <li>Ganz unten <b>PDF erstellen</b> und die PDF in LMS hochladen.</li>
     </ol>
     <p class="hint">Theorie zum Nachlesen: <a href="theorie.html">Lernseite</a> · Schulbuch (Trauner) S. 17–19</p>
   </section>
-  <div class="progress"><span id="count">0 von 10 bearbeitet</span><div class="bar"><span id="barfill"></span></div></div>
+  <div class="progress"><span id="count">0 von 12 bearbeitet</span><div class="bar"><span id="barfill"></span></div></div>
   <div id="tasks" style="display:grid;gap:14px"></div>
 
   <section class="card" id="abgabe">
@@ -97,8 +102,8 @@ __JSPDF__
 <script>
 const FONT_R = "__FONTR__", FONT_B = "__FONTB__", LOGO = "data:image/png;base64,__LOGO__";
 const RANGES = __RANGES__;
-const KEY = "26-27-1AB-K1.2.2-Koerper-UE-Handy-v1";
-const TITLE = "K1.2.2 Wie groß bist du wirklich?";
+const KEY = "26-27-1AB-K1.2.2-Messen-UE-Handy-v2";
+const TITLE = "K1.2.2 Messen wie die Profis";
 
 const GERAETE = ["Maßband", "Messschieber", "Bügelmessschraube", "Mikroskop-Maßstab", "Laser-Entfernungsmesser"];
 const BINS = ["145–149,9", "150–154,9", "155–159,9", "160–164,9", "165–169,9", "170–174,9", "175–179,9", "180–184,9", "185–189,9", "190–194,9"];
@@ -107,11 +112,13 @@ const T = [
     q: "Wähle für jede Messung das passende Messgerät. Wird direkt oder indirekt gemessen?",
     rows: ["Körpergröße eines Kadetten", "Durchmesser einer Patrone (5,56 mm)", "Dicke eines Blatts Papier (0,1 mm)", "Größe einer Zelle (0,03 mm)", "Entfernung zu einem Ziel (800 m)"],
     cols: [["g", "Messgerät", GERAETE], ["d", "direkt oder indirekt?", ["direkt", "indirekt"]]] },
-  { id: "a2", nr: 2, title: "Schätzen", src: "Theorie S. 17", type: "fields", h: 1,
-    q: "Schätze, ohne nachzusehen. Gleich wird dein Lehrer vorne gemessen – wer liegt am nächsten?",
-    fields: [["me", "Meine Körpergröße in cm"], ["lehrer", "Größe meines Lehrers in cm"]] },
+  { id: "a2", nr: 2, title: "Schätzübungen", src: "Theorie S. 17", type: "rowsin", h: 1,
+    q: "Schätze zuerst, dann wird gemessen. Länge: Nachbar misst nach · Masse: beim Lehrer wiegen · Zeit: Partner stoppt mit dem Handy.",
+    hint: "Abweichung = gemessen − Ziel (Plus = zu viel, Minus = zu wenig). Beispiel: 8,7 cm − 10 cm = −1,3 cm",
+    rows: [["Länge", "10-cm-Strich ohne Lineal", "10 cm"], ["Masse", "1 g Salz mit dem Löffel", "1 g"], ["Zeit", "leise „21 … 30“ zählen", "10 s"]],
+    cells: [["g", "gemessen"], ["a", "Abweichung"]] },
   { id: "a3", nr: 3, title: "Körpergröße messen", src: "Theorie S. 17", type: "persons", h: 1,
-    q: "3er-Gruppen: Schuhe aus, Buch waagrecht auf den Kopf, Post-it an die Unterkante, vom Boden bis zur Oberkante des Post-its messen. Jeder wird 3-mal gemessen.",
+    q: "Schätze zuerst deine Größe. Dann in 3er-Gruppen: Schuhe aus, Buch waagrecht auf den Kopf, Post-it an die Unterkante, vom Boden bis zur Oberkante des Post-its messen. Jeder wird 3-mal gemessen.",
     hint: "Alle Werte in cm, auf 1 mm genau (z. B. 174,3). Liegen die drei Werte mehr als 1 cm auseinander? Noch einmal messen!",
     cells: [["name", "Name", "text"], ["s", "Schätzung", "num"], ["m1", "1. Messung", "num"], ["m2", "2. Messung", "num"], ["m3", "3. Messung", "num"]] },
   { id: "a4", nr: 4, title: "Mittelwert, Messunsicherheit, Schätzfehler", src: "Theorie S. 17", type: "persons", h: 1,
@@ -121,22 +128,30 @@ const T = [
   { id: "a5", nr: 5, title: "Fehlerbetrachtung", src: "Theorie S. 17", type: "choose", h: 2,
     q: "Zufällig oder systematisch? Tippe die richtige Antwort an.", opts: ["zufällig", "systematisch"],
     items: ["Einmal schräg von oben abgelesen", "Alle haben mit Schuhen gemessen", "Das Buch liegt einmal leicht schief", "Das Maßband beginnt erst 1 cm über dem Boden", "Eine Person steht einmal leicht krumm", "Alle am Abend gemessen, die Stellung misst am Morgen"] },
-  { id: "a6", nr: 6, title: "Faktencheck", src: "Theorie S. 17", type: "multi", h: 2,
-    ad: "„Mit Power-Einlagen wächst du in 2 Wochen 2 cm! Max: 1. März abends 176,0 cm – 15. März morgens 178,0 cm.“",
-    q: "Prüfe die Werbung.", parts: [["a", "a) Welcher Fehler steckt im Vergleich?"], ["b", "b) Wie müsste man richtig messen?"]] },
-  { id: "a7", nr: 7, title: "Die Klasse auswerten", src: "Theorie S. 17", type: "class", h: 2,
+  { id: "a7", nr: 6, title: "Die Klasse auswerten", src: "Theorie S. 17", type: "class", h: 2,
     q: "Klebe deinen Mittelwert ohne Namen als Post-it an die Tafel. Zähle dann, wie viele Post-its in jedem Bereich kleben, und trag die Anzahl ein.",
     hint: "Grenzfall: 169,9 cm gehört zu 165–169,9 · 170,0 cm schon zu 170–174,9.",
     fields: [["mw", "Klassen-Mittelwert (Summe : Anzahl)"], ["max", "Größte Person"], ["min", "Kleinste Person"], ["sp", "Spannweite (Größte − Kleinste)"]] },
-  { id: "a8", nr: 8, title: "Säulendiagramm", src: "Theorie S. 17", type: "chart", h: 2,
+  { id: "a8", nr: 7, title: "Säulendiagramm", src: "Theorie S. 17", type: "chart", h: 2,
     q: "Zeichne das Säulendiagramm deiner Klasse: Tippe über jedem Bereich auf die Höhe der Anzahl. Nochmal auf die oberste Stelle tippen macht die Säule um 1 kleiner." },
-  { id: "a9", nr: 9, title: "Kampfanzüge bestellen", src: "Theorie S. 17", type: "multi", h: 2, tag: "OPTIONAL",
-    q: "Für 240 Rekruten werden Kampfanzüge bestellt. Nimm an, die Größen sind so verteilt wie in eurer Klasse.",
-    parts: [["a", "a) Wie viele Anzüge für 170–174,9 cm? Rechne: Anzahl : Klassengröße · 240"], ["b", "b) Ist eure Klasse eine gute Grundlage für die Bestellung? Begründe."]] },
-  { id: "a10", nr: 10, title: "Merksatz", src: "Theorie S. 17", type: "gaps", h: 2, q: "Fülle die Lücken.",
+  { id: "r1", nr: 8, title: "Reaktionszeit messen", src: "Theorie S. 18", type: "persons", h: 2, n: 2, who: "Testperson",
+    q: "Zu zweit mit einem Lineal ab 30 cm (besser 40–50 cm oder Meterstab): Lineal senkrecht, Null zwischen den Fingern, ohne Vorwarnung loslassen, fangen, Fallweg h ablesen. 3-mal messen, dann tauschen.",
+    hint: "Mittelwert h bilden und die Reaktionszeit t in der Tabelle ablesen. Liegt h dazwischen, einen Wert dazwischen nehmen (15,7 cm → ca. 0,18 s).",
+    tbl: [["h in cm", "5", "7,5", "10", "12,5", "15", "17,5", "20", "22,5", "25", "30", "35", "40", "45", "50"], ["t in s", "0,10", "0,12", "0,14", "0,16", "0,17", "0,19", "0,20", "0,21", "0,23", "0,25", "0,27", "0,29", "0,30", "0,32"]],
+    cells: [["name", "Name", "text"], ["h1", "h₁ in cm", "num"], ["h2", "h₂ in cm", "num"], ["h3", "h₃ in cm", "num"], ["mw", "Mittelwert h", "num"], ["t", "Reaktionszeit t in s", "num"]] },
+  { id: "r2", nr: "8 a–b", title: "Reaktionszeit deuten", src: "Theorie S. 18", type: "multi", h: 2,
+    q: "Bei 50 km/h fährt ein Auto pro Sekunde ca. 14 m. In 0,2 s Reaktionszeit sind das fast 3 m – ohne zu bremsen.",
+    parts: [["a", "a) „Die Testperson errät manchmal, wann losgelassen wird.“ Zufällig oder systematisch? Warum?"], ["b", "b) Was heißt das für Handy am Steuer oder Müdigkeit?"]] },
+  { id: "a10", nr: 9, title: "Merksatz", src: "Theorie S. 17", type: "gaps", h: 2, q: "Fülle die Lücken.",
     sents: [["Der Mittelwert ist genauer als eine Einzelmessung, weil sich ", 0, " Fehler ausgleichen."],
             ["Gegen ", 1, " Fehler hilft der Mittelwert nicht – man muss die Ursache beheben."],
             ["Ein Ergebnis gibt man nur so genau an, wie das ", 2, " messen kann."]] },
+  { id: "a6", nr: 10, title: "Faktencheck", src: "Theorie S. 17", type: "multi", h: 2, tag: "OPTIONAL",
+    ad: "„Mit Power-Einlagen wächst du in 2 Wochen 2 cm! Max: 1. März abends 176,0 cm – 15. März morgens 178,0 cm.“",
+    q: "Prüfe die Werbung.", parts: [["a", "a) Welcher Fehler steckt im Vergleich?"], ["b", "b) Wie müsste man richtig messen?"]] },
+  { id: "a9", nr: 11, title: "Kampfanzüge bestellen", src: "Theorie S. 17", type: "multi", h: 2, tag: "OPTIONAL",
+    q: "Für 240 Rekruten werden Kampfanzüge bestellt. Nimm an, die Größen sind so verteilt wie in eurer Klasse.",
+    parts: [["a", "a) Wie viele Anzüge für 170–174,9 cm? Rechne: Anzahl : Klassengröße · 240"], ["b", "b) Ist eure Klasse eine gute Grundlage für die Bestellung? Begründe."]] },
 ];
 
 // ---------- Zustand (nur in diesem Browser gespeichert) ----------
@@ -235,6 +250,13 @@ function renderTask(t) {
   if (t.ad) card.append(el("p", { class: "ad", text: "Werbung: " + t.ad }));
   card.append(el("p", { class: "q", text: t.q }));
   if (t.hint) card.append(el("p", { class: "hint", text: t.hint }));
+  if (t.tbl) {
+    const tb = el("table", { class: "readtbl" });
+    for (let c = 1; c < t.tbl[0].length; c += 5) {
+      t.tbl.forEach((r, ri) => tb.append(el("tr", {}, el("th", { text: r[0] }), ...r.slice(c, c + 5).map(v => el(ri ? "td" : "th", { text: v })))));
+    }
+    card.append(el("div", { class: "tblwrap" }, tb));
+  }
 
   if (t.type === "selects") {
     const box = el("div", { class: "rows" });
@@ -242,13 +264,21 @@ function renderTask(t) {
       el("div", { class: "two" }, ...t.cols.map(([k, lab, opts]) => el("div", {}, el("label", { class: "lbl", text: lab }), select(t.id, k + i, opts, lab + ": " + r)))))));
     card.append(box);
   }
+  if (t.type === "rowsin") {
+    const box = el("div", { class: "rows" });
+    t.rows.forEach(([g, task, ziel], i) => {
+      const cells = el("div", { class: "cells" }, ...t.cells.map(([k, lab]) => { const inp = input(t.id, k + i, { num: true, ph: ziel.split(" ")[1], aria: lab + " " + g }); return el("div", {}, el("label", { for: inp.id, text: lab }), inp); }));
+      box.append(el("div", { class: "person" }, el("div", { class: "who2", text: g + ": " + task + " – Ziel " + ziel }), cells));
+    });
+    card.append(box);
+  }
   if (t.type === "fields") card.append(el("div", { class: "two" }, ...t.fields.map(([k, lab]) => labeled(t.id, k, lab, { num: true, ph: "z. B. 172" }))));
   if (t.type === "persons") {
     const box = el("div", { class: "rows" });
-    for (let p = 0; p < 3; p++) {
-      const nm = el("div", { class: "who2", text: "Person " + (p + 1) });
+    for (let p = 0; p < (t.n || 3); p++) {
+      const nm = el("div", { class: "who2", text: (t.who || "Person") + " " + (p + 1) });
       if (t.from) { const n = (S.a[t.from] || {})["name" + p]; if (filled(n)) nm.textContent = n; nm.dataset.from = t.from; nm.dataset.p = p; }
-      const cells = el("div", { class: "cells" + (t.cells.length >= 4 ? " c4" : "") });
+      const cells = el("div", { class: "cells" + (t.cells.length >= 4 && t.cells.length !== 6 ? " c4" : "") });
       t.cells.forEach(([k, lab, kind]) => {
         if (kind === "text") { const d = labeled(t.id, k + p, lab, { ph: "Name" }); d.style.gridColumn = "1 / -1"; cells.append(d); return; }
         const inp = input(t.id, k + p, { num: true, ph: "cm", aria: lab + " Person " + (p + 1) });
@@ -296,7 +326,8 @@ function isDone(t) {
   const a = S.a[t.id] || {};
   if (t.type === "selects") return t.rows.every((_, i) => t.cols.every(([k]) => filled(a[k + i])));
   if (t.type === "fields") return t.fields.every(([k]) => filled(a[k]));
-  if (t.type === "persons") return [0, 1, 2].some(p => t.cells.every(([k]) => filled(a[k + p])));
+  if (t.type === "rowsin") return t.rows.every((_, i) => t.cells.every(([k]) => filled(a[k + i])));
+  if (t.type === "persons") return [...Array(t.n || 3).keys()].some(p => t.cells.every(([k]) => filled(a[k + p])));
   if (t.type === "choose") return t.items.every((_, i) => a["c" + i] != null);
   if (t.type === "multi") return t.parts.every(([k]) => filled(a[k]));
   if (t.type === "class") return BINS.some((_, j) => filled(a["n" + j])) && t.fields.every(([k]) => filled(a[k]));
@@ -322,7 +353,8 @@ function answerLines(t) {
   const a = S.a[t.id] || {}, L = [];
   if (t.type === "selects") t.rows.forEach((r, i) => L.push(r + ": " + t.cols.map(([k]) => v(a[k + i])).join(" · ")));
   if (t.type === "fields") t.fields.forEach(([k, lab]) => L.push(lab + ": " + v(a[k])));
-  if (t.type === "persons") [0, 1, 2].forEach(p => { const nm = t.from ? (S.a[t.from] || {})["name" + p] : null; L.push((filled(nm) ? nm.trim() + ": " : "Person " + (p + 1) + ": ") + t.cells.map(([k, lab]) => lab + " " + v(a[k + p])).join(" · ")); });
+  if (t.type === "rowsin") t.rows.forEach(([g, task, ziel], i) => L.push(g + " (Ziel " + ziel + "): " + t.cells.map(([k, lab]) => lab + " " + v(a[k + i])).join(" · ")));
+  if (t.type === "persons") [...Array(t.n || 3).keys()].forEach(p => { const nm = t.from ? (S.a[t.from] || {})["name" + p] : null; L.push((filled(nm) ? nm.trim() + ": " : (t.who || "Person") + " " + (p + 1) + ": ") + t.cells.map(([k, lab]) => lab + " " + v(a[k + p])).join(" · ")); });
   if (t.type === "choose") t.items.forEach((it, i) => L.push(it + ": " + (a["c" + i] != null ? t.opts[a["c" + i]] : "?")));
   if (t.type === "multi") t.parts.forEach(([k, lab]) => { L.push(lab); L.push("   " + (filled(a[k]) ? a[k].trim() : none)); });
   if (t.type === "class") { L.push("Anzahl: " + BINS.map((b, j) => b + ": " + v(a["n" + j])).join(" · ")); t.fields.forEach(([k, lab]) => L.push(lab + ": " + v(a[k]) + " cm")); }
@@ -362,7 +394,7 @@ function buildPdf() {
   };
   d.addImage(LOGO, "PNG", M, y, 11, 12.6);
   d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...teal); d.text(clean("NAWI · 1AB · K1.2.2 Messen und Messfehler · Schulbuch S. 17–19"), M + 15, y + 4);
-  d.setFontSize(18); d.setTextColor(...olive); d.text(clean("Wie groß bist du wirklich?"), M + 15, y + 11.5);
+  d.setFontSize(18); d.setTextColor(...olive); d.text(clean("Messen wie die Profis"), M + 15, y + 11.5);
   y += 17;
   d.setFont("C", "normal"); d.setFontSize(11); d.setTextColor(...ink);
   d.text(clean("Name: " + (S.name || "—")), M, y); d.text(clean("Klasse: " + (S.klasse || "—")), M + 105, y); d.text("Datum: " + new Date().toLocaleDateString("de-AT"), M + 140, y);
@@ -390,7 +422,7 @@ function buildPdf() {
     y += 3; d.setDrawColor(211, 220, 194); d.setLineWidth(0.3); d.line(M, y, W - M, y); y += 2;
   }
   const n = d.getNumberOfPages();
-  for (let p = 1; p <= n; p++) { d.setPage(p); d.setFont("C", "normal"); d.setFontSize(8); d.setTextColor(...muted); d.text(clean("K1.2.2 Körpergröße · " + (S.name || "") + " · Seite " + p + " von " + n), W - M, 292, { align: "right" }); }
+  for (let p = 1; p <= n; p++) { d.setPage(p); d.setFont("C", "normal"); d.setFontSize(8); d.setTextColor(...muted); d.text(clean("K1.2.2 Messen · " + (S.name || "") + " · Seite " + p + " von " + n), W - M, 292, { align: "right" }); }
   return d.output("blob");
 }
 function savePdf() {
@@ -399,7 +431,7 @@ function savePdf() {
   if (!S.name.trim()) { say("err", "Bitte zuerst oben deinen Namen eintragen."); $("#name").focus(); return; }
   if (!window.jspdf) { say("err", "Das PDF-Programm wurde nicht geladen. Lade die Seite neu – oder kopiere die Antworten als Text (unten)."); return; }
   btn.disabled = true; say("info", "PDF wird erstellt …");
-  const filename = "K1.2.2-Koerper-" + slug(S.name) + ".pdf";
+  const filename = "K1.2.2-Messen-" + slug(S.name) + ".pdf";
   try {
     const blob = buildPdf(), url = URL.createObjectURL(blob);
     const a = el("a", { href: url, download: filename }); document.body.append(a); a.click(); a.remove();

@@ -1,4 +1,4 @@
-"""Handy-Seiten für NAWI 1AB · K1.2.2 »Wie groß bist du wirklich?« bauen.
+"""Handy-Seiten für NAWI 1AB · K1.2.2 »Messen wie die Profis« bauen (Doppelstunde: Länge, Schätzen, Körpergröße, Messfehler, Reaktionszeit).
 Aufruf im Repository-Ordner:  python3 werkzeug/quellen/1ab-k1-2-2-koerper/bauen.py <bilder-ordner> <jspdf.min.js>
 Schreibt 1ab-nawi/k1-2-2-koerper/{theorie,aufgaben,quiz}.html und img/."""
 import base64, html, io, json, os, re, shutil, sys
@@ -37,8 +37,10 @@ def png(name, maxw=900):
     if im.width > maxw: im = im.resize((maxw, round(im.height * maxw / im.width)), Image.LANCZOS)
     im.quantize(colors=96, method=Image.Quantize.MEDIANCUT).save(DST + "img/" + name, optimize=True)
     return im.size
-SZ = {n: png(n) for n in ["ziel_zufaellig.png", "ziel_systematisch.png"]}
+SZ = {n: png(n) for n in ["ziel_zufaellig.png", "ziel_systematisch.png", "lineal.png"]}
 shutil.copy(os.path.join(IMGSRC, "diagramm.gif"), DST + "img/diagramm.gif")
+shutil.copy(os.path.join(IMGSRC, "formel_weiss.png"), DST + "img/formel.png")
+SZ["formel.png"] = Image.open(DST + "img/formel.png").size
 SZ["diagramm.gif"] = Image.open(DST + "img/diagramm.gif").size
 
 # ---------------------------------------------------------------- Arbeitsblatt
@@ -63,6 +65,8 @@ Q = [
      "Der Messschieber misst Längen zwischen 1 mm und 10 cm auf 0,1 mm genau. Ein Maßband ist dafür zu grob.", "Buch S. 19"),
     ("Messgeräte", "Wie misst man die Entfernung zum Mond?", ["Ein Laser misst die Laufzeit des Lichts zu einem Spiegel am Mond und zurück.", "Mit einem sehr langen Maßband", "Mit einem Messschieber", "Man kann sie nur schätzen."],
      "Das ist eine indirekte Messung: Aus der Laufzeit (ca. 2,5 s hin und zurück) berechnet man die Entfernung – rund 384 000 km.", "Buch S. 19"),
+    ("Schätzen", "Du solltest 10 cm zeichnen, gemessen sind 8,7 cm. Wie groß ist die Abweichung?", ["−1,3 cm", "+1,3 cm", "18,7 cm", "0,87 cm"],
+     "Abweichung = gemessen − Ziel = 8,7 − 10 = −1,3 cm. Das Minus zeigt: Der Strich war zu kurz.", "Buch S. 17"),
     ("Genauigkeit", "Dein Maßband hat eine mm-Einteilung. Welches Ergebnis ist sinnvoll angegeben?", ["174,3 cm", "174,32 cm", "174,318 cm", "170 cm"],
      "Auf 1 mm genau heißt: eine Kommastelle bei cm. Mehr Kommastellen wären Scheingenauigkeit – so genau misst kein Maßband.", "Buch S. 17"),
     ("Mittelwert", "Annas Messwerte: 165,9 cm – 166,1 cm – 166,0 cm. Wie groß ist der Mittelwert?", ["166,0 cm", "166,1 cm", "498,0 cm", "165,9 cm"],
@@ -79,6 +83,10 @@ Q = [
      "Die Bandscheiben zwischen den Wirbeln werden tagsüber zusammengedrückt und erholen sich im Liegen. Der Unterschied beträgt ca. 1–2 cm.", "Buch S. 17"),
     ("Faktencheck", "„+2 cm in 2 Wochen!“ – vorher abends, nachher morgens gemessen. Was folgt daraus?", ["Der Unterschied kann allein von der Uhrzeit kommen – das beweist nichts.", "Die Einlagen wirken sicher.", "Morgens misst man immer falsch.", "2 cm kann man nicht messen."],
      "Ein fairer Vergleich braucht gleiche Bedingungen: gleiche Uhrzeit, ohne Schuhe, mehrmals messen, viele Personen mit und ohne Einlagen.", "Buch S. 17"),
+    ("Reaktionszeit", "Deine Fallwege: 14 cm – 18 cm – 15 cm. Wie groß ist deine Reaktionszeit laut Tabelle (15 cm → 0,17 s, 17,5 cm → 0,19 s)?", ["ca. 0,18 s", "ca. 0,47 s", "ca. 0,10 s", "ca. 1,5 s"],
+     "Mittelwert h = (14 + 18 + 15) : 3 = 15,7 cm. Der Wert liegt zwischen 15 und 17,5 cm, also t ≈ 0,18 s.", "Buch S. 18"),
+    ("Reaktionszeit", "Bei 50 km/h fährt ein Auto ca. 14 m pro Sekunde. Wie weit fährt es ungebremst, wenn du 2 s aufs Handy schaust?", ["ca. 28 m", "ca. 3 m", "ca. 14 cm", "ca. 100 m"],
+     "2 s · 14 m pro Sekunde = 28 m – so lang wie ein Klassenzimmer-Trakt. Dazu kommt noch der Bremsweg.", "Buch S. 18"),
     ("Auswerten", "Größte Person 186,2 cm, kleinste 157,4 cm. Wie groß ist die Spannweite?", ["28,8 cm", "343,6 cm", "171,8 cm", "186,2 cm"],
      "Spannweite = größter − kleinster Wert = 186,2 − 157,4 = 28,8 cm. Sie zeigt, wie weit die Werte auseinanderliegen.", "Buch S. 17"),
     ("Auswerten", "Wohin gehört ein Mittelwert von 170,0 cm in der Strichliste?", ["in den Bereich 170–174,9 cm", "in den Bereich 165–169,9 cm", "in beide Bereiche", "in keinen Bereich"],
@@ -129,9 +137,9 @@ parts = [
               + '<details class="reveal"><summary>Auflösung anzeigen</summary><p><strong>Fakt!</strong> Tagsüber drückt dein Körpergewicht die Bandscheiben zusammen – abends bist du ca. 1–2 cm kleiner. In der Schwerelosigkeit dehnt sich die Wirbelsäule.</p></details>'),
         slide("Das kannst du nach dieser Doppelstunde", '<ol class="goals">'
               "<li>die <strong>Länge</strong> als Grundgröße mit der Einheit Meter erklären und das passende Messgerät wählen</li>"
-              "<li>deine Körpergröße genau messen, den <strong>Mittelwert</strong> bilden und sinnvoll runden</li>"
+              "<li><strong>schätzen</strong>, genau messen, den <strong>Mittelwert</strong> bilden und sinnvoll runden</li>"
               "<li><strong>zufällige und systematische Fehler</strong> unterscheiden</li>"
-              "<li>die Werte der Klasse in <strong>Strichliste und Säulendiagramm</strong> darstellen</li></ol>"),
+              "<li>Messwerte als <strong>Säulendiagramm</strong> darstellen und deine <strong>Reaktionszeit</strong> bestimmen</li></ol>"),
     ]),
     part("teil1", "Teil 1 · Stunde 1 · Buch S. 19", "Die Länge messen", [
         slide("Die Länge", '<div class="merke"><strong>Merke:</strong> Die <strong>Länge l</strong> gibt den Abstand zwischen zwei Punkten bzw. die Ausdehnung eines Objekts in eine Richtung an. Einheit: <strong>Meter (m)</strong>.</div>'
@@ -151,7 +159,12 @@ parts = [
               + tiles(("174,3 cm ✔", P("Maßband mit mm-Einteilung: auf 1 mm genau.")),
                       ("174,32 cm ✘", P("<strong>Scheingenauigkeit:</strong> So genau misst kein Maßband.")),
                       ("Auf Augenhöhe", P("Lies gerade von vorne ab – nicht schräg von oben oder unten."))), "Buch S. 17"),
+        slide("Schätzen wie die Profis", P("Wer ein Gefühl für Größen hat, merkt sofort, wenn ein Messwert nicht stimmen kann – z. B. 17,5 cm statt 175 cm Körpergröße.")
+              + table([["Größe", "Schätzaufgabe", "Ziel"], ["Länge", "10-cm-Strich ohne Lineal", "10 cm"], ["Masse", "1 g Salz mit dem Löffel", "1 g"], ["Zeit", "leise „21 … 30“ zählen", "10 s"]])
+              + '<div class="merke"><strong>Abweichung = gemessen − Ziel</strong> · Plus = zu viel, Minus = zu wenig. Beispiel: 8,7 cm − 10 cm = −1,3 cm</div>'
+              + P("<strong>Bundesheer:</strong> Beim Entfernungsschätzen im Gelände vergleicht man mit bekannten Längen, z. B. Fußballfeld ≈ 100 m."), "Buch S. 17"),
         slide("So misst du deine Körpergröße", '<ol class="goals">'
+              "<li><strong>Schätze</strong> zuerst deine Größe</li>"
               "<li><strong>3er-Gruppen:</strong> Messperson, Markierer, Ableser</li>"
               "<li><strong>Schuhe aus</strong> – Fersen, Po und Rücken an die Wand</li>"
               "<li>Buch <strong>waagrecht</strong> auf den Kopf, Post-it genau an die Unterkante</li>"
@@ -159,7 +172,7 @@ parts = [
               "<li>Auf <strong>Augenhöhe</strong> ablesen – auf 1 mm genau</li>"
               "<li>Jeder <strong>3-mal</strong> – dazwischen weggehen und neu hinstellen</li></ol>", "Buch S. 17"),
     ]),
-    part("teil2", "Teil 2 · Stunde 2 · Buch S. 17", "Messfehler und Messunsicherheit", [
+    part("teil2", "Teil 2 · Stunde 2 · Buch S. 17–18", "Messfehler und Reaktionszeit", [
         slide("So rechnest du – Beispiel Lukas", table([["Schritt", "Rechnung"],
                                                        ["Mittelwert", "(174,2 + 174,6 + 174,3) : 3 = 523,1 : 3 = 174,37"],
                                                        ["gerundet", "auf 1 mm genau → 174,4 cm"],
@@ -181,16 +194,34 @@ parts = [
               + P("<strong>Säulendiagramm:</strong> x-Achse = Größenbereiche, y-Achse = Anzahl. Über jeden Bereich eine Säule, genau so hoch wie die Anzahl.")
               + fig("diagramm.gif", "Animation: Die Säulen einer Beispielklasse mit 24 Kadetten wachsen nacheinander.", anim=True, cap="Animation · Beispielklasse mit 24 Kadetten")
               + P("Typisch ist die <strong>Glockenform</strong>: In der Mitte die meisten, nach außen immer weniger."), "Buch S. 17"),
+        slide("Reaktionszeit messen",
+              '<div class="tiles"><div class="tile"><ol class="goals">'
+              "<li>Zu zweit, <strong>Lineal ab 30 cm</strong> – besser 40–50 cm oder ein aufgeklappter Meterstab</li>"
+              "<li>Lineal <strong>senkrecht</strong>, Null zwischen den offenen Fingern</li>"
+              "<li><strong>Ohne Vorwarnung</strong> loslassen – fangen!</li>"
+              "<li>Den <strong>Fallweg h</strong> in cm ablesen</li>"
+              "<li><strong>3-mal</strong> messen, Mittelwert bilden, dann tauschen</li></ol>"
+              "<p>Geodreieck (zu kurz) und Maßband (zu weich) sind ungeeignet.</p></div>"
+              f'<div class="tile">{fig("lineal.png", "Skizze: Der Versuchsleiter hält das Lineal oben, unten sind die offenen Finger auf Höhe 0. Der Fallweg h ist markiert.")}</div></div>', "Buch S. 18"),
+        slide("Reaktionszeit ablesen",
+              f'<div class="merke formula"><img src="img/formel.png" width="{SZ["formel.png"][0]}" height="{SZ["formel.png"][1]}" alt="Formel: t gleich Wurzel aus 2 mal h durch 9,81"></div>'
+              + P("<strong>h</strong> = Fallweg in Meter · <strong>9,81</strong> = Fallbeschleunigung der Erde. Einfacher: in der Tabelle ablesen!")
+              + table([["h in cm", "5", "7,5", "10", "12,5", "15"], ["t in s", "0,10", "0,12", "0,14", "0,16", "0,17"]])
+              + table([["h in cm", "17,5", "20", "22,5", "25", "30"], ["t in s", "0,19", "0,20", "0,21", "0,23", "0,25"]])
+              + table([["h in cm", "35", "40", "45", "50"], ["t in s", "0,27", "0,29", "0,30", "0,32"]])
+              + P("h liegt dazwischen? Wert dazwischen nehmen: 15,7 cm → ca. 0,18 s. Schwer oder leicht ist egal – ein Meterstab fällt genauso schnell wie ein Plastiklineal."), "Buch S. 18"),
+        slide("Reaktionszeit im Verkehr", tiles(("Rechnung", P("50 km/h ≈ <strong>14 m pro Sekunde</strong>. In 0,2 s fährt das Auto fast 3 m – ohne zu bremsen.")),
+                                                ("Handy am Steuer", P("Wer aufs Handy schaut, reagiert erst nach 1–2 s: <strong>14–28 m</strong> ungebremst. Genauso bei Müdigkeit, z. B. nach dem Wachdienst."))), "Buch S. 18"),
     ]),
     part("begriffe", "Zum Nachschlagen", "Fachbegriffe", [
         slide("Teil 1 · Länge", table([["Begriff", "Bedeutung"], ["Länge l", "Abstand zwischen zwei Punkten – Einheit Meter (m)"], ["Grundgröße", "eine der 7 Größen des SI, z. B. Länge, Masse, Zeit"],
                                        ["direkte Messung", "Vergleich mit einem geeichten Messgerät"], ["indirekte Messung", "Umweg über eine andere Größe, z. B. die Laufzeit"],
                                        ["geeicht", "Messgerät wurde amtlich mit einem genauen Maßstab geprüft"], ["Genauigkeit", "kleinste Einteilung auf der Skala, z. B. 1 mm"],
-                                       ["Scheingenauigkeit", "mehr Kommastellen, als das Messgerät messen kann"]]), "Buch S. 17–19"),
-        slide("Teil 2 · Messfehler", table([["Begriff", "Bedeutung"], ["Mittelwert", "Summe aller Werte : Anzahl der Werte („Durchschnitt“)"],
+                                       ["Scheingenauigkeit", "mehr Kommastellen, als das Messgerät messen kann"], ["Abweichung", "gemessen − Ziel (Plus = zu viel, Minus = zu wenig)"]]), "Buch S. 17–19"),
+        slide("Teil 2 · Messfehler und Reaktionszeit", table([["Begriff", "Bedeutung"], ["Mittelwert", "Summe aller Werte : Anzahl der Werte („Durchschnitt“)"],
                                             ["Messunsicherheit", "(größter − kleinster Wert) : 2 – so weit kann das Ergebnis danebenliegen"], ["Schätzfehler", "Mittelwert − Schätzung"],
                                             ["zufälliger Fehler", "mal zu groß, mal zu klein → Mittelwert hilft"], ["systematischer Fehler", "immer in dieselbe Richtung → Mittelwert hilft nicht"],
-                                            ["Spannweite", "größter Wert − kleinster Wert der Klasse"], ["Strichliste", "pro Wert ein Strich, der 5. Strich quer über die vier"]]), "Buch S. 17"),
+                                            ["Spannweite", "größter Wert − kleinster Wert der Klasse"], ["Strichliste", "pro Wert ein Strich, der 5. Strich quer über die vier"], ["Fallweg h", "so weit fällt das Lineal, bis du es fängst"], ["Reaktionszeit t", "Zeit vom Loslassen bis zum Fangen"]]), "Buch S. 17–18"),
     ]),
 ]
 toc = "".join(f'<a href="#{i}">{esc(l)}</a>' for i, l in [("einstieg", "Einstieg"), ("teil1", "Teil 1"), ("teil2", "Teil 2"), ("begriffe", "Fachbegriffe"), ("weiter", "Aufgaben")])
@@ -203,6 +234,13 @@ details.reveal { border: 2px solid #D9772B; border-radius: 12px; padding: 10px 1
 details.reveal summary { cursor: pointer; font-weight: 700; color: #D9772B; }
 details.reveal p { margin: 8px 0 0; }
 .tile .fig img { max-width: 220px; }
+.merke.formula { display: flex; justify-content: center; }
+.merke.formula img { width: 200px; height: auto; }
+.tablewrap th:first-child { white-space: nowrap; }
+.sqrt { display: inline-flex; align-items: center; border-top: 2px solid #fff; padding: 2px 6px 0 4px; position: relative; margin-left: 14px; }
+.sqrt::before { content: "√"; position: absolute; left: -18px; bottom: -4px; font-size: 40px; line-height: 1; }
+.frac { display: inline-grid; text-align: center; }
+.frac span:first-child { border-bottom: 2px solid #fff; padding: 0 4px; }
 </style>""")
 page = f"""<!doctype html>
 <html lang="de">
@@ -210,7 +248,7 @@ page = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Wie groß bist du wirklich? – Lernseite</title>
+<title>Messen wie die Profis – Lernseite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">
@@ -221,7 +259,7 @@ page = f"""<!doctype html>
   <img class="camo" alt="" src="data:image/png;base64,{CAMO}">
   <img class="logo" alt="BHAK Wappen" src="data:image/png;base64,{LOGO}">
   <div class="top-inner">
-    <div class="top-text"><div class="eyebrow">{esc(EYEBROW)} · Buch S. 17–19</div><h1>Wie groß bist du wirklich?</h1></div>
+    <div class="top-text"><div class="eyebrow">{esc(EYEBROW)} · Buch S. 17–19</div><h1>Messen wie die Profis</h1></div>
     <img class="smiley" alt="" src="data:image/png;base64,{SMILEY}">
   </div>
 </header>
@@ -231,7 +269,7 @@ page = f"""<!doctype html>
 <section class="next" id="weiter">
   <div class="eyebrow">Weiter geht's</div>
   <h2>Jetzt bist du dran</h2>
-  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt A1–A10</a><a class="btn alt" href="quiz.html">Mess-Check (Quiz)</a></div>
+  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt A1–A11</a><a class="btn alt" href="quiz.html">Mess-Check (Quiz)</a></div>
   <p class="hint">Theorie zum Nachlesen im Schulbuch (Trauner) S. 17–19.</p>
 </section>
 </main>
