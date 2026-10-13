@@ -24,5 +24,17 @@
    "projekt.html",
    "quiz.html"
   ]
+ },
+ {
+  "klasse": "4AB",
+  "fach": "NAWI",
+  "ordner": "4ab-nawi/k1-5a-elektromagnet",
+  "kapitel": "K1.5a",
+  "titel": "Elektromagnet und Elektromotor",
+  "seiten": [
+   "theorie.html",
+   "aufgaben.html",
+   "quiz.html"
+  ]
  }
 ]
