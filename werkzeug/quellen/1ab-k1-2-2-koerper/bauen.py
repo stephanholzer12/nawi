@@ -132,10 +132,10 @@ P = lambda s: f"<p>{s}</p>"
 parts = [
     part("einstieg", "Einstieg", "Worum geht es?", [
         slide("Mythos oder Fakt?", P("<strong>„Am Morgen bist du größer als am Abend.“</strong>")
-              + tiles(("Im Weltall", P("Astronauten sind nach Monaten im All bis zu <strong>5 cm</strong> größer.")),
-                      ("Bei der Stellung", P("Beim Bundesheer wird deine Körpergröße gemessen. Spielt die Uhrzeit eine Rolle?")))
-              + '<details class="reveal"><summary>Auflösung anzeigen</summary><p><strong>Fakt!</strong> Tagsüber drückt dein Körpergewicht die Bandscheiben zusammen – abends bist du ca. 1–2 cm kleiner. In der Schwerelosigkeit dehnt sich die Wirbelsäule.</p></details>'),
-        slide("Das kannst du nach dieser Doppelstunde", '<ol class="goals">'
+              + '<div class="tiles"><div class="tile myth"><h4>Science oder Fiction?</h4><p>Star Wars: Han Solo prahlt, er habe den Kessel-Flug in unter <strong>12 Parsec</strong> geschafft. Ist Parsec eine Zeit?</p></div>'
+              + '<div class="tile"><h4>Bei der Stellung</h4><p>Beim Bundesheer wird deine Körpergröße gemessen. Spielt die Uhrzeit eine Rolle?</p></div></div>'
+              + '<details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Fakt:</strong> Tagsüber drückt dein Körpergewicht die Bandscheiben zusammen – abends bist du ca. 1–2 cm kleiner. Astronauten werden im All sogar bis zu 5 cm größer.</p><p><strong>Fiction:</strong> Parsec ist eine Länge (ca. 3,26 Lichtjahre), keine Zeit.</p></details>'),
+        slide("Das kannst du nach dieser Einheit", '<ol class="goals">'
               "<li>die <strong>Länge</strong> als Grundgröße mit der Einheit Meter erklären und das passende Messgerät wählen</li>"
               "<li><strong>schätzen</strong>, genau messen, den <strong>Mittelwert</strong> bilden und sinnvoll runden</li>"
               "<li><strong>zufällige und systematische Fehler</strong> unterscheiden</li>"
@@ -175,6 +175,7 @@ parts = [
               "<li>Vom Boden bis zur <strong>Oberkante des Post-its</strong> messen</li>"
               "<li>Auf <strong>Augenhöhe</strong> ablesen – auf 1 mm genau</li>"
               "<li>Jeder <strong>3-mal</strong> – dazwischen weggehen und neu hinstellen</li></ol>", "Buch S. 17"),
+        slide("Stopp – kannst du das?", '<div class="stopq"><p><strong>Womit misst du den Durchmesser einer Patrone?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Messschieber</strong> – misst Längen von 1 mm bis 10 cm auf 0,1 mm genau.</p></details></div><div class="stopq"><p><strong>Warum ist 174,32 cm beim Maßband nicht sinnvoll?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Scheingenauigkeit:</strong> Das Maßband misst nur auf 1 mm genau – also 174,3 cm.</p></details></div>', "Teil 1"),
     ]),
     part("teil2", "Teil 2 · Stunde 2 · Buch S. 17–18", "Messfehler und Reaktionszeit", [
         slide("So rechnest du – Beispiel Lukas", table([["Schritt", "Rechnung"],
@@ -216,6 +217,7 @@ parts = [
               + P("h liegt dazwischen? Wert dazwischen nehmen: 15,7 cm → ca. 0,18 s. Schwer oder leicht ist egal – ein Meterstab fällt genauso schnell wie ein Plastiklineal."), "Buch S. 18"),
         slide("Reaktionszeit im Verkehr", tiles(("Rechnung", P("50 km/h ≈ <strong>14 m pro Sekunde</strong>. In 0,2 s fährt das Auto fast 3 m – ohne zu bremsen.")),
                                                 ("Handy am Steuer", P("Wer aufs Handy schaut, reagiert erst nach 1–2 s: <strong>14–28 m</strong> ungebremst. Genauso bei Müdigkeit, z. B. nach dem Wachdienst."))), "Buch S. 18"),
+        slide("Stopp – kannst du das?", '<div class="stopq"><p><strong>Alle wurden mit Schuhen gemessen – zufällig oder systematisch?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Systematisch</strong> – alle Werte sind zu groß, der Mittelwert hilft nicht.</p></details></div><div class="stopq"><p><strong>Fallweg 20 cm – wie groß ist die Reaktionszeit?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>ca. 0,20 s</strong> – laut Ablesetabelle.</p></details></div>', "Teil 2"),
     ]),
     part("begriffe", "Zum Nachschlagen", "Fachbegriffe", [
         slide("Teil 1 · Länge", table([["Begriff", "Bedeutung"], ["Länge l", "Abstand zwischen zwei Punkten – Einheit Meter (m)"], ["Grundgröße", "eine der 7 Größen des SI, z. B. Länge, Masse, Zeit"],
@@ -227,8 +229,12 @@ parts = [
                                             ["zufälliger Fehler", "mal zu groß, mal zu klein → Mittelwert hilft"], ["systematischer Fehler", "immer in dieselbe Richtung → Mittelwert hilft nicht"],
                                             ["Spannweite", "größter Wert − kleinster Wert der Klasse"], ["Strichliste", "pro Wert ein Strich, der 5. Strich quer über die vier"], ["Fallweg h", "so weit fällt das Lineal, bis du es fängst"], ["Reaktionszeit t", "Zeit vom Loslassen bis zum Fangen"]]), "Buch S. 17–18"),
     ]),
+    part("kurz", "Zum Schluss", "Kurz & knapp", [
+        slide("Das Wichtigste in 5 Sätzen", '<ol class="goals"><li>Die Länge ist eine <strong>SI-Grundgröße</strong> – Einheit Meter.</li><li>Das <strong>Messgerät</strong> passt zur Größe: Maßband, Messschieber, Bügelmessschraube, Laser.</li><li>Mehrmals messen: Ergebnis = <strong>Mittelwert ± Messunsicherheit</strong>.</li><li><strong>Zufällige</strong> Fehler gleicht der Mittelwert aus, <strong>systematische</strong> nicht.</li><li>Ein Ergebnis gibt man nur so genau an, wie das <strong>Messgerät</strong> misst.</li></ol>'),
+        slide("Kann ich das?", '<p class="hint">Tippe ehrlich an – bei »noch nicht« den passenden Teil noch einmal lesen.</p><div class="ziel"><p>die <strong>Länge</strong> als Grundgröße erklären und das passende Messgerät wählen</p><div class="chips" role="group" aria-label="Selbstcheck"><button type="button" class="chip" data-z="0" data-v="sicher" aria-pressed="false">sicher</button><button type="button" class="chip" data-z="0" data-v="fast" aria-pressed="false">fast</button><button type="button" class="chip" data-z="0" data-v="noch nicht" aria-pressed="false">noch nicht</button></div></div><div class="ziel"><p><strong>schätzen</strong>, genau messen, den <strong>Mittelwert</strong> bilden und sinnvoll runden</p><div class="chips" role="group" aria-label="Selbstcheck"><button type="button" class="chip" data-z="1" data-v="sicher" aria-pressed="false">sicher</button><button type="button" class="chip" data-z="1" data-v="fast" aria-pressed="false">fast</button><button type="button" class="chip" data-z="1" data-v="noch nicht" aria-pressed="false">noch nicht</button></div></div><div class="ziel"><p><strong>zufällige und systematische Fehler</strong> unterscheiden</p><div class="chips" role="group" aria-label="Selbstcheck"><button type="button" class="chip" data-z="2" data-v="sicher" aria-pressed="false">sicher</button><button type="button" class="chip" data-z="2" data-v="fast" aria-pressed="false">fast</button><button type="button" class="chip" data-z="2" data-v="noch nicht" aria-pressed="false">noch nicht</button></div></div><div class="ziel"><p>ein <strong>Säulendiagramm</strong> zeichnen und deine <strong>Reaktionszeit</strong> bestimmen</p><div class="chips" role="group" aria-label="Selbstcheck"><button type="button" class="chip" data-z="3" data-v="sicher" aria-pressed="false">sicher</button><button type="button" class="chip" data-z="3" data-v="fast" aria-pressed="false">fast</button><button type="button" class="chip" data-z="3" data-v="noch nicht" aria-pressed="false">noch nicht</button></div></div>'),
+    ]),
 ]
-toc = "".join(f'<a href="#{i}">{esc(l)}</a>' for i, l in [("einstieg", "Einstieg"), ("teil1", "Teil 1"), ("teil2", "Teil 2"), ("begriffe", "Fachbegriffe"), ("weiter", "Aufgaben")])
+toc = "".join(f'<a href="#{i}">{esc(l)}</a>' for i, l in [("einstieg", "Einstieg"), ("teil1", "Teil 1"), ("teil2", "Teil 2"), ("begriffe", "Fachbegriffe"), ("kurz", "Kurz & knapp"), ("weiter", "Weiter")])
 bt = open(os.path.join(WZ, "vorlagen", "build_theorie.py"), encoding="utf-8").read()
 tcss = bt[bt.index("<style>"):bt.index("</style>") + 8].replace("{{", "{").replace("}}", "}")
 tcss = tcss.replace("</style>", """.merke { background: var(--olive); color: #fff; border-radius: 12px; padding: 12px 14px; }
@@ -238,6 +244,18 @@ details.reveal { border: 2px solid #D9772B; border-radius: 12px; padding: 10px 1
 details.reveal summary { cursor: pointer; font-weight: 700; color: #D9772B; }
 details.reveal p { margin: 8px 0 0; }
 .tile .fig img { max-width: 220px; }
+.tile.myth { border: 2px solid #D9772B; }
+.stopq { display: grid; gap: 6px; }
+.stopq + .stopq { margin-top: 10px; }
+.stopq p { margin: 0; }
+.ziel { border: 1px solid #D3DCC2; border-radius: 12px; padding: 10px 12px; display: grid; gap: 6px; }
+.ziel p { margin: 0; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: 16px; font-weight: 700; color: #3B4A2F; background: #fff; border: 2px solid #D3DCC2; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.chip[aria-pressed="true"][data-v="sicher"] { background: #E6F0D3; border-color: #7FA83A; }
+.chip[aria-pressed="true"][data-v="fast"] { background: #FFF1D6; border-color: #D9772B; }
+.chip[aria-pressed="true"][data-v="noch nicht"] { background: #F6E3DF; border-color: #8C3B2E; }
+.chip:focus-visible { outline: 3px solid #2E7D8C; outline-offset: 2px; }
 .merke.formula { display: flex; justify-content: center; }
 .merke.formula img { width: 200px; height: auto; }
 .tablewrap th:first-child { white-space: nowrap; }
@@ -273,10 +291,23 @@ page = f"""<!doctype html>
 <section class="next" id="weiter">
   <div class="eyebrow">Weiter geht's</div>
   <h2>Jetzt bist du dran</h2>
-  <div class="btns"><a class="btn" href="aufgaben.html">Arbeitsblatt (TH + UE)</a><a class="btn alt" href="quiz.html">Mess-Check (Quiz)</a></div>
+  <div class="btns"><a class="btn" href="aufgaben.html">2 · Arbeitsblatt</a><a class="btn alt" href="quiz.html">3 · Mess-Check (Quiz)</a></div>
   <p class="hint">Theorie zum Nachlesen im Schulbuch (Trauner) S. 17–19.</p>
 </section>
 </main>
+<script>
+(function () {{
+  var KEY = "26-27-1AB-K1.2.2-Messen-Lernseite-Check-v1", S = {{}};
+  try {{ S = JSON.parse(localStorage.getItem(KEY) || "{{}}") || {{}}; }} catch (e) {{ S = {{}}; }}
+  var chips = document.querySelectorAll(".chip[data-z]");
+  function paint() {{ chips.forEach(function (c) {{ c.setAttribute("aria-pressed", String(S[c.dataset.z] === c.dataset.v)); }}); }}
+  chips.forEach(function (c) {{ c.addEventListener("click", function () {{
+    S[c.dataset.z] = S[c.dataset.z] === c.dataset.v ? null : c.dataset.v; paint();
+    try {{ localStorage.setItem(KEY, JSON.stringify(S)); }} catch (e) {{}}
+  }}); }});
+  paint();
+}})();
+</script>
 </body>
 </html>
 """
