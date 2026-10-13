@@ -12,6 +12,18 @@
   ]
  },
  {
+  "klasse": "1AB",
+  "fach": "NAWI",
+  "ordner": "1ab-nawi/k1-1-2-nobel2026",
+  "kapitel": "K1.1.2",
+  "titel": "Nobelpreise 2026",
+  "seiten": [
+   "theorie.html",
+   "aufgaben.html",
+   "quiz.html"
+  ]
+ },
+ {
   "klasse": "2AB",
   "fach": "NAWI",
   "ordner": "2ab-nawi/k1-2-bindungen",
