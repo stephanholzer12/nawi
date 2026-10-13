@@ -67,10 +67,11 @@
   "fach": "IWK",
   "ordner": "5ak-iwk/k1-2-kulturen",
   "kapitel": "K1.2",
-  "titel": "Kulturen erleben",
+  "titel": "Die Welt einteilen · Kulturen erleben",
   "seiten": [
    "theorie.html",
    "aufgaben.html",
+   "uebung.html",
    "quiz.html"
   ]
  },
