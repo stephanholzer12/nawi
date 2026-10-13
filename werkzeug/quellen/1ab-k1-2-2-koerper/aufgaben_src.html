@@ -1,0 +1,437 @@
+<title>Wie groß bist du wirklich? – Arbeitsblatt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,700&display=swap">
+__BASECSS__
+<style>
+/* Ergänzungen für dieses Arbeitsblatt: Personen-Zeilen, Auswahl-Knöpfe, Säulendiagramm zum Antippen, Lückensätze */
+.ad { background: var(--rust-soft); border-left: 4px solid var(--rust); border-radius: 10px; padding: 10px 12px; font-style: italic; }
+.person { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+.person .who2 { font-weight: 700; color: var(--olive); }
+.cells { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cells.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 460px) { .cells.c4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cells label { font-size: 14px; font-weight: 700; color: var(--muted); display: block; margin-bottom: 2px; }
+.cells input { text-align: center; padding: 8px 6px; }
+.choose { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: 17px; font-weight: 700; color: var(--olive); background: var(--write); border: 2px solid var(--write-line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--green-soft); border-color: var(--green); color: var(--ink); }
+.chip:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.bins { display: grid; gap: 8px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 520px) { .bins { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bin { border: 1px solid var(--line); border-radius: 10px; padding: 8px; display: grid; gap: 4px; text-align: center; }
+.bin span { font-size: 14px; font-weight: 700; color: var(--olive); }
+.bin input { text-align: center; padding: 8px 4px; }
+.sum { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chartbox { border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: #fff; }
+.chartbox svg { width: 100%; height: auto; display: block; touch-action: manipulation; }
+.chartbox .col { cursor: pointer; }
+.chartbox .col:focus-visible rect.hit { stroke: var(--teal); stroke-width: 3; }
+.gap { display: inline-block; width: 11em; max-width: 100%; margin: 2px 2px; padding: 4px 8px; font-size: 17px; }
+.sent2 { border: 1px solid var(--line); border-radius: 12px; padding: 12px; line-height: 2.1; }
+</style>
+
+<header class="top">
+  <img class="camo" alt="" src="data:image/png;base64,__CAMO__">
+  <img class="logo" alt="BHAK Wappen" src="data:image/png;base64,__LOGO__">
+  <div class="top-inner">
+    <div class="top-text">
+      <div class="eyebrow">NAWI · 1AB · K1.2.2 Messen und Messfehler</div>
+      <h1>Wie groß bist du wirklich?</h1>
+    </div>
+    <button class="qrbtn" type="button" id="qrbtn">QR-Code für die Klasse</button>
+    <img class="smiley" alt="" src="data:image/png;base64,__SMILEY__">
+  </div>
+</header>
+<div class="qr-overlay" id="qr" hidden>
+  <div class="qr-box">
+    <div class="eyebrow">NAWI · 1AB · K1.2.2 Messen und Messfehler</div>
+    <h2>Arbeitsblatt am Handy</h2>
+    <img alt="QR-Code zum Arbeitsblatt" src="data:image/png;base64,__QR__">
+    <p>Kamera öffnen, QR-Code scannen, loslegen.</p>
+    <button class="btn small" type="button" id="qrclose">Schließen</button>
+  </div>
+</div>
+
+<main>
+  <section class="card">
+    <div class="who">
+      <div><label class="lbl" for="name">Dein Name</label><input type="text" id="name" autocomplete="name" placeholder="Vorname Nachname"></div>
+      <div><label class="lbl" for="klasse">Klasse</label><select id="klasse"><option value="">–</option><option>1AK</option><option>1BK</option></select></div>
+    </div>
+    <ol class="steps hint">
+      <li>Aufgaben in die <b>gelben Felder</b> eintragen – alles wird am Handy automatisch gespeichert.</li>
+      <li>Stunde 1: Aufgaben 1–4 · Stunde 2: Aufgaben 5–10. Nach jeder Aufgabe kontrollieren wir gemeinsam.</li>
+      <li>Ganz unten <b>PDF erstellen</b> und die PDF in LMS hochladen.</li>
+    </ol>
+    <p class="hint">Theorie zum Nachlesen: <a href="theorie.html">Lernseite</a> · Schulbuch (Trauner) S. 17–19</p>
+  </section>
+  <div class="progress"><span id="count">0 von 10 bearbeitet</span><div class="bar"><span id="barfill"></span></div></div>
+  <div id="tasks" style="display:grid;gap:14px"></div>
+
+  <section class="card" id="abgabe">
+    <div class="head"><span class="nr">Abgabe</span></div>
+    <h2>Fertig? Dann PDF erstellen</h2>
+    <p class="hint" id="missing"></p>
+    <button class="btn" type="button" id="pdfbtn">PDF erstellen</button>
+    <p class="status" id="pdfstatus" hidden></p>
+    <p class="hint">Danach in LMS die Aufgabe öffnen → <b>Datei hochladen</b> → die PDF aus <i>Downloads</i> (Android) bzw. <i>Dateien</i> (iPhone) wählen.</p>
+    <details>
+      <summary class="hint" style="cursor:pointer">Klappt das PDF nicht? Antworten als Text kopieren</summary>
+      <div style="display:grid;gap:8px;margin-top:8px">
+        <button class="btn secondary small" type="button" id="copybtn">Antworten kopieren</button>
+        <p class="status" id="copystatus" hidden></p>
+        <textarea id="copyArea" readonly aria-label="Alle Antworten als Text"></textarea>
+        <p class="hint">Den Text in LMS in das Antwortfeld einfügen oder einen Screenshot hochladen.</p>
+      </div>
+    </details>
+    <div id="resetwrap">
+      <button class="btn secondary small" type="button" id="resetbtn">Alles löschen und neu beginnen</button>
+    </div>
+  </section>
+</main>
+
+<script>/* jsPDF 2.5.1 (MIT) */
+__JSPDF__
+</script>
+<script>
+const FONT_R = "__FONTR__", FONT_B = "__FONTB__", LOGO = "data:image/png;base64,__LOGO__";
+const RANGES = __RANGES__;
+const KEY = "26-27-1AB-K1.2.2-Koerper-UE-Handy-v1";
+const TITLE = "K1.2.2 Wie groß bist du wirklich?";
+
+const GERAETE = ["Maßband", "Messschieber", "Bügelmessschraube", "Mikroskop-Maßstab", "Laser-Entfernungsmesser"];
+const BINS = ["145–149,9", "150–154,9", "155–159,9", "160–164,9", "165–169,9", "170–174,9", "175–179,9", "180–184,9", "185–189,9", "190–194,9"];
+const T = [
+  { id: "a1", nr: 1, title: "Welches Messgerät passt?", src: "Theorie S. 19", type: "selects", h: 1,
+    q: "Wähle für jede Messung das passende Messgerät. Wird direkt oder indirekt gemessen?",
+    rows: ["Körpergröße eines Kadetten", "Durchmesser einer Patrone (5,56 mm)", "Dicke eines Blatts Papier (0,1 mm)", "Größe einer Zelle (0,03 mm)", "Entfernung zu einem Ziel (800 m)"],
+    cols: [["g", "Messgerät", GERAETE], ["d", "direkt oder indirekt?", ["direkt", "indirekt"]]] },
+  { id: "a2", nr: 2, title: "Schätzen", src: "Theorie S. 17", type: "fields", h: 1,
+    q: "Schätze, ohne nachzusehen. Gleich wird dein Lehrer vorne gemessen – wer liegt am nächsten?",
+    fields: [["me", "Meine Körpergröße in cm"], ["lehrer", "Größe meines Lehrers in cm"]] },
+  { id: "a3", nr: 3, title: "Körpergröße messen", src: "Theorie S. 17", type: "persons", h: 1,
+    q: "3er-Gruppen: Schuhe aus, Buch waagrecht auf den Kopf, Post-it an die Unterkante, vom Boden bis zur Oberkante des Post-its messen. Jeder wird 3-mal gemessen.",
+    hint: "Alle Werte in cm, auf 1 mm genau (z. B. 174,3). Liegen die drei Werte mehr als 1 cm auseinander? Noch einmal messen!",
+    cells: [["name", "Name", "text"], ["s", "Schätzung", "num"], ["m1", "1. Messung", "num"], ["m2", "2. Messung", "num"], ["m3", "3. Messung", "num"]] },
+  { id: "a4", nr: 4, title: "Mittelwert, Messunsicherheit, Schätzfehler", src: "Theorie S. 17", type: "persons", h: 1,
+    q: "Rechne für alle drei aus deiner Gruppe. Runde auf 1 mm (eine Kommastelle bei cm).",
+    hint: "Beispiel Lukas: Mittelwert (174,2 + 174,6 + 174,3) : 3 = 174,37 ≈ 174,4 cm · Unsicherheit (174,6 − 174,2) : 2 = 0,2 cm · Ergebnis 174,4 cm ± 0,2 cm · Schätzfehler 174,4 − 172 = +2,4 cm",
+    cells: [["mw", "Mittelwert", "num"], ["u", "Unsicherheit ±", "num"], ["sf", "Schätzfehler", "num"]], from: "a3" },
+  { id: "a5", nr: 5, title: "Fehlerbetrachtung", src: "Theorie S. 17", type: "choose", h: 2,
+    q: "Zufällig oder systematisch? Tippe die richtige Antwort an.", opts: ["zufällig", "systematisch"],
+    items: ["Einmal schräg von oben abgelesen", "Alle haben mit Schuhen gemessen", "Das Buch liegt einmal leicht schief", "Das Maßband beginnt erst 1 cm über dem Boden", "Eine Person steht einmal leicht krumm", "Alle am Abend gemessen, die Stellung misst am Morgen"] },
+  { id: "a6", nr: 6, title: "Faktencheck", src: "Theorie S. 17", type: "multi", h: 2,
+    ad: "„Mit Power-Einlagen wächst du in 2 Wochen 2 cm! Max: 1. März abends 176,0 cm – 15. März morgens 178,0 cm.“",
+    q: "Prüfe die Werbung.", parts: [["a", "a) Welcher Fehler steckt im Vergleich?"], ["b", "b) Wie müsste man richtig messen?"]] },
+  { id: "a7", nr: 7, title: "Die Klasse auswerten", src: "Theorie S. 17", type: "class", h: 2,
+    q: "Klebe deinen Mittelwert ohne Namen als Post-it an die Tafel. Zähle dann, wie viele Post-its in jedem Bereich kleben, und trag die Anzahl ein.",
+    hint: "Grenzfall: 169,9 cm gehört zu 165–169,9 · 170,0 cm schon zu 170–174,9.",
+    fields: [["mw", "Klassen-Mittelwert (Summe : Anzahl)"], ["max", "Größte Person"], ["min", "Kleinste Person"], ["sp", "Spannweite (Größte − Kleinste)"]] },
+  { id: "a8", nr: 8, title: "Säulendiagramm", src: "Theorie S. 17", type: "chart", h: 2,
+    q: "Zeichne das Säulendiagramm deiner Klasse: Tippe über jedem Bereich auf die Höhe der Anzahl. Nochmal auf die oberste Stelle tippen macht die Säule um 1 kleiner." },
+  { id: "a9", nr: 9, title: "Kampfanzüge bestellen", src: "Theorie S. 17", type: "multi", h: 2, tag: "OPTIONAL",
+    q: "Für 240 Rekruten werden Kampfanzüge bestellt. Nimm an, die Größen sind so verteilt wie in eurer Klasse.",
+    parts: [["a", "a) Wie viele Anzüge für 170–174,9 cm? Rechne: Anzahl : Klassengröße · 240"], ["b", "b) Ist eure Klasse eine gute Grundlage für die Bestellung? Begründe."]] },
+  { id: "a10", nr: 10, title: "Merksatz", src: "Theorie S. 17", type: "gaps", h: 2, q: "Fülle die Lücken.",
+    sents: [["Der Mittelwert ist genauer als eine Einzelmessung, weil sich ", 0, " Fehler ausgleichen."],
+            ["Gegen ", 1, " Fehler hilft der Mittelwert nicht – man muss die Ursache beheben."],
+            ["Ein Ergebnis gibt man nur so genau an, wie das ", 2, " messen kann."]] },
+];
+
+// ---------- Zustand (nur in diesem Browser gespeichert) ----------
+let S = { name: "", klasse: "", a: {} };
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const A = (id) => (S.a[id] = S.a[id] || {});
+const $ = (s) => document.querySelector(s);
+function el(tag, props = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);
+  return n;
+}
+const mark = (inp) => inp.classList.toggle("filled", !!String(inp.value).trim());
+const filled = (v) => v != null && String(v).trim() !== "";
+
+function input(id, key, opts = {}) {
+  const fid = id + "_" + key.replace(/\W/g, "_");
+  const inp = opts.multi ? el("textarea", { id: fid, rows: 4, placeholder: "Hier tippen …" })
+    : el("input", { type: "text", id: fid, placeholder: opts.ph || "Hier tippen …", autocomplete: "off" });
+  if (opts.num) { inp.setAttribute("inputmode", "decimal"); }
+  if (opts.cls) inp.className = opts.cls;
+  if (opts.aria) inp.setAttribute("aria-label", opts.aria);
+  inp.value = A(id)[key] || "";
+  inp.addEventListener("input", () => { A(id)[key] = inp.value; mark(inp); update(); save(); });
+  mark(inp);
+  return inp;
+}
+function labeled(id, key, label, opts) {
+  const inp = input(id, key, opts);
+  return el("div", {}, el("label", { class: "lbl", for: inp.id, text: label }), inp);
+}
+function select(id, key, opts, aria) {
+  const fid = id + "_" + key;
+  const s = el("select", { id: fid, "aria-label": aria }, el("option", { value: "", text: "auswählen …" }), ...opts.map(o => el("option", { value: o, text: o })));
+  s.value = A(id)[key] || "";
+  s.addEventListener("change", () => { A(id)[key] = s.value; mark(s); update(); save(); });
+  mark(s);
+  return s;
+}
+
+// ---------- Säulendiagramm zum Antippen ----------
+function chart(id) {
+  const NS = "http://www.w3.org/2000/svg", W = 360, H = 230, L = 34, R = 8, Tp = 10, Bt = 44, MAX = 10;
+  const cw = (W - L - R) / 10, ch = (H - Tp - Bt) / MAX;
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("role", "group"); svg.setAttribute("aria-label", "Säulendiagramm zum Antippen");
+  const mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  for (let k = 0; k <= MAX; k++) {
+    const y = H - Bt - k * ch;
+    svg.append(mk("line", { x1: L, x2: W - R, y1: y, y2: y, stroke: "#C9D3B0", "stroke-width": 1 }));
+    const t = mk("text", { x: L - 6, y: y + 4, "text-anchor": "end", "font-size": 11, fill: "#3B4A2F" }); t.textContent = k; svg.append(t);
+  }
+  for (let j = 0; j <= 10; j++) {
+    const x = L + j * cw;
+    svg.append(mk("line", { x1: x, x2: x, y1: Tp, y2: H - Bt, stroke: "#C9D3B0", "stroke-width": 1 }));
+    const t = mk("text", { x, y: H - Bt + 14, "text-anchor": "middle", "font-size": 10.5, fill: "#3B4A2F" }); t.textContent = 145 + 5 * j; svg.append(t);
+  }
+  svg.append(mk("line", { x1: L, x2: W - R, y1: H - Bt, y2: H - Bt, stroke: "#3B4A2F", "stroke-width": 2 }));
+  svg.append(mk("line", { x1: L, x2: L, y1: Tp, y2: H - Bt, stroke: "#3B4A2F", "stroke-width": 2 }));
+  const xl = mk("text", { x: (L + W - R) / 2, y: H - 8, "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "#3B4A2F" }); xl.textContent = "Körpergröße in cm"; svg.append(xl);
+  const yl = mk("text", { x: 11, y: (Tp + H - Bt) / 2, "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "#3B4A2F", transform: `rotate(-90 11 ${(Tp + H - Bt) / 2})` }); yl.textContent = "Anzahl"; svg.append(yl);
+  const bars = [];
+  for (let j = 0; j < 10; j++) {
+    const g = mk("g", { class: "col", tabindex: "0", role: "button", "aria-label": `Bereich ${BINS[j]} cm` });
+    const bar = mk("rect", { x: L + j * cw + 3, width: cw - 6, y: H - Bt, height: 0, fill: "#7FA83A", rx: 2 });
+    const lab = mk("text", { x: L + j * cw + cw / 2, y: H - Bt - 3, "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "#3B4A2F" });
+    const hit = mk("rect", { class: "hit", x: L + j * cw, width: cw, y: Tp, height: H - Bt - Tp, fill: "transparent" });
+    g.append(bar, lab, hit); svg.append(g); bars.push([bar, lab, g]);
+    const set = (v) => { v = Math.max(0, Math.min(MAX, v)); A(id)["b" + j] = v; paint(); update(); save(); };
+    g.addEventListener("click", (e) => {
+      const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      let v = Math.ceil((H - Bt - p.y) / ch - 0.15); if (v < 0) v = 0;
+      const cur = A(id)["b" + j] || 0;
+      set(v === cur ? cur - 1 : v);
+    });
+    g.addEventListener("keydown", (e) => { const cur = A(id)["b" + j] || 0; if (e.key === "ArrowUp") { set(cur + 1); e.preventDefault(); } if (e.key === "ArrowDown") { set(cur - 1); e.preventDefault(); } });
+  }
+  function paint() {
+    bars.forEach(([bar, lab, g], j) => { const v = A(id)["b" + j] || 0; bar.setAttribute("y", H - Bt - v * ch); bar.setAttribute("height", v * ch); lab.setAttribute("y", H - Bt - v * ch - 3); lab.textContent = v ? v : ""; g.setAttribute("aria-label", `Bereich ${BINS[j]} cm: ${v}`); });
+  }
+  paint();
+  return el("div", { class: "chartbox" }, svg);
+}
+
+function renderTask(t) {
+  const card = el("section", { class: "card", id: "card_" + t.id });
+  card.append(el("div", { class: "head" },
+    el("span", { class: "nr" }, el("span", { class: "check", "aria-hidden": "true", text: "✓" }), "Aufgabe " + t.nr + " · Stunde " + t.h, t.tag ? el("span", { class: "tag", text: t.tag }) : null),
+    el("span", { class: "pill theory", text: t.src })));
+  card.append(el("h2", { text: t.title }));
+  if (t.ad) card.append(el("p", { class: "ad", text: "Werbung: " + t.ad }));
+  card.append(el("p", { class: "q", text: t.q }));
+  if (t.hint) card.append(el("p", { class: "hint", text: t.hint }));
+
+  if (t.type === "selects") {
+    const box = el("div", { class: "rows" });
+    t.rows.forEach((r, i) => box.append(el("div", { class: "row" }, el("div", { class: "stoff", text: r }),
+      el("div", { class: "two" }, ...t.cols.map(([k, lab, opts]) => el("div", {}, el("label", { class: "lbl", text: lab }), select(t.id, k + i, opts, lab + ": " + r)))))));
+    card.append(box);
+  }
+  if (t.type === "fields") card.append(el("div", { class: "two" }, ...t.fields.map(([k, lab]) => labeled(t.id, k, lab, { num: true, ph: "z. B. 172" }))));
+  if (t.type === "persons") {
+    const box = el("div", { class: "rows" });
+    for (let p = 0; p < 3; p++) {
+      const nm = el("div", { class: "who2", text: "Person " + (p + 1) });
+      if (t.from) { const n = (S.a[t.from] || {})["name" + p]; if (filled(n)) nm.textContent = n; nm.dataset.from = t.from; nm.dataset.p = p; }
+      const cells = el("div", { class: "cells" + (t.cells.length >= 4 ? " c4" : "") });
+      t.cells.forEach(([k, lab, kind]) => {
+        if (kind === "text") { const d = labeled(t.id, k + p, lab, { ph: "Name" }); d.style.gridColumn = "1 / -1"; cells.append(d); return; }
+        const inp = input(t.id, k + p, { num: true, ph: "cm", aria: lab + " Person " + (p + 1) });
+        cells.append(el("div", {}, el("label", { for: inp.id, text: lab }), inp));
+      });
+      box.append(el("div", { class: "person" }, nm, cells));
+    }
+    card.append(box);
+  }
+  if (t.type === "choose") {
+    const box = el("div", { class: "rows" });
+    t.items.forEach((it, i) => {
+      const btns = t.opts.map((o, oi) => el("button", { class: "chip", type: "button", text: o, "aria-pressed": "false" }));
+      const paint = () => btns.forEach((b, oi) => b.setAttribute("aria-pressed", String(A(t.id)["c" + i] === oi)));
+      btns.forEach((b, oi) => b.addEventListener("click", () => { A(t.id)["c" + i] = A(t.id)["c" + i] === oi ? undefined : oi; paint(); update(); save(); }));
+      paint();
+      box.append(el("div", { class: "row" }, el("div", { text: it }), el("div", { class: "choose", role: "group", "aria-label": it }, ...btns)));
+    });
+    card.append(box);
+  }
+  if (t.type === "multi") t.parts.forEach(([k, lab]) => card.append(labeled(t.id, k, lab, { multi: true })));
+  if (t.type === "class") {
+    const sum = el("p", { class: "sum", id: "a7sum" });
+    const bins = el("div", { class: "bins" }, ...BINS.map((b, j) => { const inp = input(t.id, "n" + j, { num: true, ph: "0", aria: "Anzahl " + b + " cm" }); inp.addEventListener("input", sumUp); return el("div", { class: "bin" }, el("span", { text: b }), inp); }));
+    function sumUp() { let n = 0; BINS.forEach((_, j) => { const v = parseInt(A(t.id)["n" + j], 10); if (!isNaN(v)) n += v; }); sum.textContent = "Kontrolle: Summe = " + n + " Kadetten – stimmt das mit der Klasse überein?"; }
+    card.append(el("label", { class: "lbl", text: "Anzahl pro Bereich (cm)" }), bins, sum);
+    card.append(el("div", { class: "two" }, ...t.fields.map(([k, lab]) => labeled(t.id, k, lab, { num: true, ph: "cm" }))));
+    setTimeout(sumUp);
+  }
+  if (t.type === "chart") { card.append(chart(t.id)); card.append(labeled(t.id, "most", "Welcher Bereich kommt am häufigsten vor?", { ph: "z. B. 165–169,9 cm" })); }
+  if (t.type === "gaps") {
+    const box = el("div", { class: "rows" });
+    t.sents.forEach((parts, si) => {
+      const p = el("div", { class: "sent2" }); p.append((si + 1) + "  ");
+      parts.forEach(part => { if (typeof part === "string") p.append(part); else p.append(input(t.id, "g" + part, { cls: "gap", aria: "Lücke " + (part + 1) })); });
+      box.append(p);
+    });
+    card.append(box);
+  }
+  return card;
+}
+
+// ---------- Fortschritt ----------
+function isDone(t) {
+  const a = S.a[t.id] || {};
+  if (t.type === "selects") return t.rows.every((_, i) => t.cols.every(([k]) => filled(a[k + i])));
+  if (t.type === "fields") return t.fields.every(([k]) => filled(a[k]));
+  if (t.type === "persons") return [0, 1, 2].some(p => t.cells.every(([k]) => filled(a[k + p])));
+  if (t.type === "choose") return t.items.every((_, i) => a["c" + i] != null);
+  if (t.type === "multi") return t.parts.every(([k]) => filled(a[k]));
+  if (t.type === "class") return BINS.some((_, j) => filled(a["n" + j])) && t.fields.every(([k]) => filled(a[k]));
+  if (t.type === "chart") return Object.keys(a).some(k => k[0] === "b" && a[k] > 0) && filled(a.most);
+  if (t.type === "gaps") return t.sents.every(p => p.filter(x => typeof x !== "string").every(g => filled(a["g" + g])));
+}
+function update() {
+  let n = 0; const open = [];
+  T.forEach(t => { const d = isDone(t); if (d) n++; else open.push(t.nr); $("#card_" + t.id).classList.toggle("done", d); });
+  $("#count").textContent = n + " von " + T.length + " bearbeitet";
+  $("#barfill").style.width = (n / T.length * 100) + "%";
+  document.querySelectorAll("[data-from]").forEach(nm => { const v = (S.a[nm.dataset.from] || {})["name" + nm.dataset.p]; nm.textContent = filled(v) ? v : "Person " + (+nm.dataset.p + 1); });
+  const who = [];
+  if (!S.name.trim()) who.push("Name"); if (!S.klasse) who.push("Klasse");
+  $("#missing").textContent = (who.length ? "Noch eintragen: " + who.join(" und ") + ". " : "") + (open.length ? "Noch offen: Aufgabe " + open.join(", ") + " (du kannst trotzdem abgeben)." : "Alle Aufgaben bearbeitet.");
+  $("#copyArea").value = asText();
+}
+
+// ---------- Text-Fassung (für Kopieren und PDF) ----------
+const none = "— keine Antwort —";
+const v = (x) => filled(x) ? String(x).trim() : "?";
+function answerLines(t) {
+  const a = S.a[t.id] || {}, L = [];
+  if (t.type === "selects") t.rows.forEach((r, i) => L.push(r + ": " + t.cols.map(([k]) => v(a[k + i])).join(" · ")));
+  if (t.type === "fields") t.fields.forEach(([k, lab]) => L.push(lab + ": " + v(a[k])));
+  if (t.type === "persons") [0, 1, 2].forEach(p => { const nm = t.from ? (S.a[t.from] || {})["name" + p] : null; L.push((filled(nm) ? nm.trim() + ": " : "Person " + (p + 1) + ": ") + t.cells.map(([k, lab]) => lab + " " + v(a[k + p])).join(" · ")); });
+  if (t.type === "choose") t.items.forEach((it, i) => L.push(it + ": " + (a["c" + i] != null ? t.opts[a["c" + i]] : "?")));
+  if (t.type === "multi") t.parts.forEach(([k, lab]) => { L.push(lab); L.push("   " + (filled(a[k]) ? a[k].trim() : none)); });
+  if (t.type === "class") { L.push("Anzahl: " + BINS.map((b, j) => b + ": " + v(a["n" + j])).join(" · ")); t.fields.forEach(([k, lab]) => L.push(lab + ": " + v(a[k]) + " cm")); }
+  if (t.type === "chart") { L.push("Säulen: " + BINS.map((b, j) => b + ": " + (a["b" + j] || 0)).join(" · ")); L.push("Am häufigsten: " + v(a.most)); }
+  if (t.type === "gaps") t.sents.forEach((parts, si) => L.push((si + 1) + ". " + parts.map(p => typeof p === "string" ? p : "[" + v(a["g" + p]) + "]").join("")));
+  return L;
+}
+function asText() {
+  const out = [TITLE + " – Arbeitsblatt", "Name: " + (S.name || "") + " · Klasse: " + (S.klasse || "") + " · " + new Date().toLocaleDateString("de-AT"), ""];
+  T.forEach(t => { out.push("Aufgabe " + t.nr + ": " + t.title); answerLines(t).forEach(l => out.push("  " + l)); out.push(""); });
+  return out.join("\n");
+}
+
+// ---------- PDF ----------
+function clean(s) {
+  s = String(s).replace(/[‘’]/g, "'").replace(/✓/g, "");
+  let o = "";
+  for (const ch of s) { const c = ch.codePointAt(0); if (c === 10 || RANGES.some(([a, b]) => c >= a && c <= b)) o += ch; }
+  return o;
+}
+function slug(s) {
+  const parts = (s || "").trim().split(/\s+/); const last = parts.length ? parts[parts.length - 1] : "";
+  return (last || "ohne-Namen").replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/Ä/g, "Ae").replace(/Ö/g, "Oe").replace(/Ü/g, "Ue").replace(/ß/g, "ss")
+    .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || "ohne-Namen";
+}
+function buildPdf() {
+  const { jsPDF } = window.jspdf;
+  const d = new jsPDF({ unit: "mm", format: "a4" });
+  d.addFileToVFS("C-R.ttf", FONT_R); d.addFont("C-R.ttf", "C", "normal");
+  d.addFileToVFS("C-B.ttf", FONT_B); d.addFont("C-B.ttf", "C", "bold");
+  const W = 210, M = 18, CW = W - 2 * M, BOT = 282; let y = 14;
+  const olive = [59, 74, 47], teal = [46, 125, 140], muted = [94, 102, 82], ink = [31, 42, 28], rust = [140, 59, 46], theory = [110, 127, 78];
+  const txt = (s, size, style, color, x = M, w = CW, lh = 1.32) => {
+    d.setFont("C", style); d.setFontSize(size); d.setTextColor(...color);
+    const lines = d.splitTextToSize(clean(s), w), h = size * 0.3528 * lh;
+    lines.forEach(l => { if (y + h > BOT) { d.addPage(); y = 18; } d.text(l, x, y + h * 0.78); y += h; });
+  };
+  d.addImage(LOGO, "PNG", M, y, 11, 12.6);
+  d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...teal); d.text(clean("NAWI · 1AB · K1.2.2 Messen und Messfehler · Schulbuch S. 17–19"), M + 15, y + 4);
+  d.setFontSize(18); d.setTextColor(...olive); d.text(clean("Wie groß bist du wirklich?"), M + 15, y + 11.5);
+  y += 17;
+  d.setFont("C", "normal"); d.setFontSize(11); d.setTextColor(...ink);
+  d.text(clean("Name: " + (S.name || "—")), M, y); d.text(clean("Klasse: " + (S.klasse || "—")), M + 105, y); d.text("Datum: " + new Date().toLocaleDateString("de-AT"), M + 140, y);
+  y += 3; d.setDrawColor(...olive); d.setLineWidth(0.6); d.line(M, y, W - M, y); y += 5;
+  for (const t of T) {
+    if (y > BOT - 25) { d.addPage(); y = 18; }
+    y += 2;
+    d.setFont("C", "bold"); d.setFontSize(9); d.setTextColor(...theory); d.text(clean(t.src + (t.tag ? " · " + t.tag : "")), W - M, y + 4, { align: "right" });
+    txt("Aufgabe " + t.nr + ": " + t.title, 13, "bold", olive, M, CW - 40);
+    txt((t.ad ? "Werbung: " + t.ad + " " : "") + t.q, 10, "normal", muted);
+    y += 1.2;
+    for (const l of answerLines(t)) txt(l, 11.5, l.includes("keine Antwort") ? "bold" : "normal", l.includes("keine Antwort") ? rust : ink, M + 4, CW - 4, 1.3);
+    if (t.type === "chart") {
+      const a = S.a[t.id] || {}, cw = 12, chh = 4, x0 = M + 12, h0 = 10 * chh;
+      if (y + h0 + 14 > BOT) { d.addPage(); y = 18; }
+      y += 3; const base = y + h0;
+      d.setDrawColor(201, 211, 176); d.setLineWidth(0.2);
+      for (let k = 0; k <= 10; k++) { d.line(x0, base - k * chh, x0 + 10 * cw, base - k * chh); d.setFontSize(7); d.setTextColor(...olive); d.text(String(k), x0 - 2, base - k * chh + 1, { align: "right" }); }
+      for (let j = 0; j < 10; j++) { const n = a["b" + j] || 0; if (n) { d.setFillColor(127, 168, 58); d.rect(x0 + j * cw + 1, base - n * chh, cw - 2, n * chh, "F"); } }
+      for (let j = 0; j <= 10; j++) { d.setFontSize(7); d.text(String(145 + 5 * j), x0 + j * cw, base + 4, { align: "center" }); }
+      d.setDrawColor(...olive); d.setLineWidth(0.5); d.line(x0, base, x0 + 10 * cw, base); d.line(x0, base, x0, base - h0);
+      d.setFontSize(8); d.text(clean("Körpergröße in cm"), x0 + 5 * cw, base + 8, { align: "center" });
+      y = base + 10;
+    }
+    y += 3; d.setDrawColor(211, 220, 194); d.setLineWidth(0.3); d.line(M, y, W - M, y); y += 2;
+  }
+  const n = d.getNumberOfPages();
+  for (let p = 1; p <= n; p++) { d.setPage(p); d.setFont("C", "normal"); d.setFontSize(8); d.setTextColor(...muted); d.text(clean("K1.2.2 Körpergröße · " + (S.name || "") + " · Seite " + p + " von " + n), W - M, 292, { align: "right" }); }
+  return d.output("blob");
+}
+function savePdf() {
+  const st = $("#pdfstatus"), btn = $("#pdfbtn");
+  const say = (cls, m) => { st.hidden = false; st.className = "status " + cls; st.textContent = m; };
+  if (!S.name.trim()) { say("err", "Bitte zuerst oben deinen Namen eintragen."); $("#name").focus(); return; }
+  if (!window.jspdf) { say("err", "Das PDF-Programm wurde nicht geladen. Lade die Seite neu – oder kopiere die Antworten als Text (unten)."); return; }
+  btn.disabled = true; say("info", "PDF wird erstellt …");
+  const filename = "K1.2.2-Koerper-" + slug(S.name) + ".pdf";
+  try {
+    const blob = buildPdf(), url = URL.createObjectURL(blob);
+    const a = el("a", { href: url, download: filename }); document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    say("ok", "Gespeichert: " + filename + " – jetzt in LMS hochladen.");
+  } catch (e) { say("err", "Beim Erstellen der PDF ist ein Fehler passiert. Kopiere die Antworten als Text (unten)."); }
+  finally { btn.disabled = false; }
+}
+
+// ---------- Start ----------
+T.forEach(t => $("#tasks").append(renderTask(t)));
+const nameI = $("#name"), klI = $("#klasse");
+nameI.value = S.name; klI.value = S.klasse; mark(nameI); mark(klI);
+nameI.addEventListener("input", () => { S.name = nameI.value; mark(nameI); update(); save(); });
+klI.addEventListener("change", () => { S.klasse = klI.value; mark(klI); update(); save(); });
+$("#pdfbtn").addEventListener("click", savePdf);
+$("#copybtn").addEventListener("click", () => {
+  const ta = $("#copyArea"), st = $("#copystatus"); ta.value = asText(); st.hidden = false;
+  const fallback = () => { ta.focus(); ta.select(); st.className = "status info"; st.textContent = "Text ist markiert – jetzt mit »Kopieren« übernehmen."; };
+  try { navigator.clipboard.writeText(ta.value).then(() => { st.className = "status ok"; st.textContent = "Kopiert."; }, fallback); } catch (e) { fallback(); }
+});
+function askReset() {
+  const w = $("#resetwrap"); w.textContent = "";
+  const back = () => { w.textContent = ""; w.append(el("button", { class: "btn secondary small", type: "button", id: "resetbtn", text: "Alles löschen und neu beginnen", onclick: askReset })); };
+  w.append(el("div", { class: "confirm" }, el("strong", { text: "Wirklich alle Antworten löschen?" }),
+    el("div", { class: "btns" },
+      el("button", { class: "btn danger small", type: "button", text: "Ja, alles löschen", onclick: () => { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); } }),
+      el("button", { class: "btn secondary small", type: "button", text: "Abbrechen", onclick: back }))));
+}
+$("#resetbtn").addEventListener("click", askReset);
+const qr = $("#qr");
+$("#qrbtn").addEventListener("click", () => { qr.hidden = false; });
+$("#qrclose").addEventListener("click", () => { qr.hidden = true; });
+update();
+</script>
