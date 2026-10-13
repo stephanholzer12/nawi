@@ -60,5 +60,18 @@
    "aufgaben.html",
    "quiz.html"
   ]
+ },
+ {
+  "klasse": "3AB",
+  "fach": "NAWI",
+  "ordner": "3ab-nawi/k2-3b-trendcheck",
+  "kapitel": "K2.3b",
+  "titel": "Trend-Check: Hype oder Hilfe?",
+  "seiten": [
+   "theorie.html",
+   "aufgaben.html",
+   "gruppe.html",
+   "quiz.html"
+  ]
  }
 ]
