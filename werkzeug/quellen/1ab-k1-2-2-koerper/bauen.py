@@ -175,16 +175,16 @@ parts = [
               "<li>Vom Boden bis zur <strong>Oberkante des Post-its</strong> messen</li>"
               "<li>Auf <strong>Augenhöhe</strong> ablesen – auf 1 mm genau</li>"
               "<li>Jeder <strong>3-mal</strong> – dazwischen weggehen und neu hinstellen</li></ol>", "Buch S. 17"),
-        slide("Stopp – kannst du das?", '<div class="stopq"><p><strong>Womit misst du den Durchmesser einer Patrone?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Messschieber</strong> – misst Längen von 1 mm bis 10 cm auf 0,1 mm genau.</p></details></div><div class="stopq"><p><strong>Warum ist 174,32 cm beim Maßband nicht sinnvoll?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Scheingenauigkeit:</strong> Das Maßband misst nur auf 1 mm genau – also 174,3 cm.</p></details></div>', "Teil 1"),
-    ]),
-    part("teil2", "Teil 2 · Stunde 2 · Buch S. 17–18", "Messfehler und Reaktionszeit", [
-        slide("So rechnest du – Beispiel Lukas", table([["Schritt", "Rechnung"],
+        slide("Mittelwert und Messunsicherheit", P("<strong>Beispiel Lukas</strong> (Aufgabe 3): Schätzung 172 cm, gemessen 174,2 · 174,6 · 174,3 cm.") + table([["Schritt", "Rechnung"],
                                                        ["Mittelwert", "(174,2 + 174,6 + 174,3) : 3 = 523,1 : 3 = 174,37"],
                                                        ["gerundet", "auf 1 mm genau → 174,4 cm"],
                                                        ["Messunsicherheit", "(größter − kleinster Wert) : 2 = (174,6 − 174,2) : 2 = 0,2 cm"],
                                                        ["Ergebnis", "174,4 cm ± 0,2 cm"],
                                                        ["Schätzfehler", "Mittelwert − Schätzung = 174,4 − 172 = +2,4 cm"]])
               + P("Schätzfehler: <strong>Plus</strong> = größer als gedacht · <strong>Minus</strong> = kleiner als gedacht."), "Buch S. 17"),
+        slide("Stopp – kannst du das?", '<div class="stopq"><p><strong>Womit misst du den Durchmesser einer Patrone?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Messschieber</strong> – misst Längen von 1 mm bis 10 cm auf 0,1 mm genau.</p></details></div><div class="stopq"><p><strong>Warum ist 174,32 cm beim Maßband nicht sinnvoll?</strong></p><details class="reveal"><summary>Erst überlegen – dann Lösung anzeigen</summary><p><strong>Scheingenauigkeit:</strong> Das Maßband misst nur auf 1 mm genau – also 174,3 cm.</p></details></div>', "Teil 1"),
+    ]),
+    part("teil2", "Teil 2 · Stunde 2 · Buch S. 17–18", "Messfehler und Reaktionszeit", [
         slide("Zufällige und systematische Fehler",
               '<div class="tiles">'
               f'<div class="tile">{fig("ziel_zufaellig.png", "Zielscheibe: Treffer streuen rund um die Mitte")}<h4>Zufällige Fehler</h4><p>mal zu groß, mal zu klein – z. B. schräg abgelesen. <strong>Der Mittelwert hilft!</strong></p></div>'
