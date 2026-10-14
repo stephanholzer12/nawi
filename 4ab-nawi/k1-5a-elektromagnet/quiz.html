@@ -148,18 +148,6 @@ const Q = [
   "p": "Buch S. 30"
  },
  {
-  "t": "Parallele Drähte",
-  "q": "Zwei parallele Drähte führen Strom in die gleiche Richtung. Was passiert?",
-  "a": [
-   "Sie ziehen sich an.",
-   "Sie stoßen sich ab.",
-   "Nichts – Drähte üben keine Kräfte aufeinander aus.",
-   "Sie beginnen zu rotieren."
-  ],
-  "e": "Zwischen den Drähten schwächen sich die Felder. Die Drähte werden zueinander gedrückt. Bei Gegenrichtung stoßen sie sich ab.",
-  "p": "Buch S. 29"
- },
- {
   "t": "Durchflutung",
   "q": "Eine Spule hat 200 Windungen, es fließen 0,5 A. Wie groß ist die Durchflutung Θ?",
   "a": [
@@ -184,6 +172,18 @@ const Q = [
   "p": "Buch S. 30"
  },
  {
+  "t": "Eisenkern",
+  "q": "Warum macht ein Eisenkern den Elektromagneten viel stärker?",
+  "a": [
+   "Das Spulenfeld richtet die Elementarmagnete im Eisen aus, ihre Felder addieren sich.",
+   "Eisen leitet den Strom besser als Kupfer.",
+   "Eisen speichert elektrische Ladung.",
+   "Eisen erhöht die Spannung der Batterie."
+  ],
+  "e": "Die Spins der Elektronen im Eisen ordnen sich im Spulenfeld. Die vielen kleinen Magnetfelder verstärken das Feld der Spule.",
+  "p": "Buch S. 31"
+ },
+ {
   "t": "Spule",
   "q": "Rechte-Hand-Regel an der Spule: Die Finger zeigen in Stromrichtung um die Spule. Wohin zeigt der Daumen?",
   "a": [
@@ -196,15 +196,15 @@ const Q = [
   "p": "Buch S. 30"
  },
  {
-  "t": "Eisenkern",
-  "q": "Warum macht ein Eisenkern den Elektromagneten viel stärker?",
+  "t": "Feldstärke",
+  "q": "Welche Einheit hat die magnetische Feldstärke H?",
   "a": [
-   "Das Spulenfeld richtet die Elementarmagnete im Eisen aus, ihre Felder addieren sich.",
-   "Eisen leitet den Strom besser als Kupfer.",
-   "Eisen speichert elektrische Ladung.",
-   "Eisen erhöht die Spannung der Batterie."
+   "Ampere pro Meter (A/m)",
+   "Tesla (T)",
+   "Weber (Wb)",
+   "Volt (V)"
   ],
-  "e": "Die Spins der Elektronen im Eisen ordnen sich im Spulenfeld. Die vielen kleinen Magnetfelder verstärken das Feld der Spule.",
+  "e": "H = Θ / l. Durchflutung in Ampere geteilt durch die Spulenlänge in Meter ergibt A/m.",
   "p": "Buch S. 31"
  },
  {
@@ -218,6 +218,18 @@ const Q = [
   ],
   "e": "Strom aus = Magnet aus, Strom umdrehen = Pole tauschen. Beide ziehen Eisen an und haben zwei Pole.",
   "p": "Buch S. 30–31"
+ },
+ {
+  "t": "Flussdichte",
+  "q": "Die magnetische Flussdichte B gibt an …",
+  "a": [
+   "… wie viel magnetischer Fluss durch 1 m² Fläche geht.",
+   "… wie viele Windungen eine Spule hat.",
+   "… wie schnell sich ein Motor dreht.",
+   "… wie viel Strom durch den Draht fließt."
+  ],
+  "e": "B = Φ / A, Einheit Tesla (T). Gleicher Fluss auf kleinerer Fläche bedeutet größere Flussdichte.",
+  "p": "Buch S. 31"
  },
  {
   "t": "Anwendung",
@@ -290,18 +302,6 @@ const Q = [
   ],
   "e": "Ohne Umpolen bliebe die Spule stehen, sobald ihr Feld wie das Magnetfeld ausgerichtet ist. So dreht sie dauernd weiter.",
   "p": "Buch S. 32"
- },
- {
-  "t": "Linearmotor",
-  "q": "Was ist das Besondere am Linearmotor einer Magnetschwebebahn?",
-  "a": [
-   "Der Stator ist »aufgeschnitten« und liegt im Fahrweg – das Fahrzeug bewegt sich geradlinig.",
-   "Er braucht keinen Strom.",
-   "Er funktioniert nur mit Dieselkraftstoff.",
-   "Der Rotor dreht sich schneller als bei jedem anderen Motor."
-  ],
-  "e": "Ein Wanderfeld im Fahrweg zieht das Fahrzeug. Umgekehrt bremst es berührungslos und speist Energie zurück.",
-  "p": "Buch S. 33"
  }
 ];
 const KEYS = ["A", "B", "C", "D"];

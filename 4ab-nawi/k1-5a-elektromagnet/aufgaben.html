@@ -130,6 +130,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
 .qimg { display: grid; justify-items: center; }
 .qimg img { max-height: 260px; width: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
 .fields { display: grid; gap: 12px; }
+.grp { font-weight: 700; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
 </style>
 
 </head>
@@ -164,7 +165,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
     </div>
     <ol class="steps hint">
       <li>Aufgaben in die <b>gelben Felder</b> eintragen – alles wird am Handy automatisch gespeichert.</li>
-      <li><b>Kern</b> = in der Stunde, <b>Zusatz</b> = nur wenn Zeit bleibt oder die Lehrkraft es sagt, <b>Hausübung</b> = A14.</li>
+      <li><b>Stunde 1</b>: Aufgaben 1–4 · <b>Stunde 2</b>: 5–8 · <b>Hausübung</b>: 9 · <b>Zusatz</b>: 10–15, nur wenn Zeit bleibt.</li>
       <li>Ganz unten <b>PDF erstellen</b> und die PDF in LMS hochladen.</li>
     </ol>
   </section>
@@ -608,54 +609,19 @@ const T = [
   "title": "Stärke einer Spule",
   "src": "Buch-Aufgabe S. 38",
   "own": false,
-  "tag": "Kern",
+  "tag": "Stunde 1",
+  "h": 1,
   "q": "Geben Sie an, wovon die Stärke des Magnetfeldes einer Spule abhängig ist.",
   "type": "text"
  },
  {
   "id": "a2",
   "nr": 2,
-  "title": "Magnetische Flussdichte",
-  "src": "Buch-Aufgabe S. 38",
-  "own": false,
-  "tag": "Zusatz",
-  "q": "Erläutern Sie, was man unter der magnetischen Flussdichte versteht.",
-  "type": "text"
- },
- {
-  "id": "a3",
-  "nr": 3,
-  "title": "Leiter im Magnetfeld",
-  "src": "Buch-Aufgabe S. 38",
-  "own": false,
-  "tag": "Kern",
-  "q": "Bringen Sie einen stromdurchflossenen Leiter in ein Magnetfeld ein. Erklären Sie, was bei diesem Versuch vor sich geht.",
-  "type": "text"
- },
- {
-  "id": "a4",
-  "nr": 4,
-  "title": "Parallele Drähte",
-  "src": "Buch-Aufgabe S. 38",
-  "own": false,
-  "tag": "Zusatz",
-  "q": "Erklären Sie mittels der Lorentzkraft die Richtung der Kraftwirkung zwischen zwei in gleicher (gegengleicher) Richtung vom Strom durchflossenen parallelen Drähten. Machen Sie hierzu eine Skizze.",
-  "type": "sketch",
-  "fields": [
-   [
-    "erkl",
-    "Erklärung: gleiche und entgegengesetzte Stromrichtung"
-   ]
-  ],
-  "hint": "Skizze ins Heft zeichnen und als Foto einfügen."
- },
- {
-  "id": "a5",
-  "nr": 5,
   "title": "Magnetfeld einer Spule",
   "src": "Buch-Aufgabe S. 38",
   "own": false,
-  "tag": "Zusatz",
+  "tag": "Stunde 1",
+  "h": 1,
   "q": "Zeichnen Sie in folgende Spule das Magnetfeld ein. Zusatz: Beschreibe, wie die Feldlinien verlaufen.",
   "type": "sketch",
   "img": "img/spule_leer.png",
@@ -668,12 +634,56 @@ const T = [
   "hint": "Spule ins Heft abzeichnen, Feldlinien einzeichnen, Foto einfügen."
  },
  {
+  "id": "a3",
+  "nr": 3,
+  "title": "Rechnen: Θ und H",
+  "src": "Theorie S. 30–31",
+  "own": true,
+  "tag": "Stunde 1",
+  "h": 1,
+  "q": "Eine Spule hat 600 Windungen und ist 12 cm lang. Es fließen 0,4 A. Berechne die Durchflutung Θ und die Feldstärke H.",
+  "type": "multi",
+  "fields": [
+   [
+    "theta",
+    "Durchflutung Θ (mit Rechenweg)"
+   ],
+   [
+    "h",
+    "Feldstärke H (mit Rechenweg)"
+   ]
+  ]
+ },
+ {
+  "id": "a4",
+  "nr": 4,
+  "title": "Magnetische Flussdichte",
+  "src": "Buch-Aufgabe S. 38",
+  "own": false,
+  "tag": "Stunde 1",
+  "h": 1,
+  "q": "Erläutern Sie, was man unter der magnetischen Flussdichte versteht.",
+  "type": "text"
+ },
+ {
+  "id": "a5",
+  "nr": 5,
+  "title": "Leiter im Magnetfeld",
+  "src": "Buch-Aufgabe S. 38",
+  "own": false,
+  "tag": "Stunde 2",
+  "h": 2,
+  "q": "Bringen Sie einen stromdurchflossenen Leiter in ein Magnetfeld ein. Erklären Sie, was bei diesem Versuch vor sich geht.",
+  "type": "text"
+ },
+ {
   "id": "a6",
   "nr": 6,
   "title": "Leiterschaukel",
   "src": "Buch-Aufgabe S. 38",
   "own": false,
-  "tag": "Kern",
+  "tag": "Stunde 2",
+  "h": 2,
   "q": "Bestimmen Sie, in welche Richtung die Kraft den Leiter lenkt. Begründen Sie Ihre Annahme. Zusatz: Querschnitt – Strom fließt aus der Ebene (Punkt).",
   "type": "multi",
   "img": "img/lorentz_aufgabe.png",
@@ -697,134 +707,68 @@ const T = [
  {
   "id": "a7",
   "nr": 7,
-  "title": "Rechnen: Θ und H",
-  "src": "Theorie S. 30–31",
+  "title": "Motor ohne Kommutator",
+  "src": "Theorie S. 32",
   "own": true,
-  "tag": "Zusatz",
-  "q": "Eine Spule hat 600 Windungen und ist 12 cm lang. Es fließen 0,4 A. Berechne die Durchflutung Θ und die Feldstärke H.",
-  "type": "multi",
-  "fields": [
-   [
-    "theta",
-    "Durchflutung Θ (mit Rechenweg)"
-   ],
-   [
-    "h",
-    "Feldstärke H (mit Rechenweg)"
-   ]
-  ]
+  "tag": "Stunde 2",
+  "h": 2,
+  "q": "Was würde passieren, wenn ein Gleichstrommotor keinen Kommutator hätte?",
+  "type": "text"
  },
  {
   "id": "a8",
   "nr": 8,
-  "title": "Flussdichte wie im MRT",
-  "src": "Theorie S. 31",
+  "title": "Faktencheck: Handy",
+  "src": "Theorie S. 30–31",
   "own": true,
-  "tag": "Zusatz",
-  "q": "Durch eine Fläche von 4 cm² geht ein magnetischer Fluss von 0,0006 Wb. Berechne B. Mit welchem Gerät ist das vergleichbar?",
-  "type": "multi",
-  "fields": [
+  "tag": "Stunde 2",
+  "h": 2,
+  "q": "Mythos aus dem Einstieg: »Ein Magnet in der Hosentasche löscht die Daten am Handy.« Stimmt das? Begründe. Streiche jeweils das Falsche durch.",
+  "type": "strike",
+  "hint": "Tippe auf den falschen Begriff – er wird durchgestrichen. Nochmal tippen macht es rückgängig.",
+  "sents": [
    [
-    "a",
-    "Fläche A in m²"
+    "Ein Magnet in der Hosentasche ",
+    [
+     "löscht",
+     "löscht nicht"
+    ],
+    " die Fotos am Handy."
    ],
    [
-    "b",
-    "Flussdichte B (mit Rechenweg)"
+    "Fotos liegen im Flash-Speicher als ",
+    [
+     "kleine Magnete",
+     "elektrische Ladungen"
+    ],
+    "."
    ],
    [
-    "geraet",
-    "Vergleichbar mit …"
+    "Der ",
+    [
+     "Kompass",
+     "Akku"
+    ],
+    " im Handy kann durch einen Magneten gestört werden."
+   ],
+   [
+    "Den Magnetstreifen einer älteren Karte kann ein starker Magnet ",
+    [
+     "nicht löschen",
+     "löschen"
+    ],
+    "."
    ]
   ]
  },
  {
   "id": "a9",
   "nr": 9,
-  "title": "Auf dem Schrottplatz",
-  "src": "Theorie S. 31",
-  "own": true,
-  "tag": "Zusatz",
-  "q": "Warum verwendet man auf dem Schrottplatz einen Elektromagneten statt eines Dauermagneten? Welche Metalle bleiben liegen?",
-  "type": "multi",
-  "fields": [
-   [
-    "warum",
-    "Warum ein Elektromagnet?"
-   ],
-   [
-    "liegen",
-    "Welche Metalle bleiben liegen?"
-   ]
-  ]
- },
- {
-  "id": "a10",
-  "nr": 10,
-  "title": "Schutz vor Magnetminen",
-  "src": "Theorie S. 30–31",
-  "own": true,
-  "tag": "Zusatz",
-  "q": "Warum lösen Stahlschiffe Magnetminen aus – und wie schützt der »Magnetische Eigenschutz« das Schiff?",
-  "type": "multi",
-  "fields": [
-   [
-    "warum",
-    "Warum lösen Stahlschiffe Magnetminen aus?"
-   ],
-   [
-    "schutz",
-    "Wie schützt der Magnetische Eigenschutz?"
-   ]
-  ]
- },
- {
-  "id": "a11",
-  "nr": 11,
-  "title": "Vor dem MRT",
-  "src": "Theorie S. 31",
-  "own": true,
-  "tag": "Zusatz",
-  "q": "Vor einer MRT-Untersuchung musst du Uhr, Fitnesstracker, Piercings und Bankomatkarte ablegen. Begründe.",
-  "type": "text"
- },
- {
-  "id": "a12",
-  "nr": 12,
-  "title": "Motor ohne Kommutator",
-  "src": "Theorie S. 32",
-  "own": true,
-  "tag": "Kern",
-  "q": "Was würde passieren, wenn ein Gleichstrommotor keinen Kommutator hätte?",
-  "type": "text"
- },
- {
-  "id": "a13",
-  "nr": 13,
-  "title": "Rohstoff Neodym",
-  "src": "Theorie S. 32–33",
-  "own": true,
-  "tag": "Zusatz",
-  "q": "Rund 94 % der starken Sintermagnete für E-Motoren kommen aus China. Nenne zwei Risiken für Europas Wirtschaft und eine Lösung.",
-  "type": "multi",
-  "fields": [
-   [
-    "risiken",
-    "Zwei Risiken"
-   ],
-   [
-    "loesung",
-    "Eine Lösung"
-   ]
-  ]
- },
- {
-  "id": "a14",
-  "nr": 14,
   "title": "Recherche: Technik heute",
   "src": "Theorie S. 32–33",
   "own": true,
   "tag": "Hausübung",
+  "h": 2,
   "q": "Recherchiert zu dritt ein Thema: Drohnenmotor · E-Auto ohne Seltene Erden · Magnetschwebebahn · Flugzeugträger-Katapult · Railgun · MRT. Präsentation: max. 4 min, 1 Folie.",
   "type": "multi",
   "fields": [
@@ -856,47 +800,119 @@ const T = [
   "hint": "Gruppenarbeit zu dritt – jede und jeder trägt die Ergebnisse ein. Präsentation: max. 4 Minuten, 1 Folie."
  },
  {
-  "id": "a15",
-  "nr": 15,
-  "title": "Faktencheck: Handy",
+  "id": "a10",
+  "nr": 10,
+  "title": "Parallele Drähte",
+  "src": "Buch-Aufgabe S. 38",
+  "own": false,
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Erklären Sie mittels der Lorentzkraft die Richtung der Kraftwirkung zwischen zwei in gleicher (gegengleicher) Richtung vom Strom durchflossenen parallelen Drähten. Machen Sie hierzu eine Skizze.",
+  "type": "sketch",
+  "fields": [
+   [
+    "erkl",
+    "Erklärung: gleiche und entgegengesetzte Stromrichtung"
+   ]
+  ],
+  "hint": "Skizze ins Heft zeichnen und als Foto einfügen."
+ },
+ {
+  "id": "a11",
+  "nr": 11,
+  "title": "Flussdichte wie im MRT",
+  "src": "Theorie S. 31",
+  "own": true,
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Durch eine Fläche von 4 cm² geht ein magnetischer Fluss von 0,0006 Wb. Berechne B. Mit welchem Gerät ist das vergleichbar?",
+  "type": "multi",
+  "fields": [
+   [
+    "a",
+    "Fläche A in m²"
+   ],
+   [
+    "b",
+    "Flussdichte B (mit Rechenweg)"
+   ],
+   [
+    "geraet",
+    "Vergleichbar mit …"
+   ]
+  ]
+ },
+ {
+  "id": "a12",
+  "nr": 12,
+  "title": "Auf dem Schrottplatz",
+  "src": "Theorie S. 31",
+  "own": true,
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Warum verwendet man auf dem Schrottplatz einen Elektromagneten statt eines Dauermagneten? Welche Metalle bleiben liegen?",
+  "type": "multi",
+  "fields": [
+   [
+    "warum",
+    "Warum ein Elektromagnet?"
+   ],
+   [
+    "liegen",
+    "Welche Metalle bleiben liegen?"
+   ]
+  ]
+ },
+ {
+  "id": "a13",
+  "nr": 13,
+  "title": "Schutz vor Magnetminen",
   "src": "Theorie S. 30–31",
   "own": true,
-  "tag": "Kern",
-  "q": "Mythos aus dem Einstieg: »Ein Magnet in der Hosentasche löscht die Daten am Handy.« Stimmt das? Begründe. Streiche jeweils das Falsche durch.",
-  "type": "strike",
-  "hint": "Tippe auf den falschen Begriff – er wird durchgestrichen. Nochmal tippen macht es rückgängig.",
-  "sents": [
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Warum lösen Stahlschiffe Magnetminen aus – und wie schützt der »Magnetische Eigenschutz« das Schiff?",
+  "type": "multi",
+  "fields": [
    [
-    "Ein Magnet in der Hosentasche ",
-    [
-     "löscht",
-     "löscht nicht"
-    ],
-    " die Fotos am Handy."
+    "warum",
+    "Warum lösen Stahlschiffe Magnetminen aus?"
    ],
    [
-    "Fotos liegen im Flash-Speicher als ",
-    [
-     "elektrische Ladungen",
-     "kleine Magnete"
-    ],
-    "."
+    "schutz",
+    "Wie schützt der Magnetische Eigenschutz?"
+   ]
+  ]
+ },
+ {
+  "id": "a14",
+  "nr": 14,
+  "title": "Vor dem MRT",
+  "src": "Theorie S. 31",
+  "own": true,
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Vor einer MRT-Untersuchung musst du Uhr, Fitnesstracker, Piercings und Bankomatkarte ablegen. Begründe.",
+  "type": "text"
+ },
+ {
+  "id": "a15",
+  "nr": 15,
+  "title": "Rohstoff Neodym",
+  "src": "Theorie S. 32–33",
+  "own": true,
+  "tag": "Zusatz",
+  "h": 0,
+  "q": "Rund 94 % der starken Sintermagnete für E-Motoren kommen aus China. Nenne zwei Risiken für Europas Wirtschaft und eine Lösung.",
+  "type": "multi",
+  "fields": [
+   [
+    "risiken",
+    "Zwei Risiken"
    ],
    [
-    "Der ",
-    [
-     "Kompass",
-     "Akku"
-    ],
-    " im Handy kann durch einen Magneten gestört werden."
-   ],
-   [
-    "Den Magnetstreifen einer älteren Karte kann ein starker Magnet ",
-    [
-     "löschen",
-     "nicht löschen"
-    ],
-    "."
+    "loesung",
+    "Eine Lösung"
    ]
   ]
  }
@@ -961,7 +977,7 @@ function qText(s) {
 
 function renderTask(t) {
   const card = el("section", { class: "card", id: "card_" + t.id });
-  const tagCls = t.tag === "Kern" ? "tag kern" : t.tag === "Hausübung" ? "tag hue" : "tag";
+  const tagCls = t.tag.startsWith("Stunde") ? "tag kern" : t.tag === "Hausübung" ? "tag hue" : "tag";
   card.append(el("div", { class: "head" },
     el("span", { class: "nr" }, el("span", { class: "check", "aria-hidden": "true", text: "✓" }), "Aufgabe " + t.nr, el("span", { class: tagCls, text: t.tag })),
     el("span", { class: "pill" + (t.own ? " theory" : ""), text: t.src })));
@@ -1045,7 +1061,7 @@ function update() {
   $("#barfill").style.width = (n / T.length * 100) + "%";
   const who = [];
   if (!S.name.trim()) who.push("Name"); if (!S.klasse) who.push("Klasse");
-  $("#missing").textContent = (who.length ? "Noch eintragen: " + who.join(" und ") + ". " : "") + (open.length ? "Noch offen (Kern/Hausübung): Aufgabe " + open.join(", ") + " – du kannst trotzdem abgeben." : "Alle Kern-Aufgaben bearbeitet.");
+  $("#missing").textContent = (who.length ? "Noch eintragen: " + who.join(" und ") + ". " : "") + (open.length ? "Noch offen (Stunde 1/2, Hausübung): Aufgabe " + open.join(", ") + " – du kannst trotzdem abgeben." : "Alle Pflicht-Aufgaben bearbeitet.");
   $("#copyArea").value = asText();
 }
 
@@ -1142,7 +1158,9 @@ async function savePdf() {
 }
 
 // ---------- Start ----------
-T.forEach(t => $("#tasks").append(renderTask(t)));
+const GRP = { 1: "Stunde 1 · Der Elektromagnet", 2: "Stunde 2 · Der Elektromotor", 0: "Zusatz · für Schnelle" };
+let lastH = null;
+T.forEach(t => { if (t.h !== lastH) { $("#tasks").append(el("div", { class: "grp", text: GRP[t.h] })); lastH = t.h; } $("#tasks").append(renderTask(t)); });
 const nameI = $("#name"), klI = $("#klasse");
 nameI.value = S.name; klI.value = S.klasse; mark(nameI); mark(klI);
 nameI.addEventListener("input", () => { S.name = nameI.value; mark(nameI); update(); save(); });
