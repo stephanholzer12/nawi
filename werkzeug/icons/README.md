@@ -10,12 +10,16 @@ Herkunft: Versuche »Die Bindungsarten« (2AB K1.2). Diese Icons gelten in **all
 ## Vorhandene Icons
 - `alaun`
 - `ballon`
+- `batterie`
 - `becher`
 - `bleche`
+- `bleistift`
 - `brenner`
 - `brille`
+- `cutter`
 - `destwasser`
 - `dose`
+- `draht`
 - `eiswuerfel`
 - `farbe`
 - `feuerzeug`
@@ -28,10 +32,15 @@ Herkunft: Versuche »Die Bindungsarten« (2AB K1.2). Diese Icons gelten in **all
 - `holzstab`
 - `kabel`
 - `klammer`
+- `klebeband`
+- `kompass`
+- `lineal`
 - `lupe`
+- `magnet`
 - `mikroskop`
 - `moerser`
 - `multimeter`
+- `nagel`
 - `objekttraeger`
 - `oel`
 - `paraffin`
@@ -47,6 +56,7 @@ Herkunft: Versuche »Die Bindungsarten« (2AB K1.2). Diese Icons gelten in **all
 - `silikon`
 - `spatel`
 - `spiritus`
+- `stativ`
 - `thermometer`
 - `tuch`
 - `unterlage`
@@ -54,3 +64,5 @@ Herkunft: Versuche »Die Bindungsarten« (2AB K1.2). Diese Icons gelten in **all
 - `watte`
 - `zinn`
 - `zucker`
+
+Ergänzt am 15.10.2026 (Elektromagnetismus 4AB): batterie, bleistift, cutter, draht, klebeband, kompass, lineal, magnet, nagel, stativ.

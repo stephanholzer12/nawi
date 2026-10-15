@@ -104,7 +104,7 @@ main { max-width: 680px; margin: 0 auto; padding-inline: 16px; padding-block: 18
 </div>
 
 <main>
-  <div class="progress"><span id="count">Frage 1 von 16</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
+  <div class="progress"><span id="count">Frage 1 von 18</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
   <section class="card" id="stage" aria-live="polite"></section>
 </main>
 
@@ -302,6 +302,30 @@ const Q = [
   ],
   "e": "Ohne Umpolen bliebe die Spule stehen, sobald ihr Feld wie das Magnetfeld ausgerichtet ist. So dreht sie dauernd weiter.",
   "p": "Buch S. 32"
+ },
+ {
+  "t": "Rätsel Magnet-Auto",
+  "q": "Ein Magnet hängt an einem Bügel, der fest am Auto montiert ist, und zieht das Auto nach vorne. Was passiert?",
+  "a": [
+   "Das Auto bleibt stehen – die Kräfte heben sich auf.",
+   "Das Auto fährt immer schneller.",
+   "Das Auto fährt, bis der Magnet leer ist.",
+   "Das Auto fährt rückwärts."
+  ],
+  "e": "Der Auto-Magnet zieht den Bügel-Magneten gleich stark zurück. Beide Kräfte wirken auf dasselbe Auto – Summe 0 (actio = reactio).",
+  "p": "Lernseite Teil 2"
+ },
+ {
+  "t": "Rätsel Magnet-Auto",
+  "q": "Im YouTube-Video fährt das Magnet-Auto trotzdem. Warum?",
+  "a": [
+   "Versteckte Elektromotoren mit Batterie treiben die Räder an.",
+   "Der Magnet ist besonders stark.",
+   "Das Erdmagnetfeld schiebt mit.",
+   "Holz leitet den Magnetismus."
+  ],
+  "e": "Unter dem Holzklotz sitzen zwei kleine Elektromotoren mit Kabeln zur Batterie. Die Energie kommt von außen.",
+  "p": "Lernseite Teil 2"
  }
 ];
 const KEYS = ["A", "B", "C", "D"];
@@ -345,8 +369,8 @@ function pick(orig, btn) {
 }
 function message(p) {
   if (p === Q.length) return "Alles richtig – ausgezeichnet!";
-  if (p >= 13) return "Sehr gut – fast alles sitzt.";
-  if (p >= 9) return "Gut – schau dir die markierten Fragen noch einmal an.";
+  if (p >= 15) return "Sehr gut – fast alles sitzt.";
+  if (p >= 10) return "Gut – schau dir die markierten Fragen noch einmal an.";
   return "Noch üben – lies die Buchseiten unten nach und probier es noch einmal.";
 }
 function result() {
