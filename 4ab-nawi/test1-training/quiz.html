@@ -124,7 +124,7 @@ main { max-width: 680px; margin: 0 auto; padding-inline: 16px; padding-block: 18
 </div>
 
 <main>
-  <div class="progress"><span id="count">Frage 1 von 29</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
+  <div class="progress"><span id="count">Frage 1 von 30</span><div class="bar"><span id="barfill"></span></div><span id="pts">0 Punkte</span></div>
   <section class="card" id="stage" aria-live="polite"></section>
 </main>
 
@@ -159,7 +159,8 @@ const Q = [
   { t: "Elektromagnetismus", q: "Wie machst du einen Elektromagneten stärker?", a: ["Mehr Windungen, mehr Strom und ein Eisenkern", "Weniger Windungen und ein Kupferkern", "Den Strom ausschalten", "Die Spule länger auseinanderziehen"], e: "Θ = I · N: mehr Strom und mehr Windungen. Der Eisenkern verstärkt, weil sich seine Elementarmagnete ausrichten.", p: "Buch S. 30–31" },
   { t: "Elektromagnetismus", q: "Eine Spule hat N = 200 Windungen, es fließen I = 3 A. Wie groß ist die Durchflutung Θ = I · N?", a: ["600 A", "66,7 A", "203 A", "0,015 A"], e: "Θ = 3 A · 200 = 600 A.", p: "Buch S. 31" },
   { t: "Elektromagnetismus", q: "Was bewegt die Leiterschaukel, wenn Strom fließt?", a: ["Die Lorentzkraft im Magnetfeld", "Die Schwerkraft", "Der Luftdruck", "Die Wärme des Drahts"], e: "Auf einen Strom im Magnetfeld wirkt eine Kraft – die Lorentzkraft. Richtung: Linke-Hand-Regel.", p: "Buch S. 32" },
-  { t: "Elektromagnetismus", q: "Wozu braucht ein Gleichstrom-Elektromotor den Kommutator?", a: ["Er polt den Strom jede halbe Umdrehung um, damit der Rotor weiterdreht.", "Er kühlt den Motor.", "Er misst die Drehzahl.", "Er speichert Energie wie ein Kondensator."], e: "Ohne Umpolen bliebe der Rotor stehen. Der Kommutator dreht die Stromrichtung im richtigen Moment um.", p: "Buch S. 33" }
+  { t: "Elektromagnetismus", q: "Wozu braucht ein Gleichstrom-Elektromotor den Kommutator?", a: ["Er polt den Strom jede halbe Umdrehung um, damit der Rotor weiterdreht.", "Er kühlt den Motor.", "Er misst die Drehzahl.", "Er speichert Energie wie ein Kondensator."], e: "Ohne Umpolen bliebe der Rotor stehen. Der Kommutator dreht die Stromrichtung im richtigen Moment um.", p: "Buch S. 33" },
+  { t: "Elektromagnetismus", q: "Ein Magnet hängt an einem Bügel, der fest am Auto montiert ist, und zieht das Auto an. Was passiert?", a: ["Das Auto bleibt stehen – die Kräfte heben sich auf.", "Das Auto fährt immer weiter.", "Das Auto fährt, bis der Magnet leer ist.", "Das Auto fährt rückwärts."], e: "Der Auto-Magnet zieht den Bügel genauso stark zurück. Beide Kräfte wirken auf dasselbe Auto: Summe 0 (actio = reactio).", p: "Lernseite K1.5a Teil 2" }
 ];
 const KEYS = ["A", "B", "C", "D"];
 let i = 0, pts = 0, missed = [], order = [];
@@ -202,8 +203,8 @@ function pick(orig, btn) {
 }
 function message(p) {
   if (p === Q.length) return "Alles richtig – ausgezeichnet!";
-  if (p >= 25) return "Sehr gut – fast alles sitzt.";
-  if (p >= 17) return "Gut – schau dir die markierten Fragen noch einmal an.";
+  if (p >= 26) return "Sehr gut – fast alles sitzt.";
+  if (p >= 18) return "Gut – schau dir die markierten Fragen noch einmal an.";
   return "Noch üben – lies die Buchseiten unten nach und probier es noch einmal.";
 }
 function result() {
