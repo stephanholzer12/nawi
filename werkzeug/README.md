@@ -18,6 +18,8 @@ Bauvorlagen für Lernseite (Theorie), Arbeitsblatt (Aufgaben) und Quiz – Stil 
 
 - `quellen/<einheit>/`: Quellen und Bauskript einzelner Einheiten (z. B. `quellen/1ab-k1-2-2-koerper/bauen.py` für NAWI 1AB K1.2.2)
 
+- `icons/`: Standard-Icons für Geräte und Chemikalien (aus den Bindungsarten-Versuchen) – in allen VS-Word-Dateien und Versuchsseiten verwenden, Liste in `icons/README.md`
+
 ## Regeln
 - Nur Unterrichtsmaterial: keine Noten, keine Schülernamen, keine Testlösungen, keine eingescannten Buchseiten
 - Antworten der Kadetten bleiben im Browser; Abgabe als PDF in LMS
