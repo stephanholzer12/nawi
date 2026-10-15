@@ -20,6 +20,9 @@ Bauvorlagen für Lernseite (Theorie), Arbeitsblatt (Aufgaben) und Quiz – Stil 
 
 - `icons/`: Standard-Icons für Geräte und Chemikalien (aus den Bindungsarten-Versuchen) – in allen VS-Word-Dateien und Versuchsseiten verwenden, Liste in `icons/README.md`
 
+- `pdf_hilfe.js` + `pdf_hilfe_einbauen.py`: Ersatzwege, wenn ein Handy die PDF nicht herunterlädt (App-Browser wie Instagram/Teams, manche iPhones): nach »PDF erstellen« erscheint ein Feld mit »Teilen / Speichern« und »PDF öffnen«, in App-Browsern zusätzlich der Hinweis »Im Browser öffnen«. Nach jeder neuen Seite mit PDF-Abgabe `python3 werkzeug/pdf_hilfe_einbauen.py` ausführen (setzt das Skript inline in alle Seiten mit jsPDF).
+- `quellen/4ab-test1-training/bauen.py`: Test-Training (Quiz zum Teststoff, mehrere Kapitel) – Vorlage für weitere Test-Trainings: Ordner kopieren, Fragen tauschen, in `einheiten.json` mit `kapitel` = »1. Test · Datum« eintragen.
+
 ## Regeln
 - Nur Unterrichtsmaterial: keine Noten, keine Schülernamen, keine Testlösungen, keine eingescannten Buchseiten
 - Antworten der Kadetten bleiben im Browser; Abgabe als PDF in LMS
